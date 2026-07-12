@@ -253,10 +253,22 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .card:hover .card-go .arr{transform:translateX(4px)}
 
 /* ===== MAP CARD (sede) ===== */
-.card-map{background:#05070c;cursor:default;overflow:hidden}
+.card-map{
+  background:#05070c;cursor:default;overflow:visible;
+  display:block;min-height:auto;padding:0;
+  height:300vh; /* scroll track: longer = slower zoom evolution */
+}
+.map-sticky{
+  position:sticky;top:0;
+  height:100vh;width:100%;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-end;
+  padding:0 clamp(28px,6vw,96px) 80px;
+  overflow:hidden;
+}
 .map-canvas{
   position:absolute;inset:0;z-index:0;
-  filter:saturate(.75) contrast(1.12) brightness(1.02);
+  filter:contrast(1.05);
 }
 .map-canvas canvas{outline:none}
 .map-overlay{
@@ -438,11 +450,13 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-go">Vai al sito <span class="arr">→</span></span>
   </a>
   <div class="card card-map" id="sede" aria-label="La nostra sede operativa">
-    <div class="map-canvas" id="mapCanvas" aria-hidden="true"></div>
-    <span class="map-overlay" aria-hidden="true"></span>
-    <span class="card-caption map-caption">
-      Via Giuseppe Verdi 4 · 37050 Concamarise (VR)
-    </span>
+    <div class="map-sticky">
+      <div class="map-canvas" id="mapCanvas" aria-hidden="true"></div>
+      <span class="map-overlay" aria-hidden="true"></span>
+      <span class="card-caption map-caption">
+        Via Giuseppe Verdi 4 · 37050 Concamarise (VR)
+      </span>
+    </div>
   </div>
 </section>
 
@@ -477,7 +491,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
             <span class="err">Inserire un messaggio</span>
           </div>
           <button type="submit" class="btn btn-primary form-submit">Inviate la richiesta <span class="arr">→</span></button>
-          <p class="form-note">Inviando il modulo si acconsente a essere ricontattati da LG Trading SRL. I dati saranno trattati nel rispetto della <a href="/privacy-policy.html">Privacy Policy</a>.</p>
+          <p class="form-note">Inviando il modulo si acconsente a essere ricontattati da LG Trading SRL. I dati saranno trattati nel rispetto della <a href="privacy-policy.html">Privacy Policy</a>.</p>
         </form>
         <div class="form-success" id="formSuccess">
           <div class="fs-ic"><svg width="30" height="30" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12l5 5L20 6"/></svg></div>
@@ -519,7 +533,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <div class="footer-bottom">
       <span>© 2026 LG Trading SRL — P.IVA e C.F. 05060650230 — REA VR-467219 — Codice SDI M5UXCR1</span>
       <div class="fb-links">
-        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
         <a href="cookie-policy.html">Cookie Policy</a>
       </div>
     </div>
@@ -616,24 +630,11 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     el.style.position='absolute';el.style.inset='0';el.style.width='100%';el.style.height='100%';
     console.log('[mappa] dimensioni container:',el.offsetWidth+'x'+el.offsetHeight);
     var map;
-    var satelliteStyle={
-      version:8,
-      projection:{type:'globe'},
-      sources:{
-        sat:{
-          type:'raster',
-          tiles:['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
-          tileSize:256,
-          maxzoom:19,
-          attribution:'Esri, Maxar, Earthstar Geographics'
-        }
-      },
-      layers:[{id:'sat',type:'raster',source:'sat'}]
-    };
+    var mapStyle='https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
     try{
       map=new maplibregl.Map({
         container:el,
-        style:satelliteStyle,
+        style:mapStyle,
         center:ITALY,
         zoom:reduce?16:1.4,
         pitch:0,
@@ -665,12 +666,14 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     var targetZoom=ZMIN, curZoom=ZMIN, rafId=null;
 
     function computeProgress(){
-      var sede=document.getElementById('sede');
-      var r=sede.getBoundingClientRect();
+      var track=document.getElementById('sede');
+      var r=track.getBoundingClientRect();
       var vh=window.innerHeight||document.documentElement.clientHeight;
-      // 0 when the card top enters from the bottom (top = vh),
-      // 1 when the card is filling the screen (top = 0).
-      var p=(vh-r.top)/vh;
+      // the sticky inner is pinned while the tall track scrolls past.
+      // 0 when track top hits viewport top, 1 when its bottom reaches viewport bottom.
+      var scrollable=r.height-vh; // total pinned scroll distance
+      if(scrollable<=0)return 0;
+      var p=(-r.top)/scrollable;
       return Math.max(0,Math.min(1,p));
     }
     function onScroll(){
@@ -707,7 +710,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
         entries.forEach(function(en){
           if(en.isIntersecting){trigger();mapObs.unobserve(en.target);}
         });
-      },{threshold:.1});
+      },{threshold:0,rootMargin:'0px 0px -20% 0px'});
       mapObs.observe(sedeEl);
     }else{
       trigger();
