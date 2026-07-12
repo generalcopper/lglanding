@@ -238,20 +238,19 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .card-go .arr{transition:transform .3s var(--ease)}
 .card:hover .card-go .arr{transform:translateX(4px)}
 
-/* entrance animation for inner elements */
+/* entrance animation for inner elements — triggered on scroll */
 .card-logo,.card-caption,.card-go{
-  opacity:0;transform:translateY(16px);
-  animation:cardIn .7s var(--ease-out) forwards;
+  opacity:0;transform:translateY(24px);
+  transition:opacity .7s var(--ease-out),transform .7s var(--ease-out);
 }
-.card-logo{animation-delay:.15s}
-.card-caption{animation-delay:.3s}
-.card-go{animation-delay:.45s}
-.card:nth-child(2) .card-logo{animation-delay:.3s}
-.card:nth-child(2) .card-caption{animation-delay:.45s}
-.card:nth-child(2) .card-go{animation-delay:.6s}
-@keyframes cardIn{to{opacity:1;transform:none}}
+.card.in-view .card-logo{transition-delay:.1s}
+.card.in-view .card-caption{transition-delay:.24s}
+.card.in-view .card-go{transition-delay:.38s}
+.card.in-view .card-logo,
+.card.in-view .card-caption,
+.card.in-view .card-go{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
-  .card-logo,.card-caption,.card-go{animation:none;opacity:1;transform:none}
+  .card-logo,.card-caption,.card-go{transition:none;opacity:1;transform:none}
 }
 
 /* ============ SECTION / HEADS ============ */
@@ -515,6 +514,19 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape'&&mobileNav.classList.contains('open')){closeMenu();}
   });
+
+  /* scroll reveal for cards */
+  var cards=document.querySelectorAll('.card');
+  if('IntersectionObserver' in window){
+    var cardObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){en.target.classList.add('in-view');cardObs.unobserve(en.target);}
+      });
+    },{threshold:.35});
+    cards.forEach(function(c){cardObs.observe(c);});
+  }else{
+    cards.forEach(function(c){c.classList.add('in-view');});
+  }
 
   /* form validation */
   var form=document.getElementById('contactForm');
