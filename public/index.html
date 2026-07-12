@@ -102,7 +102,7 @@ input,select,textarea{font-family:inherit;font-size:inherit}
   -webkit-backdrop-filter:blur(20px) saturate(1.6);
   box-shadow:0 1px 0 rgba(255,255,255,.06),0 18px 40px -24px rgba(0,0,0,.85);
 }
-.header .wrap{width:100%}
+.header .wrap{width:100%;max-width:none;padding:0 clamp(22px,4vw,48px)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
 .logo{display:flex;align-items:center;flex-shrink:0;margin-right:auto}
 .burger{margin-left:auto}
@@ -130,6 +130,7 @@ input,select,textarea{font-family:inherit;font-size:inherit}
   visibility:hidden;
 }
 .mobile-nav.open{transform:translateY(0);visibility:visible}
+body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none}
 .mobile-nav a{
   font-family:'Inter Tight',sans-serif;font-size:1.8rem;font-weight:600;color:#fff;
   padding:14px 0;border-bottom:1px solid var(--line-dark-soft);letter-spacing:-.03em;
@@ -377,7 +378,7 @@ input,select,textarea{font-family:inherit;font-size:inherit}
       <div class="form-card">
         <form id="contactForm" novalidate>
           <h3>Contatti</h3>
-          <p>Compilando il modulo sarete ricontattati per fissare un primo incontro conoscitivo.</p>
+          <p>Compilando il modulo sarete ricontattati dal nostro team per dare seguito alla vostra richiesta.</p>
           <div class="form-row">
             <div class="field">
               <label>Nome azienda <em>*</em></label>
@@ -413,7 +414,7 @@ input,select,textarea{font-family:inherit;font-size:inherit}
         <div class="form-success" id="formSuccess">
           <div class="fs-ic"><svg width="30" height="30" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12l5 5L20 6"/></svg></div>
           <h3>Richiesta inviata</h3>
-          <p>Vi ringraziamo. La richiesta è stata ricevuta correttamente: sarete ricontattati a breve per fissare un primo incontro.</p>
+          <p>Vi ringraziamo. La richiesta è stata ricevuta correttamente: sarete ricontattati a breve dal nostro team.</p>
         </div>
       </div>
     </div>
@@ -493,12 +494,14 @@ input,select,textarea{font-family:inherit;font-size:inherit}
   function openMenu(){
     mobileNav.classList.add('open');
     burger.classList.add('active');
+    document.body.classList.add('menu-open');
     burger.setAttribute('aria-expanded','true');
     document.body.style.overflow='hidden';
   }
   function closeMenu(){
     mobileNav.classList.remove('open');
     burger.classList.remove('active');
+    document.body.classList.remove('menu-open');
     burger.setAttribute('aria-expanded','false');
     document.body.style.overflow='';
   }
