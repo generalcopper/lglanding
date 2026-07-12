@@ -496,34 +496,20 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   });
 
   var header = document.getElementById('header');
-  function currentScroll(){
-    return window.pageYOffset
-      || document.documentElement.scrollTop
-      || document.body.scrollTop
-      || (document.scrollingElement && document.scrollingElement.scrollTop)
-      || 0;
-  }
-  function updateHeader(){
-    var y = currentScroll();
+  var lastY = window.pageYOffset || document.documentElement.scrollTop || 0;
+  function onScrollHeader(){
+    var y = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     header.classList.toggle('scrolled', y > 24);
-    header.classList.toggle('hidden', y > 80);
-  }
-  window.addEventListener('scroll',updateHeader,{passive:true});
-  document.addEventListener('scroll',updateHeader,{passive:true,capture:true});
-  // sentinel: hide the header whenever the top of the page leaves the viewport,
-  // works even when scrolling happens inside a container (e.g. preview panes)
-  if('IntersectionObserver' in window){
-    var topEl=document.getElementById('top');
-    if(topEl){
-      new IntersectionObserver(function(entries){
-        entries.forEach(function(en){
-          header.classList.toggle('hidden', !en.isIntersecting);
-          header.classList.toggle('scrolled', !en.isIntersecting);
-        });
-      },{threshold:0,rootMargin:'-80px 0px 0px 0px'}).observe(topEl);
+    if(y > lastY && y > 100){
+      header.classList.add('hidden');   // scrolling down
+    }else if(y < lastY){
+      header.classList.remove('hidden'); // scrolling up
     }
+    if(y <= 4)header.classList.remove('hidden'); // always visible at very top
+    lastY = y;
   }
-  updateHeader();
+  window.addEventListener('scroll',onScrollHeader,{passive:true});
+  onScrollHeader();
 
   /* smooth anchor */
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
