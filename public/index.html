@@ -103,10 +103,10 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 }
 .card{
   width:100%;
-  min-height:calc((100vh - 96px) / 2);
+  min-height:calc(100vh - 96px);
   display:flex;flex-direction:column;
-  align-items:flex-start;justify-content:flex-end;gap:22px;
-  padding:64px clamp(28px,6vw,96px);
+  align-items:center;justify-content:center;text-align:center;gap:26px;
+  padding:80px clamp(28px,6vw,96px);
   border-radius:0;
   background:#0A0C11;
   box-shadow:none;
@@ -123,23 +123,41 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .card:hover::before{opacity:1}
 
 /* brand cards — flat solid color */
-.card.bionee{background:#94c248;border:none}
+.card.bionee{background:#1A2410;border:none}
 .card.bionee::before{display:none}
 .card.bionee .card-caption{color:rgba(255,255,255,.92)}
 .card.bionee .card-go{color:#fff}
 .card.bionee:hover .card-go{color:#fff}
+.card.bionee .card-logo,
+.card.bionee .card-caption,
+.card.bionee .card-go{position:relative;z-index:2}
 
-.card.ilp{background:#1c6fe6;border:none}
+.card.ilp{background:#0B1220;border:none}
 .card.ilp::before{display:none}
 .card.ilp .card-go{color:#fff}
 .card.ilp:hover .card-go{color:#fff}
-.card-logo{
-  display:flex;align-items:center;justify-content:flex-start;
+.card-video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;z-index:0;pointer-events:none;
 }
-.card-logo img{max-width:min(70%,280px);height:auto}
+.card-video-overlay{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(6,10,20,.35) 0%,rgba(6,10,20,.15) 40%,rgba(6,10,20,.55) 100%),
+    radial-gradient(120% 90% at 50% 50%,rgba(6,10,20,.15),rgba(6,10,20,.5) 100%);
+  backdrop-filter:saturate(1.1);
+  -webkit-backdrop-filter:saturate(1.1);
+}
+.card.ilp .card-logo,
+.card.ilp .card-caption,
+.card.ilp .card-go{position:relative;z-index:2}
+.card-logo{
+  display:flex;align-items:center;justify-content:center;
+}
+.card-logo img{max-width:min(70%,300px);height:auto}
 .card-caption{
-  max-width:400px;text-align:left;
-  font-size:1rem;line-height:1.55;font-weight:500;
+  max-width:440px;text-align:center;
+  font-size:1.05rem;line-height:1.55;font-weight:500;
   color:rgba(255,255,255,.92);letter-spacing:-.01em;text-wrap:pretty;
 }
 .card-go{
@@ -259,11 +277,15 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 <!-- ============ ENTRY CARDS ============ -->
 <section class="cards" aria-label="I nostri brand">
   <a class="card bionee" href="https://www.amazon.it/stores/BIONEE/page/5014B05E-4297-4BBE-A29B-D6BF55C5BEA6?lp_asin=B0GYDTGHXQ&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto&bl_grd_status=override" target="_blank" rel="noopener" aria-label="BIONEE su Amazon">
+    <video class="card-video" src="/4807709_Farm_Tomato_1920x1080.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+    <span class="card-video-overlay" aria-hidden="true"></span>
     <span class="card-logo"><img src="/logo%20bionee.png" alt="BIONEE"></span>
     <span class="card-caption">Il nostro brand di prodotti naturali per la cura della casa, degli animali e delle piante, in vendita su Amazon.</span>
     <span class="card-go">Scopri lo store <span class="arr">→</span></span>
   </a>
   <a class="card ilp" href="https://www.ilovepaghe.com/" target="_blank" rel="noopener" aria-label="iLovePaghe">
+    <video class="card-video" src="/Scena-1.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+    <span class="card-video-overlay" aria-hidden="true"></span>
     <span class="card-logo"><img src="/ilovepaghe_logo.png" alt="iLovePaghe"></span>
     <span class="card-caption">La piattaforma che digitalizza l'invio e la gestione delle buste paga, semplice e sicura.</span>
     <span class="card-go">Vai al sito <span class="arr">→</span></span>
