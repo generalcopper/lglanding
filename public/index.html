@@ -678,59 +678,75 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   /* ===== SEDE MAP: non-interactive, premium fly-in on scroll ===== */
   (function(){
     var el=document.getElementById('mapCanvas');
-    if(!el||typeof maplibregl==='undefined')return;
+    if(!el){console.warn('[mappa] container #mapCanvas non trovato');return;}
+    if(typeof maplibregl==='undefined'){
+      console.error('[mappa] MapLibre non caricato: controlla che unpkg.com sia raggiungibile e non bloccato da CSP/adblock');
+      el.style.background='#0a0e17';
+      return;
+    }
     var SEDE=[11.1830,45.2130]; // Concamarise (VR) — Via Giuseppe Verdi
     var ITALY=[12.5,42.5];
     var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-    var map=new maplibregl.Map({
-      container:el,
-      style:'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
-      center:ITALY,
-      zoom:reduce?15:4.4,
-      pitch:reduce?0:45,
-      bearing:0,
-      interactive:false,
-      attributionControl:false,
-      fadeDuration:0
-    });
-    // marker at sede
+    var map;
+    try{
+      map=new maplibregl.Map({
+        container:el,
+        style:'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+        center:ITALY,
+        zoom:reduce?15:4.4,
+        pitch:reduce?0:45,
+        bearing:0,
+        interactive:false,
+        attributionControl:false,
+        fadeDuration:0
+      });
+    }catch(err){
+      console.error('[mappa] init fallita:',err);return;
+    }
+    map.on('error',function(e){console.error('[mappa] errore stile/tiles:',e&&e.error?e.error:e);});
+
     var pin=document.createElement('div');pin.className='map-pin';
-    new maplibregl.Marker({element:pin}).setLngLat(SEDE).addTo(map);
+    var marker;
+
+    var loaded=false;
+    map.on('load',function(){
+      loaded=true;
+      map.resize();
+      try{marker=new maplibregl.Marker({element:pin}).setLngLat(SEDE).addTo(map);}catch(e){}
+      if(started)kickoff();
+    });
 
     var flown=false;
     function flyIn(){
       if(flown||reduce)return;flown=true;
       map.flyTo({
-        center:SEDE,
-        zoom:16.2,
-        pitch:58,
-        bearing:-18,
-        duration:6500,
-        curve:1.5,
-        essential:true,
+        center:SEDE,zoom:16.2,pitch:58,bearing:-18,
+        duration:6500,curve:1.5,essential:true,
         easing:function(t){return 1-Math.pow(1-t,3);}
       });
     }
+    function kickoff(){
+      // give the entrance animation a moment, then ensure correct size before flying
+      setTimeout(function(){map.resize();flyIn();},400);
+    }
+
     var started=false;
-    map.on('load',function(){
-      if(started)flyIn();
-    });
+    function trigger(){
+      if(started)return;started=true;
+      if(loaded)kickoff();
+    }
     if('IntersectionObserver' in window){
+      var sede=document.getElementById('sede');
       var mapObs=new IntersectionObserver(function(entries){
         entries.forEach(function(en){
-          if(en.isIntersecting){
-            started=true;
-            if(map.loaded())flyIn();
-            mapObs.unobserve(en.target);
-          }
+          if(en.isIntersecting){trigger();mapObs.unobserve(en.target);}
         });
-      },{threshold:.45});
-      mapObs.observe(document.getElementById('sede'));
+      },{threshold:.35});
+      mapObs.observe(sede);
     }else{
-      started=true;map.on('load',flyIn);
+      trigger();
     }
-    // keep map sized correctly
-    window.addEventListener('resize',function(){map.resize();});
+    window.addEventListener('resize',function(){if(map)map.resize();});
   })();
 
   /* form validation */
