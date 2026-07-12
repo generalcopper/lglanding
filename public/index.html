@@ -122,6 +122,47 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .burger.active span:nth-child(2){opacity:0}
 .burger.active span:nth-child(3){top:20px;transform:rotate(-45deg)}
 
+/* ============ PRELOADER ============ */
+.preloader{
+  position:fixed;inset:0;z-index:3000;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--dark);
+  transition:opacity .7s var(--ease-out),visibility 0s linear .7s;
+}
+.preloader::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 50% at 50% 45%,rgba(46,107,255,.14),transparent 70%);
+}
+.preloader.done{opacity:0;visibility:hidden}
+.pl-inner{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;align-items:center;gap:38px;
+}
+.pl-logo img{
+  height:64px;width:auto;
+  filter:drop-shadow(0 4px 24px rgba(46,107,255,.35));
+  animation:plPulse 2.4s var(--ease) infinite;
+}
+@keyframes plPulse{0%,100%{opacity:.86;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+.pl-spinner{width:50px;height:50px}
+.pl-spinner svg{width:100%;height:100%;animation:plRotate 1.15s linear infinite}
+.pl-track{fill:none;stroke:rgba(255,255,255,.08);stroke-width:3}
+.pl-arc{
+  fill:none;stroke:var(--blue);stroke-width:3;stroke-linecap:round;
+  stroke-dasharray:90 126;
+  filter:drop-shadow(0 0 6px rgba(46,107,255,.55));
+  animation:plDash 1.5s ease-in-out infinite;
+}
+@keyframes plRotate{to{transform:rotate(360deg)}}
+@keyframes plDash{
+  0%{stroke-dasharray:1 126;stroke-dashoffset:0}
+  50%{stroke-dasharray:90 126;stroke-dashoffset:-30}
+  100%{stroke-dasharray:90 126;stroke-dashoffset:-124}
+}
+@media (prefers-reduced-motion:reduce){
+  .pl-logo img,.pl-spinner svg,.pl-arc{animation:none}
+}
+
 /* mobile menu */
 .mobile-nav{
   position:fixed;inset:0;z-index:1100;background:var(--dark);
@@ -334,6 +375,14 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 </head>
 <body>
 
+<!-- ============ PRELOADER ============ -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pl-inner">
+    <div class="pl-logo"><img src="/LG%20TRADING%20LOGO.%20trasp.png" alt="LG Trading SRL"></div>
+    <div class="pl-spinner"><svg viewBox="0 0 50 50"><circle class="pl-track" cx="25" cy="25" r="20"></circle><circle class="pl-arc" cx="25" cy="25" r="20"></circle></svg></div>
+  </div>
+</div>
+
 <span id="top"></span>
 
 <!-- ============ HEADER ============ -->
@@ -461,6 +510,35 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 <script>
 (function(){
+  /* ===== PRELOADER (waits for videos) ===== */
+  (function(){
+    var pre=document.getElementById('preloader');
+    if(!pre)return;
+    document.documentElement.style.overflow='hidden';
+    var vids=Array.prototype.slice.call(document.querySelectorAll('.card-video'));
+    var done=false;
+    function hide(){
+      if(done)return;done=true;
+      pre.classList.add('done');
+      document.documentElement.style.overflow='';
+      vids.forEach(function(v){var p=v.play();if(p&&p.catch)p.catch(function(){});});
+    }
+    if(vids.length===0){setTimeout(hide,400);return;}
+    var ready=0;
+    function mark(){ready++;if(ready>=vids.length)hide();}
+    vids.forEach(function(v){
+      if(v.readyState>=3){mark();return;}
+      var fired=false;
+      function ok(){if(fired)return;fired=true;mark();}
+      v.addEventListener('canplaythrough',ok,{once:true});
+      v.addEventListener('loadeddata',ok,{once:true});
+      v.addEventListener('error',ok,{once:true});
+    });
+    /* safety cap so users never wait too long */
+    setTimeout(hide,6000);
+    window.addEventListener('load',function(){setTimeout(hide,300);});
+  })();
+
   var header = document.getElementById('header');
   var lastY = window.pageYOffset;
   window.addEventListener('scroll',function(){
