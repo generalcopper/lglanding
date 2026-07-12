@@ -256,7 +256,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .card-map{background:#05070c;cursor:default;overflow:hidden}
 .map-canvas{
   position:absolute;inset:0;z-index:0;
-  filter:saturate(1.05) contrast(1.03);
+  filter:saturate(.75) contrast(1.12) brightness(1.02);
 }
 .map-canvas canvas{outline:none}
 .map-overlay{
@@ -668,10 +668,9 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       var sede=document.getElementById('sede');
       var r=sede.getBoundingClientRect();
       var vh=window.innerHeight||document.documentElement.clientHeight;
-      // 0 when the card enters from the bottom, 1 as it leaves toward the top
-      var total=r.height+vh;
-      var travelled=vh-r.top;
-      var p=travelled/total;
+      // 0 when the card top enters from the bottom (top = vh),
+      // 1 when the card is filling the screen (top = 0).
+      var p=(vh-r.top)/vh;
       return Math.max(0,Math.min(1,p));
     }
     function onScroll(){
