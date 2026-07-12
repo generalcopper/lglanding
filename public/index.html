@@ -3,16 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LG Trading SRL — Vendite più forti. Processi più semplici. Crescita più veloce.</title>
-<meta name="description" content="LG Trading SRL è il partner digitale e commerciale delle imprese: e-commerce, Amazon e marketplace, sviluppo di app, gestionali, dashboard e automazioni su misura.">
+<title>LG Trading SRL — Bionee e iLovePaghe</title>
+<meta name="description" content="LG Trading SRL è la casa dei suoi progetti digitali e commerciali: Bionee, il brand di prodotti naturali per la cura della casa, degli animali e delle piante, e iLovePaghe, la piattaforma per l'invio e la gestione delle buste paga.">
 <meta name="theme-color" content="#FFFFFF">
+<link rel="canonical" href="https://www.lgtrading.it/">
+<meta name="robots" content="index, follow">
 <link rel="icon" type="image/png" href="/LG%20TRADING%20LOGO%20MADDAFAFCCA%20MODIFICABILE.png">
 <link rel="apple-touch-icon" href="/LG%20TRADING%20LOGO%20MADDAFAFCCA%20MODIFICABILE.png">
-<meta property="og:title" content="LG Trading SRL — Vendite più forti. Processi più semplici. Crescita più veloce.">
-<meta property="og:description" content="Partner digitale e commerciale B2B: e-commerce, Amazon e marketplace, software su misura, gestionali, dashboard e automazioni.">
+<meta property="og:title" content="LG Trading SRL — Bionee e iLovePaghe">
+<meta property="og:description" content="La casa dei progetti di LG Trading: Bionee, prodotti naturali per la cura della casa, degli animali e delle piante, e iLovePaghe, la piattaforma per la gestione delle buste paga.">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<meta property="og:site_name" content="LG Trading SRL">
+<meta property="og:url" content="https://www.lgtrading.it/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LG Trading SRL — Bionee e iLovePaghe">
+<meta name="twitter:description" content="La casa dei progetti di LG Trading: Bionee, prodotti naturali per la cura della casa, degli animali e delle piante, e iLovePaghe, la piattaforma per la gestione delle buste paga.">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Organization","name":"LG Trading SRL","email":"info@lgtrading.it","telephone":"+39 348 125 3603","vatID":"IT05060650230","taxID":"05060650230","address":[{"@type":"PostalAddress","streetAddress":"Via Olga Visentini 1","postalCode":"37053","addressLocality":"Cerea","addressRegion":"VR","addressCountry":"IT"},{"@type":"PostalAddress","streetAddress":"Via Giuseppe Verdi 4","postalCode":"37050","addressLocality":"Concamarise","addressRegion":"VR","addressCountry":"IT"}]}
+{"@context":"https://schema.org","@type":"Organization","name":"LG Trading SRL","url":"https://www.lgtrading.it/","email":"info@lgtrading.it","telephone":"+39 348 125 3603","vatID":"IT05060650230","taxID":"05060650230","address":[{"@type":"PostalAddress","streetAddress":"Via Olga Visentini 1","postalCode":"37053","addressLocality":"Cerea","addressRegion":"VR","addressCountry":"IT"},{"@type":"PostalAddress","streetAddress":"Via Giuseppe Verdi 4","postalCode":"37050","addressLocality":"Concamarise","addressRegion":"VR","addressCountry":"IT"}],"brand":[{"@type":"Brand","name":"Bionee","description":"Prodotti naturali per la cura della casa, degli animali e delle piante.","url":"https://www.amazon.it/stores/BIONEE/page/5014B05E-4297-4BBE-A29B-D6BF55C5BEA6"},{"@type":"Brand","name":"iLovePaghe","description":"Piattaforma per l'invio e la gestione digitale delle buste paga.","url":"https://www.ilovepaghe.com/"}]}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -76,21 +84,70 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .btn-primary:hover{background:#1F5BEF;box-shadow:0 20px 44px -14px rgba(46,107,255,.7)}
 
 /* ============ HEADER ============ */
+:root{--header-h:84px}
 .header{
-  position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 0;
-  background:var(--dark);
-  border-bottom:1px solid var(--line-dark-soft);
-  transition:padding .35s var(--ease),box-shadow .35s,transform .4s var(--ease);
+  position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--header-h);
+  display:flex;align-items:center;
+  background:linear-gradient(180deg,rgba(4,6,11,.72) 0%,rgba(4,6,11,.32) 60%,transparent 100%);
+  transition:height .4s var(--ease),background .4s var(--ease),box-shadow .4s var(--ease),transform .45s var(--ease);
 }
 .header.hidden{transform:translateY(-100%)}
 .header.scrolled{
-  padding:12px 0;
-  box-shadow:0 14px 38px -26px rgba(0,0,0,.9);
+  height:66px;
+  background:rgba(6,8,13,.78);
+  backdrop-filter:blur(20px) saturate(1.6);
+  -webkit-backdrop-filter:blur(20px) saturate(1.6);
+  box-shadow:0 1px 0 rgba(255,255,255,.06),0 18px 40px -24px rgba(0,0,0,.85);
 }
-.header-inner{display:flex;align-items:center;justify-content:center}
+.header .wrap{width:100%}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
 .logo{display:flex;align-items:center;flex-shrink:0}
-.logo img{height:60px;width:auto;transition:height .3s var(--ease)}
-.header.scrolled .logo img{height:50px}
+.logo img{height:48px;width:auto;transition:height .4s var(--ease);filter:drop-shadow(0 1px 8px rgba(0,0,0,.4))}
+.header.scrolled .logo img{height:40px;filter:none}
+
+/* desktop nav */
+.nav{display:none}
+
+/* burger */
+.burger{display:block;width:44px;height:40px;position:relative;z-index:1002;background:none;border:none}
+.burger span{position:absolute;left:9px;width:26px;height:2px;background:#fff;border-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,.4);transition:.35s var(--ease)}
+.burger span:nth-child(1){top:13px}
+.burger span:nth-child(2){top:20px}
+.burger span:nth-child(3){top:27px}
+.burger.active span:nth-child(1){top:20px;transform:rotate(45deg)}
+.burger.active span:nth-child(2){opacity:0}
+.burger.active span:nth-child(3){top:20px;transform:rotate(-45deg)}
+
+/* mobile menu */
+.mobile-nav{
+  position:fixed;inset:0;z-index:1100;background:var(--dark);
+  display:flex;flex-direction:column;justify-content:center;gap:8px;padding:100px 32px 44px;
+  transform:translateY(-102%);transition:transform .55s var(--ease-out);
+  visibility:hidden;
+}
+.mobile-nav.open{transform:translateY(0);visibility:visible}
+.mobile-nav a{
+  font-family:'Inter Tight',sans-serif;font-size:1.8rem;font-weight:600;color:#fff;
+  padding:14px 0;border-bottom:1px solid var(--line-dark-soft);letter-spacing:-.03em;
+}
+.mobile-nav a small{color:var(--blue-soft);font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;margin-right:14px}
+.mobile-close{
+  position:absolute;top:20px;right:22px;width:46px;height:46px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.06);border:1px solid var(--line-dark-soft);border-radius:100px;
+  transition:background .25s;
+}
+.mobile-close:hover{background:rgba(255,255,255,.12)}
+.mobile-close::before,.mobile-close::after{
+  content:"";position:absolute;width:20px;height:2px;background:#fff;border-radius:2px;
+}
+.mobile-close::before{transform:rotate(45deg)}
+.mobile-close::after{transform:rotate(-45deg)}
+
+@media (max-width:760px){
+  :root{--header-h:68px}
+  .logo img{height:42px}
+}
 
 
 /* ============ CARDS (entry) ============ */
@@ -99,14 +156,13 @@ input,select,textarea{font-family:inherit;font-size:inherit}
   flex-direction:column;
   gap:0;
   padding:0;
-  padding-top:96px;
 }
 .card{
   width:100%;
-  min-height:calc(100vh - 96px);
+  min-height:100vh;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;text-align:center;gap:26px;
-  padding:80px clamp(28px,6vw,96px);
+  padding:calc(var(--header-h) + 40px) clamp(28px,6vw,96px) 80px;
   border-radius:0;
   background:#0A0C11;
   box-shadow:none;
@@ -186,7 +242,7 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 }
 
 /* ============ SECTION / HEADS ============ */
-.section{padding:110px 0;position:relative}
+.section{padding:170px 0;position:relative}
 .eyebrow{
   display:inline-flex;align-items:center;gap:10px;
   font-size:12.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);
@@ -195,28 +251,30 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .eyebrow.center{justify-content:center}
 
 /* ============ CONTACT ============ */
-.contact-grid{max-width:660px;margin:0 auto}
+.contact-grid{max-width:680px;margin:0 auto}
 
 .form-card{background:transparent;padding:0}
-.form-card h3{font-size:1.5rem}
-.form-card>form>p{margin-top:8px;color:var(--muted);font-size:.96rem}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.form-card h3{font-size:1.8rem}
+.form-card>form>p{margin-top:12px;color:var(--muted);font-size:1rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:32px}
+.form-row+.field{margin-top:32px}
 .field{display:flex;flex-direction:column}
-.field label{font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:7px}
+.field label{font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:10px}
 .field label em{color:var(--blue);font-style:normal}
 .field input,.field select,.field textarea{
-  padding:13px 15px;border-radius:4px;border:1px solid var(--line);background:#fff;color:var(--ink);
+  padding:15px 17px;border-radius:4px;border:1px solid var(--line);background:#fff;color:var(--ink);
   transition:border-color .25s,box-shadow .25s;
 }
 .field input::placeholder,.field textarea::placeholder{color:var(--faint)}
 .field select{color:var(--muted)}
-.field textarea{min-height:120px;resize:vertical}
+.field textarea{min-height:150px;resize:vertical}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(46,107,255,.14)}
 .field .err{display:none;color:#D62E4E;font-size:.8rem;margin-top:6px}
 .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:#D62E4E;box-shadow:0 0 0 3px rgba(214,46,78,.12)}
 .field.invalid .err{display:block}
-.form-submit{margin-top:24px;width:100%}
-.form-note{margin-top:16px;color:var(--faint);font-size:.82rem;line-height:1.5}
+.form-submit{margin-top:36px;width:100%;box-shadow:none;padding:17px 27px;background:var(--dark);color:#fff}
+.form-submit:hover{background:#15181F;box-shadow:none}
+.form-note{margin-top:20px;color:var(--faint);font-size:.82rem;line-height:1.5}
 .form-success{display:none;text-align:center;padding:40px 20px}
 .form-success.show{display:block}
 .fs-ic{width:60px;height:60px;border-radius:50%;background:rgba(46,107,255,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
@@ -225,20 +283,21 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .form-success p{margin-top:10px;color:var(--muted);max-width:360px;margin-left:auto;margin-right:auto}
 
 /* ============ FOOTER ============ */
-.footer{background:var(--dark);color:#fff;padding:74px 0 38px}
-.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.1fr;gap:44px}
-.footer-brand .logo img{height:52px}
-.footer-brand p{margin-top:18px;font-size:.9rem;color:rgba(255,255,255,.5);max-width:330px;line-height:1.65}
-.footer-col h5{font-size:.76rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.42);margin-bottom:18px}
-.footer-col a{display:block;font-size:.9rem;color:rgba(255,255,255,.66);padding:5px 0;transition:color .25s}
+.footer{background:var(--dark);color:#fff;padding:130px 0 60px}
+.footer-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.1fr;gap:64px;padding-bottom:80px}
+.footer-brand{max-width:380px}
+.footer-brand .logo img{height:58px}
+.footer-brand p{margin-top:24px;font-size:.94rem;color:rgba(255,255,255,.5);line-height:1.75}
+.footer-col h5{font-size:.76rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.42);margin-bottom:24px}
+.footer-col a{display:block;font-size:.92rem;color:rgba(255,255,255,.66);padding:8px 0;transition:color .25s}
 .footer-col a:hover{color:#fff}
-.footer-col p{font-size:.88rem;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:14px}
+.footer-col p{font-size:.9rem;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:20px}
 .footer-bottom{
   display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
-  margin-top:52px;padding-top:26px;border-top:1px solid var(--line-dark-soft);
-  font-size:.82rem;color:rgba(255,255,255,.44);
+  padding-top:40px;border-top:1px solid var(--line-dark-soft);
+  font-size:.84rem;color:rgba(255,255,255,.44);
 }
-.fb-links{display:flex;gap:22px}
+.fb-links{display:flex;gap:26px}
 .fb-links a{transition:color .25s}
 .fb-links a:hover{color:#fff}
 
@@ -247,8 +306,8 @@ input,select,textarea{font-family:inherit;font-size:inherit}
   .footer-top{grid-template-columns:1fr 1fr;gap:36px}
 }
 @media (max-width:720px){
-  .cards{padding-top:88px}
-  .card{min-height:auto;padding:56px 24px}
+  .cards{padding-top:0}
+  .card{min-height:100vh;padding:calc(var(--header-h) + 28px) 24px 56px}
   .wrap{padding:0 22px}
   .form-row{grid-template-columns:1fr}
   .form-card{padding:0}
@@ -271,20 +330,36 @@ input,select,textarea{font-family:inherit;font-size:inherit}
     <a href="#top" class="logo" aria-label="LG Trading SRL">
       <img src="/LG%20TRADING%20LOGO.%20trasp.png" alt="LG Trading SRL">
     </a>
+    <nav class="nav" aria-label="Navigazione rapida">
+      <a href="#bionee">Bionee</a>
+      <a href="#ilovepaghe">iLovePaghe</a>
+      <a href="#contatti">Contatti</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Apri il menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
+<!-- mobile nav -->
+<nav class="mobile-nav" id="mobileNav" aria-label="Menu mobile">
+  <button class="mobile-close" id="mobileClose" aria-label="Chiudi il menu"></button>
+  <a href="#bionee"><small>01</small>Bionee</a>
+  <a href="#ilovepaghe"><small>02</small>iLovePaghe</a>
+  <a href="#contatti"><small>03</small>Contatti</a>
+</nav>
+
 <!-- ============ ENTRY CARDS ============ -->
 <section class="cards" aria-label="I nostri brand">
-  <a class="card bionee" href="https://www.amazon.it/stores/BIONEE/page/5014B05E-4297-4BBE-A29B-D6BF55C5BEA6?lp_asin=B0GYDTGHXQ&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto&bl_grd_status=override" target="_blank" rel="noopener" aria-label="BIONEE su Amazon">
+  <a id="bionee" class="card bionee" href="https://www.amazon.it/stores/BIONEE/page/5014B05E-4297-4BBE-A29B-D6BF55C5BEA6?lp_asin=B0GYDTGHXQ&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto&bl_grd_status=override" target="_blank" rel="noopener" aria-label="BIONEE su Amazon">
     <video class="card-video" src="/4807709_Farm_Tomato_1920x1080.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
     <span class="card-logo"><img src="/logo%20bionee.png" alt="BIONEE"></span>
     <span class="card-caption">Il nostro brand di prodotti naturali per la cura della casa, degli animali e delle piante, in vendita su Amazon.</span>
     <span class="card-go">Scopri lo store <span class="arr">→</span></span>
   </a>
-  <a class="card ilp" href="https://www.ilovepaghe.com/" target="_blank" rel="noopener" aria-label="iLovePaghe">
-    <video class="card-video" src="/Scena-1.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+  <a id="ilovepaghe" class="card ilp" href="https://www.ilovepaghe.com/" target="_blank" rel="noopener" aria-label="iLovePaghe">
+    <video class="card-video" src="/immagini/Scena-2.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
     <span class="card-logo"><img src="/ilovepaghe_logo.png" alt="iLovePaghe"></span>
     <span class="card-caption">La piattaforma che digitalizza l'invio e la gestione delle buste paga, semplice e sicura.</span>
@@ -350,7 +425,7 @@ input,select,textarea{font-family:inherit;font-size:inherit}
         <a href="#top" class="logo">
           <img src="/LG%20TRADING%20LOGO.%20trasp.png" alt="LG Trading SRL">
         </a>
-        <p>La casa dei nostri progetti: BIONEE, il brand di prodotti naturali per la cura della casa, degli animali e delle piante, e iLovePaghe, la piattaforma che digitalizza l'invio e la gestione delle buste paga.</p>
+        <p>LG Trading SRL sviluppa e gestisce progetti a marchio proprio nei settori dei prodotti di consumo e dei servizi digitali per le imprese.</p>
       </div>
       <div class="footer-col">
         <h5>Brand</h5>
@@ -361,7 +436,7 @@ input,select,textarea{font-family:inherit;font-size:inherit}
         <h5>Contatti</h5>
         <a href="mailto:info@lgtrading.it">info@lgtrading.it</a>
         <a href="tel:+393481253603">+39 348 125 3603</a>
-        <a href="#contatti">Richiedete una consulenza</a>
+        <a href="#contatti">Contatti</a>
       </div>
       <div class="footer-col">
         <h5>Sedi</h5>
@@ -402,9 +477,35 @@ input,select,textarea{font-family:inherit;font-size:inherit}
       var el=document.querySelector(href);
       if(!el)return;
       e.preventDefault();
-      var y=el.getBoundingClientRect().top+window.pageYOffset-84;
+      var hh=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||80;
+      var y=el.getBoundingClientRect().top+window.pageYOffset-hh-8;
       window.scrollTo({top:y<0?0:y,behavior:'smooth'});
     });
+  });
+
+  /* mobile menu */
+  var burger=document.getElementById('burger');
+  var mobileNav=document.getElementById('mobileNav');
+  var mobileClose=document.getElementById('mobileClose');
+  function openMenu(){
+    mobileNav.classList.add('open');
+    burger.classList.add('active');
+    burger.setAttribute('aria-expanded','true');
+    document.body.style.overflow='hidden';
+  }
+  function closeMenu(){
+    mobileNav.classList.remove('open');
+    burger.classList.remove('active');
+    burger.setAttribute('aria-expanded','false');
+    document.body.style.overflow='';
+  }
+  burger.addEventListener('click',function(){
+    if(mobileNav.classList.contains('open')){closeMenu();}else{openMenu();}
+  });
+  if(mobileClose){mobileClose.addEventListener('click',closeMenu);}
+  mobileNav.querySelectorAll('a').forEach(function(a){a.addEventListener('click',closeMenu);});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&mobileNav.classList.contains('open')){closeMenu();}
   });
 
   /* form validation */
