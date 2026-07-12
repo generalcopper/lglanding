@@ -122,33 +122,7 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .burger.active span:nth-child(2){opacity:0}
 .burger.active span:nth-child(3){top:20px;transform:rotate(-45deg)}
 
-/* ============ PRELOADER ============ */
-.preloader{
-  position:fixed;inset:0;z-index:3000;
-  display:flex;align-items:center;justify-content:center;
-  background:#000;
-  transition:opacity .8s var(--ease-out),visibility 0s linear .8s;
-}
-.preloader::after{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(60% 50% at 50% 45%,rgba(46,107,255,.10),transparent 72%);
-}
-.preloader.done{opacity:0;visibility:hidden}
-.pl-inner{
-  position:relative;z-index:1;
-  display:flex;flex-direction:column;align-items:center;gap:52px;
-}
-.pl-logo img{
-  height:150px;width:auto;
-  filter:drop-shadow(0 6px 40px rgba(46,107,255,.35));
-  animation:plPulse 2.4s var(--ease) infinite;
-}
-@keyframes plPulse{0%,100%{opacity:.86;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
-@media (prefers-reduced-motion:reduce){
-  .pl-logo img{animation:none}
-}
-
-/* premium site entrance after loader */
+/* premium site entrance */
 .header,.cards,.section,.footer{
   opacity:0;transform:translateY(22px);
   transition:opacity 1s var(--ease-out),transform 1s var(--ease-out);
@@ -282,7 +256,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .card-map{background:#05070c;cursor:default;overflow:hidden}
 .map-canvas{
   position:absolute;inset:0;z-index:0;
-  filter:saturate(.9) brightness(.92);
+  filter:saturate(1.05) contrast(1.03);
 }
 .map-canvas canvas{outline:none}
 .map-overlay{
@@ -420,13 +394,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 </head>
 <body>
 
-<!-- ============ PRELOADER ============ -->
-<div class="preloader" id="preloader" aria-hidden="true">
-  <div class="pl-inner">
-    <div class="pl-logo"><img src="/LG%20TRADING%20LOGO.%20trasp.png" alt="LG Trading SRL"></div>
-  </div>
-</div>
-
 <span id="top"></span>
 
 <!-- ============ HEADER ============ -->
@@ -562,35 +529,10 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 <script>
 (function(){
-  /* ===== PRELOADER (waits for videos) ===== */
-  (function(){
-    var pre=document.getElementById('preloader');
-    if(!pre)return;
-    document.documentElement.style.overflow='hidden';
-    var vids=Array.prototype.slice.call(document.querySelectorAll('.card-video'));
-    var done=false;
-    function hide(){
-      if(done)return;done=true;
-      pre.classList.add('done');
-      document.body.classList.add('site-ready');
-      document.documentElement.style.overflow='';
-      vids.forEach(function(v){var p=v.play();if(p&&p.catch)p.catch(function(){});});
-    }
-    if(vids.length===0){setTimeout(hide,400);return;}
-    var ready=0;
-    function mark(){ready++;if(ready>=vids.length)hide();}
-    vids.forEach(function(v){
-      if(v.readyState>=3){mark();return;}
-      var fired=false;
-      function ok(){if(fired)return;fired=true;mark();}
-      v.addEventListener('canplaythrough',ok,{once:true});
-      v.addEventListener('loadeddata',ok,{once:true});
-      v.addEventListener('error',ok,{once:true});
-    });
-    /* safety cap so users never wait too long */
-    setTimeout(hide,6000);
-    window.addEventListener('load',function(){setTimeout(hide,300);});
-  })();
+  /* ===== SITE ENTRANCE ===== */
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){document.body.classList.add('site-ready');});
+  });
 
   var header = document.getElementById('header');
   var lastY = window.pageYOffset;
@@ -668,20 +610,33 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       el.style.background='#0a0e17';
       return;
     }
-    var SEDE=[11.1830,45.2130]; // Concamarise (VR) — Via Giuseppe Verdi
+    var SEDE=[11.12719,45.18344]; // Concamarise (VR) — Plus Code 8FQH54MG+9V
     var ITALY=[12.5,42.5];
     var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
     // ensure the container has real dimensions before MapLibre reads them
     el.style.position='absolute';el.style.inset='0';el.style.width='100%';el.style.height='100%';
     console.log('[mappa] dimensioni container:',el.offsetWidth+'x'+el.offsetHeight);
     var map;
+    var satelliteStyle={
+      version:8,
+      sources:{
+        sat:{
+          type:'raster',
+          tiles:['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+          tileSize:256,
+          maxzoom:19,
+          attribution:'Esri, Maxar, Earthstar Geographics'
+        }
+      },
+      layers:[{id:'sat',type:'raster',source:'sat'}]
+    };
     try{
       map=new maplibregl.Map({
         container:el,
-        style:'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+        style:satelliteStyle,
         center:ITALY,
-        zoom:reduce?15:4.4,
-        pitch:reduce?0:45,
+        zoom:reduce?16:4.4,
+        pitch:0,
         bearing:0,
         interactive:false,
         attributionControl:false,
@@ -708,7 +663,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     function flyIn(){
       if(flown||reduce)return;flown=true;
       map.flyTo({
-        center:SEDE,zoom:16.2,pitch:58,bearing:-18,
+        center:SEDE,zoom:17.4,pitch:0,bearing:0,
         duration:6500,curve:1.5,essential:true,
         easing:function(t){return 1-Math.pow(1-t,3);}
       });
