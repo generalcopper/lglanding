@@ -126,15 +126,26 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .mobile-nav{
   position:fixed;inset:0;z-index:1100;background:var(--dark);
   display:flex;flex-direction:column;justify-content:center;gap:8px;padding:100px 32px 44px;
-  transform:translateY(-102%);transition:transform .55s var(--ease-out);
+  transform:translateY(-102%);
+  transition:transform .6s cubic-bezier(.76,0,.24,1),visibility 0s linear .6s;
   visibility:hidden;
 }
-.mobile-nav.open{transform:translateY(0);visibility:visible}
+.mobile-nav.open{
+  transform:translateY(0);visibility:visible;
+  transition:transform .6s cubic-bezier(.76,0,.24,1),visibility 0s linear 0s;
+}
 body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none}
 .mobile-nav a{
   font-family:'Inter Tight',sans-serif;font-size:1.8rem;font-weight:600;color:#fff;
   padding:14px 0;border-bottom:1px solid var(--line-dark-soft);letter-spacing:-.03em;
+  opacity:0;transform:translateY(18px);
+  transition:opacity .4s var(--ease-out),transform .4s var(--ease-out);
 }
+.mobile-nav.open a{opacity:1;transform:translateY(0)}
+.mobile-nav.open a:nth-child(1){transition-delay:.18s}
+.mobile-nav.open a:nth-child(2){transition-delay:.26s}
+.mobile-nav.open a:nth-child(3){transition-delay:.34s}
+.mobile-nav.open a:nth-child(4){transition-delay:.42s}
 .mobile-nav a small{color:var(--blue-soft);font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;margin-right:14px}
 .mobile-close{display:none;
   position:absolute;top:24px;right:24px;width:44px;height:44px;
@@ -379,31 +390,24 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
           <p>Compilando il modulo sarete ricontattati dal nostro team per dare seguito alla vostra richiesta.</p>
           <div class="form-row">
             <div class="field">
-              <label>Nome azienda <em>*</em></label>
-              <input type="text" name="azienda" required placeholder="Ragione sociale">
-              <span class="err">Indicare il nome dell'azienda</span>
-            </div>
-            <div class="field">
               <label>Nome referente <em>*</em></label>
               <input type="text" name="referente" required placeholder="Nome e cognome">
               <span class="err">Indicare il nome del referente</span>
             </div>
-          </div>
-          <div class="form-row">
             <div class="field">
               <label>Email <em>*</em></label>
               <input type="email" name="email" required placeholder="nome@azienda.it">
               <span class="err">Indicare un indirizzo email valido</span>
             </div>
-            <div class="field">
-              <label>Telefono <em>*</em></label>
-              <input type="tel" name="telefono" required placeholder="+39 ...">
-              <span class="err">Indicare un numero di telefono valido</span>
-            </div>
+          </div>
+          <div class="field">
+            <label>Telefono <em>*</em></label>
+            <input type="tel" name="telefono" required placeholder="+39 ...">
+            <span class="err">Indicare un numero di telefono valido</span>
           </div>
           <div class="field">
             <label>Messaggio <em>*</em></label>
-            <textarea name="messaggio" required placeholder="Descrivete sinteticamente la situazione attuale e gli obiettivi che intendete raggiungere."></textarea>
+            <textarea name="messaggio" required placeholder="Descrivete sinteticamente la vostra richiesta."></textarea>
             <span class="err">Inserire un messaggio</span>
           </div>
           <button type="submit" class="btn btn-primary form-submit">Inviate la richiesta <span class="arr">→</span></button>
