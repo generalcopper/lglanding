@@ -144,23 +144,8 @@ input,select,textarea{font-family:inherit;font-size:inherit}
   animation:plPulse 2.4s var(--ease) infinite;
 }
 @keyframes plPulse{0%,100%{opacity:.86;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
-.pl-spinner{width:50px;height:50px}
-.pl-spinner svg{width:100%;height:100%;animation:plRotate 1.15s linear infinite}
-.pl-track{fill:none;stroke:rgba(255,255,255,.08);stroke-width:3}
-.pl-arc{
-  fill:none;stroke:var(--blue);stroke-width:3;stroke-linecap:round;
-  stroke-dasharray:90 126;
-  filter:drop-shadow(0 0 6px rgba(46,107,255,.55));
-  animation:plDash 1.5s ease-in-out infinite;
-}
-@keyframes plRotate{to{transform:rotate(360deg)}}
-@keyframes plDash{
-  0%{stroke-dasharray:1 126;stroke-dashoffset:0}
-  50%{stroke-dasharray:90 126;stroke-dashoffset:-30}
-  100%{stroke-dasharray:90 126;stroke-dashoffset:-124}
-}
 @media (prefers-reduced-motion:reduce){
-  .pl-logo img,.pl-spinner svg,.pl-arc{animation:none}
+  .pl-logo img{animation:none}
 }
 
 /* premium site entrance after loader */
@@ -439,7 +424,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 <div class="preloader" id="preloader" aria-hidden="true">
   <div class="pl-inner">
     <div class="pl-logo"><img src="/LG%20TRADING%20LOGO.%20trasp.png" alt="LG Trading SRL"></div>
-    <div class="pl-spinner"><svg viewBox="0 0 50 50"><circle class="pl-track" cx="25" cy="25" r="20"></circle><circle class="pl-arc" cx="25" cy="25" r="20"></circle></svg></div>
   </div>
 </div>
 
@@ -687,6 +671,9 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     var SEDE=[11.1830,45.2130]; // Concamarise (VR) — Via Giuseppe Verdi
     var ITALY=[12.5,42.5];
     var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    // ensure the container has real dimensions before MapLibre reads them
+    el.style.position='absolute';el.style.inset='0';el.style.width='100%';el.style.height='100%';
+    console.log('[mappa] dimensioni container:',el.offsetWidth+'x'+el.offsetHeight);
     var map;
     try{
       map=new maplibregl.Map({
@@ -712,6 +699,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     map.on('load',function(){
       loaded=true;
       map.resize();
+      [100,400,900].forEach(function(d){setTimeout(function(){map.resize();},d);});
       try{marker=new maplibregl.Marker({element:pin}).setLngLat(SEDE).addTo(map);}catch(e){}
       if(started)kickoff();
     });
