@@ -86,7 +86,7 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 /* ============ HEADER ============ */
 :root{--header-h:84px}
 .header{
-  position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--header-h);
+  position:fixed;top:0;left:0;right:0;z-index:1150;height:var(--header-h);
   display:flex;align-items:center;
   background:linear-gradient(180deg,rgba(6,8,13,.66) 0%,rgba(6,8,13,.42) 100%);
   backdrop-filter:blur(8px) saturate(1.3);
@@ -104,7 +104,8 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 }
 .header .wrap{width:100%}
 .header-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
-.logo{display:flex;align-items:center;flex-shrink:0}
+.logo{display:flex;align-items:center;flex-shrink:0;margin-right:auto}
+.burger{margin-left:auto}
 .logo img{height:48px;width:auto;transition:height .4s var(--ease);filter:drop-shadow(0 1px 8px rgba(0,0,0,.4))}
 .header.scrolled .logo img{height:40px;filter:none}
 
@@ -112,7 +113,7 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .nav{display:none}
 
 /* burger */
-.burger{display:block;width:44px;height:40px;position:relative;z-index:1002;background:none;border:none}
+.burger{display:block;width:44px;height:40px;position:relative;z-index:1200;background:none;border:none;cursor:pointer}
 .burger span{position:absolute;left:9px;width:26px;height:2px;background:#fff;border-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,.4);transition:.35s var(--ease)}
 .burger span:nth-child(1){top:13px}
 .burger span:nth-child(2){top:20px}
@@ -134,7 +135,7 @@ input,select,textarea{font-family:inherit;font-size:inherit}
   padding:14px 0;border-bottom:1px solid var(--line-dark-soft);letter-spacing:-.03em;
 }
 .mobile-nav a small{color:var(--blue-soft);font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;margin-right:14px}
-.mobile-close{
+.mobile-close{display:none;
   position:absolute;top:24px;right:24px;width:44px;height:44px;
   display:flex;align-items:center;justify-content:center;
   background:none;border:none;opacity:.85;transition:opacity .25s;
