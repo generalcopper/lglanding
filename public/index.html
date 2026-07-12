@@ -126,21 +126,21 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .preloader{
   position:fixed;inset:0;z-index:3000;
   display:flex;align-items:center;justify-content:center;
-  background:var(--dark);
-  transition:opacity .7s var(--ease-out),visibility 0s linear .7s;
+  background:#000;
+  transition:opacity .8s var(--ease-out),visibility 0s linear .8s;
 }
 .preloader::after{
   content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(60% 50% at 50% 45%,rgba(46,107,255,.14),transparent 70%);
+  background:radial-gradient(60% 50% at 50% 45%,rgba(46,107,255,.10),transparent 72%);
 }
 .preloader.done{opacity:0;visibility:hidden}
 .pl-inner{
   position:relative;z-index:1;
-  display:flex;flex-direction:column;align-items:center;gap:38px;
+  display:flex;flex-direction:column;align-items:center;gap:52px;
 }
 .pl-logo img{
-  height:64px;width:auto;
-  filter:drop-shadow(0 4px 24px rgba(46,107,255,.35));
+  height:150px;width:auto;
+  filter:drop-shadow(0 6px 40px rgba(46,107,255,.35));
   animation:plPulse 2.4s var(--ease) infinite;
 }
 @keyframes plPulse{0%,100%{opacity:.86;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
@@ -161,6 +161,20 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 }
 @media (prefers-reduced-motion:reduce){
   .pl-logo img,.pl-spinner svg,.pl-arc{animation:none}
+}
+
+/* premium site entrance after loader */
+.header,.cards,.section,.footer{
+  opacity:0;transform:translateY(22px);
+  transition:opacity 1s var(--ease-out),transform 1s var(--ease-out);
+}
+.header{transform:translateY(-100%)}
+body.site-ready .header{opacity:1;transform:translateY(0);transition-delay:.05s}
+body.site-ready .cards{opacity:1;transform:translateY(0);transition-delay:.15s}
+body.site-ready .section{opacity:1;transform:translateY(0);transition-delay:.25s}
+body.site-ready .footer{opacity:1;transform:translateY(0);transition-delay:.3s}
+@media (prefers-reduced-motion:reduce){
+  .header,.cards,.section,.footer{opacity:1;transform:none;transition:none}
 }
 
 /* mobile menu */
@@ -279,6 +293,50 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .card-go .arr{transition:transform .3s var(--ease)}
 .card:hover .card-go .arr{transform:translateX(4px)}
 
+/* ===== MAP CARD (sede) ===== */
+.card-map{background:#05070c;cursor:default;overflow:hidden}
+.map-canvas{
+  position:absolute;inset:0;z-index:0;
+  filter:saturate(.9) brightness(.92);
+}
+.map-canvas canvas{outline:none}
+.map-overlay{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(120% 90% at 50% 0%,rgba(46,107,255,.10),transparent 55%),
+    linear-gradient(180deg,rgba(5,7,12,.55) 0%,transparent 22%,transparent 62%,rgba(5,7,12,.88) 100%);
+}
+.map-caption{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;gap:12px;align-items:center;
+  margin-top:auto;padding-bottom:8px;
+  font-size:1.05rem;font-weight:600;color:#fff;
+  text-shadow:0 2px 20px rgba(0,0,0,.6);
+}
+.map-eyebrow{
+  display:inline-flex;align-items:center;
+  font-family:'Inter',sans-serif;font-size:.72rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--blue-soft);padding:7px 16px;border-radius:100px;
+  background:rgba(46,107,255,.14);border:1px solid rgba(91,140,255,.28);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  text-shadow:none;
+}
+/* hide maplibre default UI just in case */
+.map-canvas .maplibregl-control-container{display:none !important}
+.map-pin{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--blue);border:3px solid #fff;
+  box-shadow:0 0 0 6px rgba(46,107,255,.25),0 4px 14px rgba(0,0,0,.5);
+}
+.map-pin::after{
+  content:"";position:absolute;left:50%;top:50%;width:18px;height:18px;
+  transform:translate(-50%,-50%);border-radius:50%;
+  background:rgba(46,107,255,.5);
+  animation:pinPulse 2.2s ease-out infinite;
+}
+@keyframes pinPulse{0%{transform:translate(-50%,-50%) scale(1);opacity:.7}100%{transform:translate(-50%,-50%) scale(3.4);opacity:0}}
+
 /* entrance animation for inner elements — triggered on scroll */
 .card-logo,.card-caption,.card-go{
   opacity:0;transform:translateY(24px);
@@ -372,6 +430,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   *,*::before,*::after{animation-duration:.001s !important;transition-duration:.001s !important}
 }
 </style>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 </head>
 <body>
 
@@ -426,6 +486,14 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-caption">La piattaforma che digitalizza l'invio e la gestione delle buste paga, semplice e sicura.</span>
     <span class="card-go">Vai al sito <span class="arr">→</span></span>
   </a>
+  <div class="card card-map" id="sede" aria-label="La nostra sede operativa">
+    <div class="map-canvas" id="mapCanvas" aria-hidden="true"></div>
+    <span class="map-overlay" aria-hidden="true"></span>
+    <span class="card-caption map-caption">
+      <span class="map-eyebrow">La nostra sede operativa</span>
+      Via Giuseppe Verdi 4 · 37050 Concamarise (VR)
+    </span>
+  </div>
 </section>
 
 <!-- ============ CONTATTI ============ -->
@@ -520,6 +588,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     function hide(){
       if(done)return;done=true;
       pre.classList.add('done');
+      document.body.classList.add('site-ready');
       document.documentElement.style.overflow='';
       vids.forEach(function(v){var p=v.play();if(p&&p.catch)p.catch(function(){});});
     }
@@ -605,6 +674,64 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   }else{
     cards.forEach(function(c){c.classList.add('in-view');});
   }
+
+  /* ===== SEDE MAP: non-interactive, premium fly-in on scroll ===== */
+  (function(){
+    var el=document.getElementById('mapCanvas');
+    if(!el||typeof maplibregl==='undefined')return;
+    var SEDE=[11.1830,45.2130]; // Concamarise (VR) — Via Giuseppe Verdi
+    var ITALY=[12.5,42.5];
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var map=new maplibregl.Map({
+      container:el,
+      style:'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+      center:ITALY,
+      zoom:reduce?15:4.4,
+      pitch:reduce?0:45,
+      bearing:0,
+      interactive:false,
+      attributionControl:false,
+      fadeDuration:0
+    });
+    // marker at sede
+    var pin=document.createElement('div');pin.className='map-pin';
+    new maplibregl.Marker({element:pin}).setLngLat(SEDE).addTo(map);
+
+    var flown=false;
+    function flyIn(){
+      if(flown||reduce)return;flown=true;
+      map.flyTo({
+        center:SEDE,
+        zoom:16.2,
+        pitch:58,
+        bearing:-18,
+        duration:6500,
+        curve:1.5,
+        essential:true,
+        easing:function(t){return 1-Math.pow(1-t,3);}
+      });
+    }
+    var started=false;
+    map.on('load',function(){
+      if(started)flyIn();
+    });
+    if('IntersectionObserver' in window){
+      var mapObs=new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){
+            started=true;
+            if(map.loaded())flyIn();
+            mapObs.unobserve(en.target);
+          }
+        });
+      },{threshold:.45});
+      mapObs.observe(document.getElementById('sede'));
+    }else{
+      started=true;map.on('load',flyIn);
+    }
+    // keep map sized correctly
+    window.addEventListener('resize',function(){map.resize();});
+  })();
 
   /* form validation */
   var form=document.getElementById('contactForm');
