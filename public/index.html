@@ -77,45 +77,40 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 
 /* ============ HEADER ============ */
 .header{
-  position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 0;
+  position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 0;
   background:var(--dark);
   border-bottom:1px solid var(--line-dark-soft);
-  transition:padding .35s var(--ease),box-shadow .35s;
+  transition:padding .35s var(--ease),box-shadow .35s,transform .4s var(--ease);
 }
+.header.hidden{transform:translateY(-100%)}
 .header.scrolled{
-  padding:11px 0;
+  padding:12px 0;
   box-shadow:0 14px 38px -26px rgba(0,0,0,.9);
 }
-.header-inner{display:flex;align-items:center;justify-content:flex-start;gap:18px}
+.header-inner{display:flex;align-items:center;justify-content:center}
 .logo{display:flex;align-items:center;flex-shrink:0}
-.logo img{height:42px;width:auto;transition:height .3s var(--ease)}
-.header.scrolled .logo img{height:36px}
-.header-slogan{
-  padding-left:18px;border-left:1px solid var(--line-dark-soft);
-  font-size:.86rem;font-weight:500;line-height:1.35;color:rgba(255,255,255,.62);
-  letter-spacing:-.005em;max-width:340px;
-}
-.header-slogan b{color:#fff;font-weight:600}
-@media (max-width:600px){.header-slogan{display:none}}
+.logo img{height:60px;width:auto;transition:height .3s var(--ease)}
+.header.scrolled .logo img{height:50px}
 
 
 /* ============ CARDS (entry) ============ */
 .cards{
-  min-height:100vh;
   display:flex;
-  align-items:stretch;
-  gap:44px;
-  padding:120px 44px 56px;
+  flex-direction:column;
+  gap:0;
+  padding:0;
+  padding-top:96px;
 }
 .card{
-  flex:1 1 50%;
+  width:100%;
+  min-height:calc((100vh - 96px) / 2);
   display:flex;flex-direction:column;
   align-items:flex-start;justify-content:flex-end;gap:22px;
-  padding:56px 48px;
-  border-radius:24px;
+  padding:64px clamp(28px,6vw,96px);
+  border-radius:0;
   background:#0A0C11;
-  box-shadow:0 4px 12px rgba(10,12,18,.06),0 40px 90px -30px rgba(10,12,18,.32);
-  transition:transform .5s var(--ease-out),box-shadow .5s var(--ease-out),filter .5s var(--ease-out);
+  box-shadow:none;
+  transition:transform .5s var(--ease-out),filter .5s var(--ease-out);
   position:relative;overflow:hidden;
 }
 .card::before{
@@ -128,11 +123,11 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .card:hover::before{opacity:1}
 
 /* brand cards — flat solid color */
-.card.bionee{background:#fff;border:none}
+.card.bionee{background:#94c248;border:none}
 .card.bionee::before{display:none}
-.card.bionee .card-caption{color:var(--muted)}
-.card.bionee .card-go{color:#4CAF3F}
-.card.bionee:hover .card-go{color:#3E9433}
+.card.bionee .card-caption{color:rgba(255,255,255,.92)}
+.card.bionee .card-go{color:#fff}
+.card.bionee:hover .card-go{color:#fff}
 
 .card.ilp{background:#1c6fe6;border:none}
 .card.ilp::before{display:none}
@@ -155,6 +150,22 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .card:hover .card-go{color:var(--blue);gap:12px}
 .card-go .arr{transition:transform .3s var(--ease)}
 .card:hover .card-go .arr{transform:translateX(4px)}
+
+/* entrance animation for inner elements */
+.card-logo,.card-caption,.card-go{
+  opacity:0;transform:translateY(16px);
+  animation:cardIn .7s var(--ease-out) forwards;
+}
+.card-logo{animation-delay:.15s}
+.card-caption{animation-delay:.3s}
+.card-go{animation-delay:.45s}
+.card:nth-child(2) .card-logo{animation-delay:.3s}
+.card:nth-child(2) .card-caption{animation-delay:.45s}
+.card:nth-child(2) .card-go{animation-delay:.6s}
+@keyframes cardIn{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .card-logo,.card-caption,.card-go{animation:none;opacity:1;transform:none}
+}
 
 /* ============ SECTION / HEADS ============ */
 .section{padding:110px 0;position:relative}
@@ -218,8 +229,8 @@ input,select,textarea{font-family:inherit;font-size:inherit}
   .footer-top{grid-template-columns:1fr 1fr;gap:36px}
 }
 @media (max-width:720px){
-  .cards{flex-direction:column;padding:96px 20px 32px;gap:20px}
-  .card{padding:48px 28px;min-height:44vh}
+  .cards{padding-top:88px}
+  .card{min-height:auto;padding:56px 24px}
   .wrap{padding:0 22px}
   .form-row{grid-template-columns:1fr}
   .form-card{padding:0}
@@ -242,7 +253,6 @@ input,select,textarea{font-family:inherit;font-size:inherit}
     <a href="#top" class="logo" aria-label="LG Trading SRL">
       <img src="/LG%20TRADING%20LOGO.%20trasp.png" alt="LG Trading SRL">
     </a>
-    <p class="header-slogan"><b>LG Trading</b> — la casa dei nostri progetti digitali e commerciali.</p>
   </div>
 </header>
 
@@ -350,8 +360,16 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 <script>
 (function(){
   var header = document.getElementById('header');
+  var lastY = window.pageYOffset;
   window.addEventListener('scroll',function(){
-    header.classList.toggle('scrolled',window.pageYOffset>24);
+    var y = window.pageYOffset;
+    header.classList.toggle('scrolled', y > 24);
+    if(y > lastY && y > 120){
+      header.classList.add('hidden');
+    } else if(y < lastY){
+      header.classList.remove('hidden');
+    }
+    lastY = y;
   },{passive:true});
 
   /* smooth anchor */
