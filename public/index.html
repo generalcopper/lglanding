@@ -441,7 +441,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <div class="map-canvas" id="mapCanvas" aria-hidden="true"></div>
     <span class="map-overlay" aria-hidden="true"></span>
     <span class="card-caption map-caption">
-      <span class="map-eyebrow">La nostra sede operativa</span>
       Via Giuseppe Verdi 4 · 37050 Concamarise (VR)
     </span>
   </div>
@@ -619,6 +618,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     var map;
     var satelliteStyle={
       version:8,
+      projection:{type:'globe'},
       sources:{
         sat:{
           type:'raster',
@@ -635,7 +635,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
         container:el,
         style:satelliteStyle,
         center:ITALY,
-        zoom:reduce?16:4.4,
+        zoom:reduce?16:1.4,
         pitch:0,
         bearing:0,
         interactive:false,
@@ -646,6 +646,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       console.error('[mappa] init fallita:',err);return;
     }
     map.on('error',function(e){console.error('[mappa] errore stile/tiles:',e&&e.error?e.error:e);});
+    // ensure globe even if style projection is ignored by version
+    map.on('style.load',function(){try{map.setProjection({type:'globe'});}catch(e){}});
 
     var pin=document.createElement('div');pin.className='map-pin';
     var marker;
@@ -659,18 +661,37 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       if(started)kickoff();
     });
 
-    var flown=false;
-    function flyIn(){
-      if(flown||reduce)return;flown=true;
-      map.flyTo({
-        center:SEDE,zoom:17.4,pitch:0,bearing:0,
-        duration:6500,curve:1.5,essential:true,
-        easing:function(t){return 1-Math.pow(1-t,3);}
-      });
+    var ZMIN=1.4, ZMAX=17.4; // sfera → sede
+    var targetZoom=ZMIN, curZoom=ZMIN, rafId=null;
+
+    function computeProgress(){
+      var sede=document.getElementById('sede');
+      var r=sede.getBoundingClientRect();
+      var vh=window.innerHeight||document.documentElement.clientHeight;
+      // 0 when the card enters from the bottom, 1 as it leaves toward the top
+      var total=r.height+vh;
+      var travelled=vh-r.top;
+      var p=travelled/total;
+      return Math.max(0,Math.min(1,p));
+    }
+    function onScroll(){
+      var p=computeProgress();
+      var e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2; // easeInOut
+      targetZoom=ZMIN+(ZMAX-ZMIN)*e;
+      if(!rafId)rafId=requestAnimationFrame(animate);
+    }
+    function animate(){
+      rafId=null;
+      curZoom+=(targetZoom-curZoom)*0.12; // smooth follow
+      if(Math.abs(targetZoom-curZoom)<0.01)curZoom=targetZoom;
+      if(map)map.jumpTo({center:SEDE,zoom:curZoom,pitch:0,bearing:0});
+      if(Math.abs(targetZoom-curZoom)>0.005)rafId=requestAnimationFrame(animate);
     }
     function kickoff(){
-      // give the entrance animation a moment, then ensure correct size before flying
-      setTimeout(function(){map.resize();flyIn();},400);
+      map.resize();
+      map.jumpTo({center:SEDE,zoom:curZoom,pitch:0,bearing:0});
+      window.addEventListener('scroll',onScroll,{passive:true});
+      onScroll();
     }
 
     var started=false;
@@ -678,14 +699,17 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       if(started)return;started=true;
       if(loaded)kickoff();
     }
+    if(reduce){
+      map.on('load',function(){map.jumpTo({center:SEDE,zoom:16,pitch:0});});
+    }
     if('IntersectionObserver' in window){
-      var sede=document.getElementById('sede');
+      var sedeEl=document.getElementById('sede');
       var mapObs=new IntersectionObserver(function(entries){
         entries.forEach(function(en){
           if(en.isIntersecting){trigger();mapObs.unobserve(en.target);}
         });
-      },{threshold:.35});
-      mapObs.observe(sede);
+      },{threshold:.1});
+      mapObs.observe(sedeEl);
     }else{
       trigger();
     }
