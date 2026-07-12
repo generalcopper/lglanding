@@ -138,7 +138,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .mobile-nav a small{color:var(--blue-soft);font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;margin-right:14px}
 .mobile-close{display:none;
   position:absolute;top:24px;right:24px;width:44px;height:44px;
-  display:flex;align-items:center;justify-content:center;
+  align-items:center;justify-content:center;
   background:none;border:none;opacity:.85;transition:opacity .25s;
 }
 .mobile-close:hover{opacity:1}
@@ -178,8 +178,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   background:radial-gradient(120% 90% at 50% 0%,rgba(46,107,255,.08),transparent 60%);
   transition:opacity .5s var(--ease-out);pointer-events:none;
 }
-.card:hover{filter:brightness(1.02)}
-.card:active{transform:scale(.992);transition-duration:.12s}
 .card:hover::before{opacity:1}
 
 /* brand cards — flat solid color */
@@ -359,7 +357,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <video class="card-video" src="/4807709_Farm_Tomato_1920x1080.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
     <span class="card-logo"><img src="/logo%20bionee.png" alt="BIONEE"></span>
-    <span class="card-caption">Il nostro brand di prodotti naturali per la cura della casa, degli animali e delle piante, in vendita su Amazon.</span>
+    <span class="card-caption">Il nostro brand di prodotti naturali per la cura della casa, degli animali e delle piante, disponibile su Amazon.</span>
     <span class="card-go">Scopri lo store <span class="arr">→</span></span>
   </a>
   <a id="ilovepaghe" class="card ilp" href="https://www.ilovepaghe.com/" target="_blank" rel="noopener" aria-label="iLovePaghe">
@@ -409,7 +407,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
             <span class="err">Inserire un messaggio</span>
           </div>
           <button type="submit" class="btn btn-primary form-submit">Inviate la richiesta <span class="arr">→</span></button>
-          <p class="form-note">Inviando il modulo si acconsente a essere ricontattati da LG Trading SRL. I dati saranno trattati nel rispetto della <a href="privacy-policy.html">Privacy Policy</a>.</p>
+          <p class="form-note">Inviando il modulo si acconsente a essere ricontattati da LG Trading SRL. I dati saranno trattati nel rispetto della <a href="/privacy-policy.html">Privacy Policy</a>.</p>
         </form>
         <div class="form-success" id="formSuccess">
           <div class="fs-ic"><svg width="30" height="30" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12l5 5L20 6"/></svg></div>
@@ -451,7 +449,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <div class="footer-bottom">
       <span>© 2026 LG Trading SRL — P.IVA e C.F. 05060650230 — REA VR-467219 — Codice SDI M5UXCR1</span>
       <div class="fb-links">
-        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="/privacy-policy.html">Privacy Policy</a>
         <a href="cookie-policy.html">Cookie Policy</a>
       </div>
     </div>
