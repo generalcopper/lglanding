@@ -103,9 +103,10 @@ input,select,textarea{font-family:inherit;font-size:inherit}
   backdrop-filter:blur(8px) saturate(1.3);
   -webkit-backdrop-filter:blur(8px) saturate(1.3);
   box-shadow:0 1px 0 rgba(255,255,255,.04);
-  transition:height .4s var(--ease),background .4s var(--ease),box-shadow .4s var(--ease),transform .45s var(--ease);
+  transition:height .4s var(--ease),background .4s var(--ease),box-shadow .4s var(--ease),transform .5s cubic-bezier(.22,1,.36,1);
+  will-change:transform;
 }
-.header.hidden{transform:translateY(-100%)}
+.header.hidden{transform:translateY(-100%);box-shadow:none}
 .header.scrolled{
   height:66px;
   background:rgba(6,8,13,.78);
@@ -497,19 +498,56 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
   var header = document.getElementById('header');
   var lastY = window.pageYOffset || document.documentElement.scrollTop || 0;
-  function onScrollHeader(){
+  var accUp = 0, accDown = 0;      // scroll accumulato in ciascuna direzione
+  var UP_THRESHOLD = 6;            // px verso l'alto prima di ricomparire
+  var DOWN_THRESHOLD = 80;         // px verso il basso prima di nascondere
+  var REVEAL_AT_TOP = 6;           // sempre visibile vicino alla cima
+  var headerTicking = false;
+
+  function updateHeader(){
+    headerTicking = false;
     var y = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    var delta = y - lastY;
+
     header.classList.toggle('scrolled', y > 24);
-    if(y > lastY && y > 100){
-      header.classList.add('hidden');   // scrolling down
-    }else if(y < lastY){
-      header.classList.remove('hidden'); // scrolling up
+
+    // menu mobile aperto: non nascondere mai
+    if(document.body.classList.contains('menu-open')){
+      header.classList.remove('hidden');
+      lastY = y;
+      return;
     }
-    if(y <= 4)header.classList.remove('hidden'); // always visible at very top
+
+    // vicino alla cima: header sempre visibile
+    if(y <= REVEAL_AT_TOP){
+      header.classList.remove('hidden');
+      accUp = accDown = 0;
+      lastY = y;
+      return;
+    }
+
+    if(delta > 0){                 // scroll verso il basso
+      accDown += delta; accUp = 0;
+      if(accDown > DOWN_THRESHOLD && y > 120){
+        header.classList.add('hidden');
+      }
+    }else if(delta < 0){           // scroll verso l'alto
+      accUp += -delta; accDown = 0;
+      if(accUp > UP_THRESHOLD){
+        header.classList.remove('hidden');
+      }
+    }
     lastY = y;
   }
+
+  function onScrollHeader(){
+    if(!headerTicking){
+      headerTicking = true;
+      requestAnimationFrame(updateHeader);
+    }
+  }
   window.addEventListener('scroll',onScrollHeader,{passive:true});
-  onScrollHeader();
+  updateHeader();
 
   /* smooth anchor */
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
