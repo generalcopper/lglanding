@@ -7,8 +7,11 @@
 <meta name="description" content="LG Trading SRL sviluppa e gestisce progetti a marchio proprio nei settori dei prodotti di consumo e dei servizi digitali per le imprese.">
 <meta name="author" content="LG Trading SRL">
 <meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light">
+<meta name="application-name" content="LG Trading SRL">
 <meta name="format-detection" content="telephone=no">
 <link rel="canonical" href="https://www.lgtrading.it/">
+<link rel="sitemap" type="application/xml" href="https://www.lgtrading.it/sitemap.xml">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <link rel="icon" type="image/png" href="/LG%20TRADING%20LOGO%20MADDAFAFCCA%20MODIFICABILE.png">
@@ -20,6 +23,7 @@
 <meta property="og:site_name" content="LG Trading SRL">
 <meta property="og:url" content="https://www.lgtrading.it/">
 <meta property="og:image" content="https://www.lgtrading.it/LG%20TRADING%20LOGO.%20trasp.png">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Logo LG Trading SRL">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="LG Trading SRL">
@@ -425,8 +429,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 <!-- ============ HEADER ============ -->
 <header class="header" id="header">
   <div class="wrap header-inner">
-    <a href="#top" class="logo" aria-label="LG Trading SRL">
-      <img src="/LG%20TRADING%20LOGO.%20trasp.png" alt="LG Trading SRL" decoding="async">
+    <a href="/" class="logo" aria-label="LG Trading SRL">
+      <img src="/LG%20TRADING%20LOGO.%20trasp.png" alt="LG Trading SRL" decoding="async" fetchpriority="high">
     </a>
     <nav class="nav" aria-label="Navigazione rapida" data-nosnippet>
       <a href="#bionee">Bionee</a>
@@ -458,9 +462,9 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-go">Scopri lo store <span class="arr">→</span></span>
   </a>
   <a id="ilovepaghe" class="card ilp" href="https://www.ilovepaghe.com/" target="_blank" rel="noopener" aria-label="iLovePaghe">
-    <video class="card-video" src="/macbookmockupvideo.webm" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+    <video class="card-video" src="/macbookmockupvideo.webm" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
-    <span class="card-logo"><img src="/ilovepaghe_logo.png" alt="iLovePaghe - gestione buste paga" decoding="async"></span>
+    <span class="card-logo"><img src="/ilovepaghe_logo.png" alt="iLovePaghe - gestione buste paga" decoding="async" loading="lazy"></span>
     <h2 class="sr-only">iLovePaghe — piattaforma per l'invio e la gestione digitale delle buste paga</h2>
     <span class="card-caption">La piattaforma che gestisce cedolini, timbrature e presenze del personale.</span>
     <span class="card-go">Vai al sito <span class="arr">→</span></span>
@@ -472,38 +476,38 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   <div class="wrap">
     <div class="contact-grid">
       <div class="form-card">
-        <form id="contactForm" novalidate>
+        <form id="contactForm" action="mailto:info@lgtrading.it" method="post" enctype="text/plain" novalidate>
           <h3>Contatti</h3>
           <p>Compilando il modulo sarete ricontattati dal nostro team per dare seguito alla vostra richiesta.</p>
           <div class="form-row">
             <div class="field">
-              <label>Nome referente <em>*</em></label>
-              <input type="text" name="referente" required placeholder="Nome e cognome">
+              <label for="referente">Nome referente <em>*</em></label>
+              <input id="referente" type="text" name="referente" required autocomplete="name" placeholder="Nome e cognome">
               <span class="err">Indicare il nome del referente</span>
             </div>
             <div class="field">
-              <label>Email <em>*</em></label>
-              <input type="email" name="email" required placeholder="nome@azienda.it">
+              <label for="email">Email <em>*</em></label>
+              <input id="email" type="email" name="email" required autocomplete="email" placeholder="nome@azienda.it">
               <span class="err">Indicare un indirizzo email valido</span>
             </div>
           </div>
           <div class="field">
-            <label>Telefono <em>*</em></label>
-            <input type="tel" name="telefono" required placeholder="+39 ...">
+            <label for="telefono">Telefono <em>*</em></label>
+            <input id="telefono" type="tel" name="telefono" required autocomplete="tel" inputmode="tel" placeholder="+39 ...">
             <span class="err">Indicare un numero di telefono valido</span>
           </div>
           <div class="field">
-            <label>Messaggio <em>*</em></label>
-            <textarea name="messaggio" required placeholder="Descrivete sinteticamente la vostra richiesta."></textarea>
+            <label for="messaggio">Messaggio <em>*</em></label>
+            <textarea id="messaggio" name="messaggio" required maxlength="2000" placeholder="Descrivete sinteticamente la vostra richiesta."></textarea>
             <span class="err">Inserire un messaggio</span>
           </div>
           <button type="submit" class="btn btn-primary form-submit">Inviate la richiesta <span class="arr">→</span></button>
-          <p class="form-note">Inviando il modulo si acconsente a essere ricontattati da LG Trading SRL. I dati saranno trattati nel rispetto della <a href="privacy-policy.html">Privacy Policy</a>.</p>
+          <p class="form-note">Inviando il modulo si acconsente a essere ricontattati da LG Trading SRL. I dati saranno trattati nel rispetto della <a href="/privacy-policy">Privacy Policy</a>.</p>
         </form>
-        <div class="form-success" id="formSuccess">
+        <div class="form-success" id="formSuccess" role="status" aria-live="polite">
           <div class="fs-ic"><svg width="30" height="30" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12l5 5L20 6"/></svg></div>
-          <h3>Richiesta inviata</h3>
-          <p>Vi ringraziamo. La richiesta è stata ricevuta correttamente: sarete ricontattati a breve dal nostro team.</p>
+          <h3>Completa l’invio</h3>
+          <p>È stato aperto il programma di posta con il messaggio già compilato. Confermate l’email per inviare la richiesta a <a href="mailto:info@lgtrading.it">info@lgtrading.it</a>.</p>
         </div>
       </div>
     </div>
@@ -515,7 +519,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   <div class="wrap">
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="#top" class="logo" aria-label="Torna su - LG Trading SRL">
+        <a href="/" class="logo" aria-label="Torna su - LG Trading SRL">
           <img src="/LG%20TRADING%20LOGO.%20trasp.png" alt="LG Trading SRL" decoding="async" loading="lazy">
         </a>
         <p>LG Trading SRL sviluppa e gestisce progetti a marchio proprio nei settori dei prodotti di consumo e dei servizi digitali per le imprese.</p>
@@ -540,8 +544,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <div class="footer-bottom">
       <span>© 2026 LG Trading SRL — P.IVA e C.F. 05060650230 — REA VR-467219 — Codice SDI M5UXCR1</span>
       <div class="fb-links">
-        <a href="privacy-policy.html">Privacy Policy</a>
-        <a href="cookie-policy.html">Cookie Policy</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/cookie-policy">Cookie Policy</a>
       </div>
     </div>
   </div>
@@ -662,6 +666,32 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   }
 
 
+
+  /* background video performance */
+  var bgVideos=document.querySelectorAll('.card-video');
+  var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduceMotion){
+    bgVideos.forEach(function(video){video.pause();video.removeAttribute('autoplay');});
+  }else if('IntersectionObserver' in window){
+    var videoObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var video=entry.target;
+        if(entry.isIntersecting&&document.visibilityState==='visible'){
+          var playPromise=video.play();
+          if(playPromise&&typeof playPromise.catch==='function'){playPromise.catch(function(){});}
+        }else{
+          video.pause();
+        }
+      });
+    },{rootMargin:'150px 0px',threshold:.08});
+    bgVideos.forEach(function(video){videoObs.observe(video);});
+    document.addEventListener('visibilitychange',function(){
+      bgVideos.forEach(function(video){
+        if(document.visibilityState!=='visible'){video.pause();}
+      });
+    });
+  }
+
   /* form validation */
   var form=document.getElementById('contactForm');
   var success=document.getElementById('formSuccess');
@@ -683,6 +713,18 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       if(!validateField(field)){ok=false;if(!firstInvalid)firstInvalid=field;}
     });
     if(ok){
+      var referente=form.elements.referente.value.trim();
+      var email=form.elements.email.value.trim();
+      var telefono=form.elements.telefono.value.trim();
+      var messaggio=form.elements.messaggio.value.trim();
+      var subject=encodeURIComponent('Richiesta dal sito LG Trading SRL - '+referente);
+      var body=encodeURIComponent(
+        'Nome referente: '+referente+'\n'+
+        'Email: '+email+'\n'+
+        'Telefono: '+telefono+'\n\n'+
+        'Messaggio:\n'+messaggio
+      );
+      window.location.href='mailto:info@lgtrading.it?subject='+subject+'&body='+body;
       form.style.display='none';
       success.classList.add('show');
       success.scrollIntoView({behavior:'smooth',block:'center'});
