@@ -94,6 +94,7 @@
   ]
 }
 </script>
+<link rel="preload" href="/4807709_Farm_Tomato_1920x1080.webm" as="video" type="video/webm">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -454,7 +455,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 <!-- ============ ENTRY CARDS ============ -->
 <section class="cards" aria-label="I nostri brand" data-nosnippet>
   <a id="bionee" class="card bionee" href="https://www.amazon.it/stores/BIONEE/page/5014B05E-4297-4BBE-A29B-D6BF55C5BEA6?lp_asin=B0GYDTGHXQ&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto&bl_grd_status=override" target="_blank" rel="noopener" aria-label="BIONEE su Amazon">
-    <video class="card-video" src="/4807709_Farm_Tomato_1920x1080.webm" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+    <video id="bioneeVideo" class="card-video" src="/4807709_Farm_Tomato_1920x1080.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
     <span class="card-logo"><img src="/logo%20bionee.png" alt="Bionee - prodotti naturali" decoding="async"></span>
     <h2 class="sr-only">Bionee — prodotti naturali per la cura della casa, degli animali e delle piante</h2>
@@ -666,6 +667,18 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   }
 
 
+
+  /* Bionee: caricamento e avvio immediato */
+  var bioneeVideo=document.getElementById('bioneeVideo');
+  if(bioneeVideo){
+    bioneeVideo.muted=true;
+    bioneeVideo.defaultMuted=true;
+    bioneeVideo.playsInline=true;
+    bioneeVideo.preload='auto';
+    bioneeVideo.load();
+    var bioneePlay=bioneeVideo.play();
+    if(bioneePlay&&typeof bioneePlay.catch==='function'){bioneePlay.catch(function(){});}
+  }
 
   /* background video performance */
   var bgVideos=document.querySelectorAll('.card-video');
