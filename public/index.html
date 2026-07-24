@@ -94,7 +94,9 @@
   ]
 }
 </script>
+<link rel="preload" href="/LG%20TRADING%20LOGO.%20trasp.png" as="image" fetchpriority="high">
 <link rel="preload" href="/4807709_Farm_Tomato_1920x1080.webm" as="video" type="video/webm">
+<link rel="preload" href="/macbookmockupvideo.webm" as="video" type="video/webm">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -196,6 +198,53 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .burger.active span:nth-child(1){top:20px;transform:rotate(45deg)}
 .burger.active span:nth-child(2){opacity:0}
 .burger.active span:nth-child(3){top:20px;transform:rotate(-45deg)}
+
+/* ===== PRELOADER ===== */
+#preloader{
+  position:fixed;inset:0;z-index:3000;
+  background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;
+  opacity:1;
+  transition:opacity .9s var(--ease-out),visibility 0s linear .9s;
+}
+.preloader-logo{
+  width:clamp(150px,20vw,210px);height:auto;
+  opacity:0;transform:translateY(10px) scale(.985);
+  animation:preloaderLogoIn 1.15s var(--ease-out) .1s forwards;
+}
+.preloader-bar{
+  position:relative;width:clamp(120px,16vw,170px);height:1px;
+  background:rgba(255,255,255,.14);overflow:hidden;
+  opacity:0;animation:preloaderFadeIn .9s var(--ease-out) .45s forwards;
+}
+.preloader-bar span{
+  position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(0);
+  background:linear-gradient(90deg,rgba(255,255,255,.45),#fff);
+  transition:transform .75s var(--ease-out);
+}
+@keyframes preloaderLogoIn{to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes preloaderFadeIn{to{opacity:1}}
+
+/* uscita morbida: il logo si stacca mentre il nero sfuma */
+html.loaded .preloader-logo{
+  transition:opacity .55s var(--ease-out),transform .85s var(--ease-out);
+  opacity:0;transform:translateY(-6px) scale(1.03);
+}
+html.loaded .preloader-bar{transition:opacity .4s var(--ease-out);opacity:0}
+
+/* sito nascosto finché i video non sono pronti */
+html.is-loading,html.is-loading body{overflow:hidden;height:100%}
+html.is-loading #siteRoot{opacity:0;visibility:hidden}
+#siteRoot{opacity:1;visibility:visible;transition:opacity .01s}
+
+html.loaded #preloader{opacity:0;visibility:hidden;pointer-events:none}
+
+
+@media (prefers-reduced-motion:reduce){
+  .preloader-logo,.preloader-bar{animation:none;opacity:1;transform:none}
+  html.loaded .preloader-logo,html.loaded .preloader-bar{transition:none;transform:none}
+  #preloader{transition:opacity .2s linear,visibility 0s linear .2s}
+}
 
 /* premium site entrance */
 .header,.cards,.section,.footer{
@@ -422,6 +471,16 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 </style>
 </head>
 <body>
+<script>document.documentElement.className+=' is-loading';</script>
+
+<noscript><style>html.is-loading #siteRoot{opacity:1;visibility:visible}html.is-loading,html.is-loading body{overflow:visible;height:auto}#preloader{display:none}.header,.cards,.section,.footer{opacity:1;transform:none}</style></noscript>
+
+<div id="preloader" role="status" aria-live="polite" aria-label="Caricamento del sito in corso">
+  <img class="preloader-logo" src="/LG%20TRADING%20LOGO.%20trasp.png" alt="LG Trading SRL" decoding="async" fetchpriority="high">
+  <div class="preloader-bar"><span id="preloaderBar"></span></div>
+</div>
+
+<div id="siteRoot">
 
 <span id="top"></span>
 
@@ -463,7 +522,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-go">Scopri lo store <span class="arr">→</span></span>
   </a>
   <a id="ilovepaghe" class="card ilp" href="https://www.ilovepaghe.com/" target="_blank" rel="noopener" aria-label="iLovePaghe">
-    <video class="card-video" src="/macbookmockupvideo.webm" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
+    <video class="card-video" src="/macbookmockupvideo.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
     <span class="card-logo"><img src="/ilovepaghe_logo.png" alt="iLovePaghe - gestione buste paga" decoding="async" loading="lazy"></span>
     <h2 class="sr-only">iLovePaghe — piattaforma per l'invio e la gestione digitale delle buste paga</h2>
@@ -552,12 +611,106 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   </div>
 </footer>
 
+</div><!-- /#siteRoot -->
+
 <script>
 (function(){
-  /* ===== SITE ENTRANCE ===== */
-  requestAnimationFrame(function(){
-    requestAnimationFrame(function(){document.body.classList.add('site-ready');});
+  /* ===== PRELOADER: attende il caricamento reale dei video ===== */
+  var docEl=document.documentElement;
+  var preloader=document.getElementById('preloader');
+  var bar=document.getElementById('preloaderBar');
+  var loaderVideos=Array.prototype.slice.call(document.querySelectorAll('.card-video'));
+  var total=loaderVideos.length+1;   /* video + window load (font/immagini) */
+  var done=0;
+  var finished=false;
+  var MAX_WAIT=12000;                /* fallback: non bloccare mai oltre 12s */
+  var MIN_SHOW=1400;                 /* durata minima: evita il "lampo" su cache/rete veloce */
+  var startedAt=Date.now();
+  /* il minimo si misura da quando il logo è davvero visibile,
+     così l'animazione d'ingresso non viene mai troncata */
+  var logoEl=preloader?preloader.querySelector('.preloader-logo'):null;
+  if(logoEl){
+    if(logoEl.complete&&logoEl.naturalWidth>0){startedAt=Date.now();}
+    else{
+      logoEl.addEventListener('load',function(){startedAt=Date.now();});
+      logoEl.addEventListener('error',function(){startedAt=Date.now();});
+    }
+  }
+  var revealQueue=[];
+  var revealed=false;
+
+  /* esegue un callback quando il sito è realmente visibile:
+     prima dello svelamento le misure di layout/viewport non sono affidabili */
+  function afterReveal(fn){
+    if(revealed){fn();return;}
+    revealQueue.push(fn);
+  }
+  function runRevealQueue(){
+    revealed=true;
+    revealQueue.forEach(function(fn){try{fn();}catch(e){}});
+    revealQueue.length=0;
+  }
+
+  function setProgress(){
+    if(!bar)return;
+    var pct=Math.min(done/total,1);
+    bar.style.transform='scaleX('+pct+')';
+  }
+
+  function finish(){
+    if(finished)return;
+    finished=true;
+    if(bar)bar.style.transform='scaleX(1)';
+    /* rispetta la durata minima, poi lascia percepire il 100% */
+    var waited=Date.now()-startedAt;
+    var hold=Math.max(MIN_SHOW-waited,0)+420;
+    setTimeout(function(){
+      docEl.classList.remove('is-loading');
+      docEl.classList.add('loaded');
+      /* entrata scaglionata solo dopo che il sito è visibile */
+      requestAnimationFrame(function(){
+        runRevealQueue();
+        requestAnimationFrame(function(){document.body.classList.add('site-ready');});
+      });
+      /* rimuove il nodo a transizione conclusa (0.9s di fade) */
+      setTimeout(function(){
+        if(preloader&&preloader.parentNode)preloader.parentNode.removeChild(preloader);
+      },1000);
+    },hold);
+  }
+
+  function step(){
+    done++;
+    setProgress();
+    if(done>=total)finish();
+  }
+
+  /* un video conta come pronto quando ha dati sufficienti a partire */
+  loaderVideos.forEach(function(video){
+    var counted=false;
+    function ready(){
+      if(counted)return;
+      counted=true;
+      video.removeEventListener('canplaythrough',ready);
+      video.removeEventListener('loadeddata',ready);
+      video.removeEventListener('error',ready);
+      video.removeEventListener('stalled',ready);
+      step();
+    }
+    /* readyState 3 = HAVE_FUTURE_DATA, 4 = HAVE_ENOUGH_DATA */
+    if(video.readyState>=3){ready();return;}
+    video.addEventListener('canplaythrough',ready);
+    video.addEventListener('loadeddata',ready);
+    video.addEventListener('error',ready);      /* non bloccare se un video fallisce */
+    video.addEventListener('stalled',ready);
+    /* forza l'avvio del download anche se il browser lo rimanda */
+    try{video.load();}catch(e){}
   });
+
+  if(document.readyState==='complete'){step();}
+  else{window.addEventListener('load',step);}
+
+  setTimeout(finish,MAX_WAIT);
 
   var header = document.getElementById('header');
   var lastY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -653,18 +806,21 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     if(e.key==='Escape'&&mobileNav.classList.contains('open')){closeMenu();}
   });
 
-  /* scroll reveal for cards */
-  var cards=document.querySelectorAll('.card');
-  if('IntersectionObserver' in window){
-    var cardObs=new IntersectionObserver(function(entries){
-      entries.forEach(function(en){
-        if(en.isIntersecting){en.target.classList.add('in-view');cardObs.unobserve(en.target);}
-      });
-    },{threshold:.35});
-    cards.forEach(function(c){cardObs.observe(c);});
-  }else{
-    cards.forEach(function(c){c.classList.add('in-view');});
-  }
+  /* scroll reveal for cards — attivato solo a sito visibile,
+     altrimenti visibility:hidden falsa le intersezioni */
+  afterReveal(function(){
+    var cards=document.querySelectorAll('.card');
+    if('IntersectionObserver' in window){
+      var cardObs=new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){en.target.classList.add('in-view');cardObs.unobserve(en.target);}
+        });
+      },{threshold:.35});
+      cards.forEach(function(c){cardObs.observe(c);});
+    }else{
+      cards.forEach(function(c){c.classList.add('in-view');});
+    }
+  });
 
 
 
@@ -698,7 +854,9 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
         }
       });
     },{rootMargin:'150px 0px',threshold:.08});
-    bgVideos.forEach(function(video){videoObs.observe(video);});
+    afterReveal(function(){
+      bgVideos.forEach(function(video){videoObs.observe(video);});
+    });
     document.addEventListener('visibilitychange',function(){
       if(document.visibilityState==='visible'){
         bgVideos.forEach(function(video){
