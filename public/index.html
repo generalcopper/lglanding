@@ -203,27 +203,43 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 #preloader{
   position:fixed;inset:0;z-index:3000;
   background:#000;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;
   opacity:1;
   transition:opacity .9s var(--ease-out),visibility 0s linear .9s;
 }
 .preloader-logo{
-  width:clamp(150px,20vw,210px);height:auto;
-  opacity:0;transform:translateY(10px) scale(.985);
+  display:block;
+  width:clamp(96px,11vw,128px);height:auto;
+  margin:0 auto;
+  opacity:0;transform:translateY(8px) scale(.985);
   animation:preloaderLogoIn 1.15s var(--ease-out) .1s forwards;
 }
 .preloader-bar{
-  position:relative;width:clamp(120px,16vw,170px);height:1px;
-  background:rgba(255,255,255,.14);overflow:hidden;
+  position:relative;width:clamp(110px,13vw,150px);height:1px;
+  margin:0 auto;
+  background:rgba(255,255,255,.13);overflow:hidden;
   opacity:0;animation:preloaderFadeIn .9s var(--ease-out) .45s forwards;
 }
+/* riempimento da sinistra verso destra */
 .preloader-bar span{
-  position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(0);
-  background:linear-gradient(90deg,rgba(255,255,255,.45),#fff);
-  transition:transform .75s var(--ease-out);
+  position:absolute;top:0;left:0;bottom:0;width:100%;
+  transform-origin:left center;transform:scaleX(0);
+  background:#fff;
+  will-change:transform;
+}
+/* riflesso che accompagna il fronte dell'avanzamento */
+.preloader-bar::after{
+  content:'';position:absolute;inset:0;z-index:2;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:translateX(-100%);
+  animation:preloaderSheen 1.8s var(--ease-out) .8s infinite;
 }
 @keyframes preloaderLogoIn{to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes preloaderFadeIn{to{opacity:1}}
+@keyframes preloaderSheen{
+  0%{transform:translateX(-100%)}
+  60%,100%{transform:translateX(100%)}
+}
 
 /* uscita morbida: il logo si stacca mentre il nero sfuma */
 html.loaded .preloader-logo{
@@ -231,6 +247,7 @@ html.loaded .preloader-logo{
   opacity:0;transform:translateY(-6px) scale(1.03);
 }
 html.loaded .preloader-bar{transition:opacity .4s var(--ease-out);opacity:0}
+html.loaded .preloader-bar::after{animation:none;opacity:0}
 
 /* sito nascosto finché i video non sono pronti */
 html.is-loading,html.is-loading body{overflow:hidden;height:100%}
@@ -242,6 +259,7 @@ html.loaded #preloader{opacity:0;visibility:hidden;pointer-events:none}
 
 @media (prefers-reduced-motion:reduce){
   .preloader-logo,.preloader-bar{animation:none;opacity:1;transform:none}
+  .preloader-bar::after{animation:none;opacity:0}
   html.loaded .preloader-logo,html.loaded .preloader-bar{transition:none;transform:none}
   #preloader{transition:opacity .2s linear,visibility 0s linear .2s}
 }
@@ -651,16 +669,42 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     revealQueue.length=0;
   }
 
+  /* Progresso fluido: il valore reale (done/total) è il traguardo,
+     la barra ci si avvicina con continuità invece di scattare a blocchi.
+     Non supera mai il caricamento effettivo: rallenta avvicinandosi al target. */
+  var shown=0;      /* percentuale attualmente disegnata */
+  var rafId=null;
+
+  function targetPct(){
+    if(finished)return 1;
+    var real=Math.min(done/total,1);
+    /* mentre si attende il primo asset la barra avanza comunque verso una
+       soglia intermedia, così non resta immobile su reti lente */
+    var floor=Math.min((Date.now()-startedAt)/6000,1)*0.55;
+    return Math.max(real,Math.min(floor,0.9));
+  }
+  function tick(){
+    var target=targetPct();
+    /* easing esponenziale: veloce all'inizio, morbido in prossimità del target.
+       A caricamento concluso la corsa finale è più rapida, così la barra
+       tocca il 100% appena prima della dissolvenza. */
+    var k=finished?0.14:0.06;
+    shown+=(target-shown)*k;
+    if(target-shown<0.0005)shown=target;
+    if(bar)bar.style.transform='scaleX('+shown.toFixed(4)+')';
+    /* continua finché non è completo: il target cresce nel tempo */
+    if(shown<1){rafId=requestAnimationFrame(tick);}
+    else{rafId=null;}
+  }
   function setProgress(){
     if(!bar)return;
-    var pct=Math.min(done/total,1);
-    bar.style.transform='scaleX('+pct+')';
+    if(rafId===null&&shown<1){rafId=requestAnimationFrame(tick);}
   }
 
   function finish(){
     if(finished)return;
     finished=true;
-    if(bar)bar.style.transform='scaleX(1)';
+    setProgress();   /* il loop rAF porta la barra a 1 con continuità */
     /* rispetta la durata minima, poi lascia percepire il 100% */
     var waited=Date.now()-startedAt;
     var hold=Math.max(MIN_SHOW-waited,0)+420;
@@ -684,6 +728,9 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     setProgress();
     if(done>=total)finish();
   }
+
+  /* la barra inizia a muoversi da subito, da sinistra verso destra */
+  setProgress();
 
   /* un video conta come pronto quando ha dati sufficienti a partire */
   loaderVideos.forEach(function(video){
