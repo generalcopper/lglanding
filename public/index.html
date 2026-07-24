@@ -207,47 +207,56 @@ input,select,textarea{font-family:inherit;font-size:inherit}
   opacity:1;
   transition:opacity .9s var(--ease-out),visibility 0s linear .9s;
 }
+/* logo e barra entrano insieme, stessa animazione e stesso delay */
+.preloader-logo,
+.preloader-bar{
+  opacity:0;transform:translateY(8px);
+  animation:preloaderIn 1s var(--ease-out) .08s forwards;
+}
 .preloader-logo{
   display:block;
   width:clamp(96px,11vw,128px);height:auto;
   margin:0 auto;
-  opacity:0;transform:translateY(8px) scale(.985);
-  animation:preloaderLogoIn 1.15s var(--ease-out) .1s forwards;
 }
 .preloader-bar{
-  position:relative;width:clamp(110px,13vw,150px);height:1px;
-  margin:0 auto;
-  background:rgba(255,255,255,.13);overflow:hidden;
-  opacity:0;animation:preloaderFadeIn .9s var(--ease-out) .45s forwards;
+  position:relative;
+  width:clamp(220px,26vw,320px);height:2px;
+  margin:0 auto;border-radius:2px;
+  background:rgba(255,255,255,.10);
+  overflow:visible;
 }
 /* riempimento da sinistra verso destra */
 .preloader-bar span{
   position:absolute;top:0;left:0;bottom:0;width:100%;
   transform-origin:left center;transform:scaleX(0);
-  background:#fff;
+  border-radius:2px;
+  background:linear-gradient(90deg,rgba(255,255,255,.7),#fff);
   will-change:transform;
 }
-/* riflesso che accompagna il fronte dell'avanzamento */
-.preloader-bar::after{
-  content:'';position:absolute;inset:0;z-index:2;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
-  transform:translateX(-100%);
-  animation:preloaderSheen 1.8s var(--ease-out) .8s infinite;
+/* alone che segue il fronte: elemento separato, non subisce lo scaleX
+   quindi il bagliore resta circolare invece di deformarsi */
+.preloader-glow{
+  position:absolute;top:50%;left:0;
+  width:64px;height:64px;margin:-32px 0 0 -32px;
+  border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,255,255,.34) 0%,rgba(255,255,255,.10) 38%,transparent 68%);
+  opacity:0;transform:translateX(0);
+  transition:opacity .5s var(--ease-out);
+  will-change:transform;
 }
-@keyframes preloaderLogoIn{to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes preloaderFadeIn{to{opacity:1}}
-@keyframes preloaderSheen{
-  0%{transform:translateX(-100%)}
-  60%,100%{transform:translateX(100%)}
-}
+.preloader-bar.lit .preloader-glow{opacity:1}
+@keyframes preloaderIn{to{opacity:1;transform:translateY(0)}}
 
 /* uscita morbida: il logo si stacca mentre il nero sfuma */
 html.loaded .preloader-logo{
+  animation:none;
   transition:opacity .55s var(--ease-out),transform .85s var(--ease-out);
   opacity:0;transform:translateY(-6px) scale(1.03);
 }
-html.loaded .preloader-bar{transition:opacity .4s var(--ease-out);opacity:0}
-html.loaded .preloader-bar::after{animation:none;opacity:0}
+html.loaded .preloader-bar{
+  animation:none;
+  transition:opacity .45s var(--ease-out);opacity:0;
+}
 
 /* sito nascosto finché i video non sono pronti */
 html.is-loading,html.is-loading body{overflow:hidden;height:100%}
@@ -259,7 +268,6 @@ html.loaded #preloader{opacity:0;visibility:hidden;pointer-events:none}
 
 @media (prefers-reduced-motion:reduce){
   .preloader-logo,.preloader-bar{animation:none;opacity:1;transform:none}
-  .preloader-bar::after{animation:none;opacity:0}
   html.loaded .preloader-logo,html.loaded .preloader-bar{transition:none;transform:none}
   #preloader{transition:opacity .2s linear,visibility 0s linear .2s}
 }
@@ -495,7 +503,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 <div id="preloader" role="status" aria-live="polite" aria-label="Caricamento del sito in corso">
   <img class="preloader-logo" src="/LG%20TRADING%20LOGO.%20trasp.png" alt="LG Trading SRL" decoding="async" fetchpriority="high">
-  <div class="preloader-bar"><span id="preloaderBar"></span></div>
+  <div class="preloader-bar"><span id="preloaderBar"></span><i class="preloader-glow" id="preloaderGlow"></i></div>
 </div>
 
 <div id="siteRoot">
@@ -637,6 +645,9 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   var docEl=document.documentElement;
   var preloader=document.getElementById('preloader');
   var bar=document.getElementById('preloaderBar');
+  var glow=document.getElementById('preloaderGlow');
+  var barWrap=preloader?preloader.querySelector('.preloader-bar'):null;
+  if(barWrap)barWrap.classList.add('lit');
   var loaderVideos=Array.prototype.slice.call(document.querySelectorAll('.card-video'));
   var total=loaderVideos.length+1;   /* video + window load (font/immagini) */
   var done=0;
@@ -692,6 +703,10 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     shown+=(target-shown)*k;
     if(target-shown<0.0005)shown=target;
     if(bar)bar.style.transform='scaleX('+shown.toFixed(4)+')';
+    /* l'alone accompagna il fronte del riempimento */
+    if(glow&&barWrap){
+      glow.style.transform='translateX('+(barWrap.offsetWidth*shown).toFixed(1)+'px)';
+    }
     /* continua finché non è completo: il target cresce nel tempo */
     if(shown<1){rafId=requestAnimationFrame(tick);}
     else{rafId=null;}
