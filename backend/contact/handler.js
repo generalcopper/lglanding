@@ -69,7 +69,10 @@ export function validateContact(body) {
   return contact;
 }
 
-export function postmarkSender(token, fetchImpl = fetch) {
+export function postmarkSender(token, fetchImpl = fetch, fromEmail = 'info@lgtrading.it') {
+  if (!['info@lgtrading.it', 'info@ilovepaghe.com'].includes(fromEmail)) {
+    throw new Error('Unsupported contact sender');
+  }
   return async function send(contact, id) {
     let response;
     let result;
@@ -79,7 +82,7 @@ export function postmarkSender(token, fetchImpl = fetch) {
         signal: AbortSignal.timeout(12000),
         headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-Postmark-Server-Token': token },
         body: JSON.stringify({
-          From: 'LG Trading SRL <info@lgtrading.it>',
+          From: 'LG Trading SRL <' + fromEmail + '>',
           To: 'info@lgtrading.it',
           ReplyTo: contact.email,
           Subject: 'Richiesta dal sito LG Trading — ' + contact.referente,

@@ -117,3 +117,15 @@ test('invalid Postmark acknowledgement is never success', async () => {
   const send = postmarkSender('secret', async () => ({ ok: true, status: 200, json: async () => ({ ErrorCode: 300 }) }));
   await assert.rejects(send(valid, 'id'), error => error.code === 'send_failed' && !error.definitelyRejected);
 });
+
+test('an explicitly configured verified sender keeps LG Trading identity and fixed recipient', async () => {
+  const send = postmarkSender('secret', async (_url, config) => {
+    const payload = JSON.parse(config.body);
+    assert.equal(payload.From, 'LG Trading SRL <info@ilovepaghe.com>');
+    assert.equal(payload.To, 'info@lgtrading.it');
+    assert.equal(payload.ReplyTo, valid.email);
+    return { ok: true, status: 200, json: async () => ({ ErrorCode: 0, MessageID: 'accepted' }) };
+  }, 'info@ilovepaghe.com');
+  assert.equal(await send(valid, 'id'), 'accepted');
+  assert.throws(() => postmarkSender('secret', fetch, 'attacker@example.com'), /Unsupported contact sender/);
+});

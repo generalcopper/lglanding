@@ -10,7 +10,7 @@ if (!project) throw new Error('Google Cloud project must be explicitly configure
 
 const server = http.createServer(createHandler({
   store: createStore(project, database),
-  send: postmarkSender(token),
+  send: postmarkSender(token, fetch, process.env.CONTACT_FROM_EMAIL || 'info@lgtrading.it'),
   hashSecret: token,
   version: process.env.CONTACT_RELEASE || 'development'
 }));
