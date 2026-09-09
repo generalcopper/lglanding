@@ -9,8 +9,18 @@ on:
 jobs:
   deploy_live:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate contact form and backend
+        run: |
+          node --check public/contact.js
+          node --check backend/contact/server.js
+          node --check backend/contact/store.js
+          node --test backend/contact/test/*.test.js
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}

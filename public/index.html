@@ -374,6 +374,10 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:#D62E4E;box-shadow:0 0 0 3px rgba(214,46,78,.12)}
 .field.invalid .err{display:block}
 .form-submit{margin-top:36px;width:100%;box-shadow:none;padding:17px 27px;background:var(--dark);color:#fff}
+.form-submit:disabled{opacity:.65;cursor:wait}
+.contact-trap{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.form-card>form>.form-error{margin-top:24px;color:#ffaaaa;font-size:1rem;line-height:1.5}
+.form-error[hidden]{display:none}
 .form-submit:hover{background:#15181F;box-shadow:none}
 .form-note{margin-top:20px;color:var(--faint);font-size:.82rem;line-height:1.5}
 .form-success{display:none;text-align:center;padding:40px 20px}
@@ -435,7 +439,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     </a>
     <nav class="nav" aria-label="Navigazione rapida" data-nosnippet>
       <a href="#bionee">Bionee</a>
-      <a href="#ilovepaghe">iLovePaghe</a>
+      <a href="#cedoly">Cedoly</a>
       <a href="#contatti">Contatti</a>
     </nav>
     <button class="burger" id="burger" aria-label="Apri il menu" aria-expanded="false">
@@ -448,25 +452,25 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 <nav class="mobile-nav" id="mobileNav" aria-label="Menu mobile" data-nosnippet>
   <button class="mobile-close" id="mobileClose" aria-label="Chiudi il menu"></button>
   <a href="#bionee"><small>01</small>Bionee</a>
-  <a href="#ilovepaghe"><small>02</small>iLovePaghe</a>
+  <a href="#cedoly"><small>02</small>Cedoly</a>
   <a href="#contatti"><small>03</small>Contatti</a>
 </nav>
 
 <!-- ============ ENTRY CARDS ============ -->
 <section class="cards" aria-label="I nostri brand" data-nosnippet>
-  <a id="bionee" class="card bionee" href="https://www.amazon.it/stores/BIONEE/page/5014B05E-4297-4BBE-A29B-D6BF55C5BEA6?lp_asin=B0GYDTGHXQ&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto&bl_grd_status=override" target="_blank" rel="noopener" aria-label="BIONEE su Amazon">
+  <a id="bionee" class="card bionee" href="https://bionee.shop/" target="_blank" rel="noopener" aria-label="Bionee">
     <video id="bioneeVideo" class="card-video" src="/4807709_Farm_Tomato_1920x1080.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
     <span class="card-logo"><img src="/logo%20bionee.png" alt="Bionee - prodotti naturali" decoding="async"></span>
     <h2 class="sr-only">Bionee — prodotti naturali per la cura della casa, degli animali e delle piante</h2>
-    <span class="card-caption">Il nostro brand di prodotti naturali per la cura della casa, degli animali e delle piante, disponibile su Amazon.</span>
+    <span class="card-caption">Il nostro brand di prodotti naturali per la cura della casa, degli animali e delle piante.</span>
     <span class="card-go">Scopri lo store <span class="arr">→</span></span>
   </a>
-  <a id="ilovepaghe" class="card ilp" href="https://www.ilovepaghe.com/" target="_blank" rel="noopener" aria-label="iLovePaghe">
+  <a id="cedoly" class="card ilp" href="https://cedoly.it/" target="_blank" rel="noopener" aria-label="Cedoly">
     <video class="card-video" src="/macbookmockupvideo.webm" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
-    <span class="card-logo"><img src="/ilovepaghe_logo.png" alt="iLovePaghe - gestione buste paga" decoding="async" loading="lazy"></span>
-    <h2 class="sr-only">iLovePaghe — piattaforma per l'invio e la gestione digitale delle buste paga</h2>
+    <span class="card-logo"><img src="/logo-cedoly%20bianco.png" width="6718" height="1797" alt="Cedoly - gestione buste paga" decoding="async" loading="lazy"></span>
+    <h2 class="sr-only">Cedoly — piattaforma per l'invio e la gestione digitale delle buste paga</h2>
     <span class="card-caption">La piattaforma che gestisce cedolini, timbrature e presenze del personale.</span>
     <span class="card-go">Vai al sito <span class="arr">→</span></span>
   </a>
@@ -483,18 +487,18 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
           <div class="form-row">
             <div class="field">
               <label for="referente">Nome referente <em>*</em></label>
-              <input id="referente" type="text" name="referente" required autocomplete="name" placeholder="Nome e cognome">
+              <input id="referente" type="text" name="referente" maxlength="120" required autocomplete="name" placeholder="Nome e cognome">
               <span class="err">Indicare il nome del referente</span>
             </div>
             <div class="field">
               <label for="email">Email <em>*</em></label>
-              <input id="email" type="email" name="email" required autocomplete="email" placeholder="nome@azienda.it">
+              <input id="email" type="email" name="email" maxlength="254" required autocomplete="email" placeholder="nome@azienda.it">
               <span class="err">Indicare un indirizzo email valido</span>
             </div>
           </div>
           <div class="field">
             <label for="telefono">Telefono <em>*</em></label>
-            <input id="telefono" type="tel" name="telefono" required autocomplete="tel" inputmode="tel" placeholder="+39 ...">
+            <input id="telefono" type="tel" name="telefono" maxlength="40" required autocomplete="tel" inputmode="tel" placeholder="+39 ...">
             <span class="err">Indicare un numero di telefono valido</span>
           </div>
           <div class="field">
@@ -502,13 +506,19 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
             <textarea id="messaggio" name="messaggio" required maxlength="2000" placeholder="Descrivete sinteticamente la vostra richiesta."></textarea>
             <span class="err">Inserire un messaggio</span>
           </div>
+          <div class="contact-trap" aria-hidden="true">
+            <label for="website">Lasciare vuoto questo campo</label>
+            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <p class="form-error" id="formError" role="alert" hidden></p>
           <button type="submit" class="btn btn-primary form-submit">Inviate la richiesta <span class="arr">→</span></button>
-          <p class="form-note">Inviando il modulo si acconsente a essere ricontattati da LG Trading SRL. I dati saranno trattati nel rispetto della <a href="/privacy-policy">Privacy Policy</a>.</p>
+          <p class="form-note">LG Trading SRL utilizzerà i dati per rispondere alla vostra richiesta, nel rispetto della <a href="/privacy-policy">Privacy Policy</a>.</p>
+          <noscript><p>Per utilizzare il modulo abilitate JavaScript, oppure scrivete a <a href="mailto:info@lgtrading.it">info@lgtrading.it</a>.</p></noscript>
         </form>
-        <div class="form-success" id="formSuccess" role="status" aria-live="polite">
+        <div class="form-success" id="formSuccess" tabindex="-1" role="status" aria-live="polite">
           <div class="fs-ic"><svg width="30" height="30" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12l5 5L20 6"/></svg></div>
           <h3>Completa l’invio</h3>
-          <p>È stato aperto il programma di posta con il messaggio già compilato. Confermate l’email per inviare la richiesta a <a href="mailto:info@lgtrading.it">info@lgtrading.it</a>.</p>
+          <p>Per inviare la richiesta, confermate il messaggio nel vostro programma di posta. Potete anche scrivere direttamente a info@lgtrading.it.</p>
         </div>
       </div>
     </div>
@@ -527,8 +537,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       </div>
       <div class="footer-col">
         <h5>Brand</h5>
-        <a href="https://www.amazon.it/stores/BIONEE/page/5014B05E-4297-4BBE-A29B-D6BF55C5BEA6?lp_asin=B0GYDTGHXQ&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto&bl_grd_status=override" target="_blank" rel="noopener">BIONEE su Amazon</a>
-        <a href="https://www.ilovepaghe.com/" target="_blank" rel="noopener">iLovePaghe</a>
+        <a href="https://bionee.shop/" target="_blank" rel="noopener">Bionee</a>
+        <a href="https://cedoly.it/" target="_blank" rel="noopener">Cedoly</a>
       </div>
       <div class="footer-col">
         <h5>Contatti</h5>
@@ -711,53 +721,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     });
   }
 
-  /* form validation */
-  var form=document.getElementById('contactForm');
-  var success=document.getElementById('formSuccess');
-  var emailRe=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  var phoneRe=/^[0-9+()\s.\-]{6,}$/;
-  function validateField(field){
-    var wrap=field.closest('.field');
-    var val=field.value.trim();
-    var valid=val!=='';
-    if(valid&&field.type==='email')valid=emailRe.test(val);
-    if(valid&&field.name==='telefono')valid=phoneRe.test(val);
-    wrap.classList.toggle('invalid',!valid);
-    return valid;
-  }
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    var ok=true,firstInvalid=null;
-    form.querySelectorAll('[required]').forEach(function(field){
-      if(!validateField(field)){ok=false;if(!firstInvalid)firstInvalid=field;}
-    });
-    if(ok){
-      var referente=form.elements.referente.value.trim();
-      var email=form.elements.email.value.trim();
-      var telefono=form.elements.telefono.value.trim();
-      var messaggio=form.elements.messaggio.value.trim();
-      var subject=encodeURIComponent('Richiesta dal sito LG Trading SRL - '+referente);
-      var body=encodeURIComponent(
-        'Nome referente: '+referente+'\n'+
-        'Email: '+email+'\n'+
-        'Telefono: '+telefono+'\n\n'+
-        'Messaggio:\n'+messaggio
-      );
-      window.location.href='mailto:info@lgtrading.it?subject='+subject+'&body='+body;
-      form.style.display='none';
-      success.classList.add('show');
-      success.scrollIntoView({behavior:'smooth',block:'center'});
-    }else if(firstInvalid){firstInvalid.focus();}
-  });
-  form.querySelectorAll('input,select,textarea').forEach(function(field){
-    ['input','change'].forEach(function(evt){
-      field.addEventListener(evt,function(){
-        var wrap=field.closest('.field');
-        if(wrap&&wrap.classList.contains('invalid'))validateField(field);
-      });
-    });
-  });
 })();
 </script>
+<script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>

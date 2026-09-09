@@ -1,0 +1,8 @@
+{
+  "firestore": [
+    {
+      "database": "lgtrading-contacts",
+      "rules": "firestore.rules"
+    }
+  ]
+}
