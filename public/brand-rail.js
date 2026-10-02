@@ -12,7 +12,7 @@
   var desktop=window.matchMedia('(min-width: 721px) and (hover: hover) and (pointer: fine)');
   var previous=section.querySelector('.brand-nav-prev');
   var next=section.querySelector('.brand-nav-next');
-  var travel=0,speed=0,carry=0,expectedX=stage.scrollLeft;
+  var travel=0,speed=0,carry=0;
   var raf=0,lastFrame=0,resizeFrame=0,lastManual=-Infinity,wakeTimer=0,autoDeadline=0;
   var hovered=false,hoverStarted=0,touching=false,visible=false,initialized=false;
   var navigation=null,normalizing=false;
@@ -25,7 +25,7 @@
     navigation=null;lastManual=performance.now();speed=0;carry=0;
     clearTimeout(wakeTimer);wakeTimer=setTimeout(wake,2100);wake();
   }
-  function position(x){stage.scrollLeft=x;expectedX=stage.scrollLeft;}
+  function position(x){stage.scrollLeft=x;}
   function applyOrder(){ordered.forEach(function(card,index){card.style.order=index;});}
   function nearestCard(){
     var center=stage.getBoundingClientRect().left+stage.clientWidth/2;
@@ -145,12 +145,17 @@
   window.lgBrandRail={goToCard:goToCard};
 
   // Native wheel, touch and keyboard scrolling never capture the vertical page.
-  stage.addEventListener('scroll',function(){
-    if(Math.abs(stage.scrollLeft-expectedX)>2){manual();expectedX=stage.scrollLeft;}
-    normalize();
+  stage.addEventListener('scroll',normalize,{passive:true});
+  stage.addEventListener('wheel',function(event){
+    if(Math.abs(event.deltaX)>Math.abs(event.deltaY)||(event.shiftKey&&event.deltaY)){manual();}
   },{passive:true});
-  stage.addEventListener('wheel',manual,{passive:true});
-  stage.addEventListener('keydown',manual);
+  stage.addEventListener('keydown',function(event){
+    if(event.key==='ArrowLeft'||event.key==='ArrowRight')manual();
+  });
+  // Page scrolling is independent; only a stationary hover starts the pause.
+  window.addEventListener('scroll',function(){
+    if(hovered){hoverStarted=performance.now();wake();}
+  },{passive:true});
   stage.addEventListener('pointerdown',manual,{passive:true});
   stage.addEventListener('dragstart',function(event){event.preventDefault();},true);
   stage.addEventListener('touchstart',function(){touching=true;manual();},{passive:true});
