@@ -277,8 +277,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .cards.is-enhanced .brand-stage{scroll-snap-type:none}
 .brand-nav{display:none}
 @media(min-width:721px) and (hover:hover) and (pointer:fine){
-  .brand-stage,.brand-stage .card{cursor:grab;user-select:none;-webkit-user-select:none}
-  .brand-stage.is-dragging,.brand-stage.is-dragging .card{cursor:grabbing}
+  .brand-stage .card{cursor:pointer}
   .brand-nav{
     position:absolute;z-index:3;top:calc(50% + (var(--rail-top) - var(--rail-bottom))/2);transform:translateY(-50%);
     display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid rgba(255,255,255,.14);border-radius:50%;
@@ -807,7 +806,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 })();
 </script>
-<script src="/brand-rail.js?v=20261002-mouse-drag" defer></script>
+<script src="/brand-rail.js?v=20261002-hover-pause" defer></script>
 <script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>

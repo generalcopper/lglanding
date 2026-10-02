@@ -2,6 +2,7 @@
   'use strict';
   var section=document.getElementById('brands');
   if(!section)return;
+  var pin=section.querySelector('.brand-pin');
   var stage=section.querySelector('.brand-stage');
   var track=section.querySelector('.brand-track');
   var cards=Array.from(track.querySelectorAll('.card'));
@@ -11,15 +12,15 @@
   var previous=section.querySelector('.brand-nav-prev');
   var next=section.querySelector('.brand-nav-next');
   var travel=0,speed=0,carry=0,expectedX=stage.scrollLeft;
-  var raf=0,lastFrame=0,resizeFrame=0,autoDeadline=0;
-  var autoStopped=!desktop.matches||motion.matches,drag=null,suppressClick=false;
-  var hovered=false,touching=false,visible=false;
+  var raf=0,lastFrame=0,resizeFrame=0,lastManual=-Infinity,wakeTimer=0;
+  var hovered=false,hoverStarted=0,touching=false,visible=false;
   var clamp=function(v,min,max){return Math.max(min,Math.min(max,v));};
   section.classList.add('is-enhanced');
 
   function wake(){if(!raf&&!document.hidden){lastFrame=performance.now();raf=requestAnimationFrame(tick);}}
   function manual(){
-    autoStopped=true;speed=0;carry=0;wake();
+    lastManual=performance.now();speed=0;carry=0;
+    clearTimeout(wakeTimer);wakeTimer=setTimeout(wake,2100);wake();
   }
   function position(x){
     stage.scrollLeft=x;
@@ -42,16 +43,17 @@
     if(document.hidden)return;
     var dt=Math.min((now-lastFrame)/1000,.05);lastFrame=now;
     var at=stage.scrollLeft;
-    if(visible&&desktop.matches&&!autoStopped&&!autoDeadline)autoDeadline=now+5000;
-    if(autoDeadline&&now>=autoDeadline)autoStopped=true;
-    var focused=section.contains(document.activeElement);
-    var running=visible&&desktop.matches&&!autoStopped&&!motion.matches&&!hovered&&!touching&&!focused&&
-      !document.body.classList.contains('menu-open')&&at<travel-1;
-    var fade=autoDeadline?Math.pow(clamp((autoDeadline-now)/1400,0,1),2):1;
-    var wanted=running?Math.max(18,window.innerWidth*.028)*clamp((travel-at)/140,.18,1)*fade:0;
+    var hoverElapsed=hovered?now-hoverStarted:0;
+    var hoverPaused=hovered&&hoverElapsed>=3000;
+    var focused=section.contains(document.activeElement)&&document.activeElement.matches(':focus-visible');
+    var running=visible&&desktop.matches&&!motion.matches&&!hoverPaused&&!touching&&!focused&&
+      !document.body.classList.contains('menu-open')&&now-lastManual>2000&&at<travel-1;
+    // Keep moving initially, then ease down during the final 1.2 seconds of hover.
+    var hoverFade=hovered?Math.pow(clamp((3000-hoverElapsed)/1200,0,1),2):1;
+    var wanted=running?Math.max(18,window.innerWidth*.028)*clamp((travel-at)/140,.18,1)*hoverFade:0;
     speed+=(wanted-speed)*(1-Math.exp(-dt/.24));
     if(speed<.04)speed=0;
-    if(!desktop.matches||motion.matches){speed=0;carry=0;}
+    if(!desktop.matches||motion.matches||hoverPaused){speed=0;carry=0;}
     if(visible&&speed>0){
       carry+=speed*dt;
       var step=Math.floor(carry);
@@ -92,49 +94,23 @@
   },{passive:true});
   stage.addEventListener('wheel',manual,{passive:true});
   stage.addEventListener('keydown',manual);
-  stage.addEventListener('pointerdown',function(event){
-    manual();suppressClick=false;
-    if(event.pointerType==='mouse'&&event.button===0&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.altKey){
-      // Cancel native link/image dragging before the browser starts its drag gesture.
-      event.preventDefault();
-      drag={id:event.pointerId,x:event.clientX,y:event.clientY,left:stage.scrollLeft,active:false};
-    }
-  });
-  stage.addEventListener('pointermove',function(event){
-    if(!drag||event.pointerId!==drag.id)return;
-    if(!(event.buttons&1)){endDrag();return;}
-    var dx=event.clientX-drag.x,dy=event.clientY-drag.y;
-    if(!drag.active){
-      if(Math.abs(dx)<6||Math.abs(dx)<=Math.abs(dy))return;
-      drag.active=true;suppressClick=true;stage.setPointerCapture(drag.id);stage.classList.add('is-dragging');
-    }
-    event.preventDefault();position(clamp(drag.left-dx,0,travel));
-  });
-  function endDrag(){
-    if(!drag)return;
-    var id=drag.id;drag=null;stage.classList.remove('is-dragging');
-    if(stage.hasPointerCapture(id))stage.releasePointerCapture(id);
-  }
-  stage.addEventListener('pointerup',endDrag);
-  stage.addEventListener('pointercancel',endDrag);
-  stage.addEventListener('lostpointercapture',endDrag);
-  stage.addEventListener('pointerleave',function(){if(drag&&!drag.active)endDrag();});
-  window.addEventListener('blur',endDrag);
+  stage.addEventListener('pointerdown',manual,{passive:true});
   stage.addEventListener('dragstart',function(event){event.preventDefault();},true);
-  stage.addEventListener('click',function(event){
-    if(suppressClick&&event.detail){suppressClick=false;event.preventDefault();event.stopPropagation();}
-  },true);
   stage.addEventListener('touchstart',function(){touching=true;manual();},{passive:true});
   function endTouch(){touching=false;manual();}
   stage.addEventListener('touchend',endTouch,{passive:true});
   stage.addEventListener('touchcancel',endTouch,{passive:true});
-  cards.forEach(function(card){
-    card.addEventListener('pointerenter',function(event){if(hoverCapable.matches&&event.pointerType!=='touch'){hovered=true;wake();}});
-    card.addEventListener('pointerleave',function(event){if(event.pointerType!=='touch'){hovered=false;wake();}});
+  pin.addEventListener('pointerenter',function(event){
+    if(hoverCapable.matches&&event.pointerType!=='touch'){
+      hovered=true;hoverStarted=performance.now();wake();
+    }
+  });
+  pin.addEventListener('pointerleave',function(event){
+    if(event.pointerType!=='touch'){hovered=false;hoverStarted=0;wake();}
   });
   section.addEventListener('focusin',function(event){
     var card=event.target.closest('.card');
-    if(card&&!drag)centerCard(card);
+    if(card&&event.target.matches(':focus-visible'))centerCard(card);
     wake();
   });
   section.addEventListener('focusout',function(){setTimeout(wake,0);});
