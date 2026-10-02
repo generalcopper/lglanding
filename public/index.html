@@ -343,140 +343,16 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 }
 
 
-/* Cedoly: app mockups form the full-screen background. */
+/* Cedoly: full-screen video with the shared brand overlay. */
 .card.cedoly{min-height:100vh;min-height:100svh;isolation:isolate;background:#061a24;color:#fff;gap:25px;padding:96px 28px;scroll-margin-top:0}
 .card.cedoly::before{display:none}
-.cedoly-scene{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 7% 20%,#16878285 0,transparent 50%),radial-gradient(ellipse at 98% 100%,#155a8978 0,transparent 52%),linear-gradient(132deg,#082f3b,#061822 49%,#0a273c)}
-.cedoly-shade{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 36% 95% at 50% 50%,#061820ed 8%,#061820d1 40%,#06182038 82%,transparent 100%),linear-gradient(180deg,#03121b30,transparent 26%,transparent 76%,#03121b52)}
 .cedoly .card-logo,.cedoly .card-caption,.cedoly .card-go{position:relative;z-index:2}
 .cedoly .card-logo img{width:clamp(235px,23vw,300px);max-width:100%;height:auto;filter:drop-shadow(0 4px 24px #00131f40)}
 .cedoly .card-caption{max-width:390px;color:#f1f7f8;font-size:1.075rem;line-height:1.65;text-shadow:0 2px 16px #00111bb3}
 .cedoly .card-go,.cedoly:hover .card-go{color:#fff}
 .cedoly:focus-visible{outline:3px solid #50dfbf;outline-offset:-5px}
-.cedoly-device{--ink:#072e38;--petrol:#054c5c;--mint:#3dd2a9;position:absolute;width:clamp(290px,26vw,430px);aspect-ratio:1002/2118;container-type:inline-size;text-align:left;color:#161920;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;line-height:1.3;letter-spacing:normal;isolation:isolate}
-.cedoly-device-home{left:17%;top:43%;transform:translate(-50%,-50%) perspective(1600px) rotate(-13deg) rotateY(12deg)}
-.cedoly-device-attendance{left:83%;top:64%;transform:translate(-50%,-50%) perspective(1600px) rotate(14deg) rotateY(-12deg)}
-.cedoly-bezel{position:absolute;inset:0;border-radius:15cqw;background:linear-gradient(125deg,#8b9b9f,#182629 18%,#46565b 42%,#10191c 80%,#73848b);border:.4cqw solid #798d9270;box-shadow:inset 0 0 0 .8cqw #2b3b40,0 15cqw 24cqw -9cqw #0009,0 2cqw 7cqw #0005}
-.cedoly-screen{position:absolute;inset:2.3cqw;background:#fff;border:.8cqw solid #080e11;border-radius:12.8cqw;overflow:hidden}
-.cedoly-device p{margin:0}
-.cedoly-device svg{display:block;width:5cqw;height:5cqw;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.cedoly-status{position:absolute;top:4.6cqw;left:7.7cqw;right:7cqw;display:flex;justify-content:space-between;align-items:center;font-size:3.5cqw;line-height:1;font-weight:700;z-index:2;color:#151a20}
-.cedoly-status svg{width:11cqw;height:4cqw;stroke-width:1.5}
-.cedoly-island{position:absolute;top:3cqw;left:50%;width:26cqw;height:7cqw;border-radius:6cqw;background:#090d12;transform:translateX(-50%);z-index:2;box-shadow:inset -.8cqw 0 1cqw #263139}
-.cedoly-app{position:absolute;inset:15cqw 0 18cqw;overflow:hidden}
-.cedoly-device .app-screen{padding:2.5cqw 4.7cqw 0;background:#fff}
-.cedoly-device .row{display:flex;align-items:center;justify-content:space-between;gap:2cqw}
-.cedoly-device .avatar{display:flex;align-items:center;justify-content:center;width:9cqw;height:9cqw;border-radius:50%;font-size:3cqw;font-weight:700;flex:none}
-.cedoly-device .avatar-teal{background:#d8ebe4;color:#136258}
-.cedoly-app-nav{position:absolute;left:0;right:0;bottom:5.5cqw;height:13cqw;display:flex;align-items:center;justify-content:space-around;padding:1.5cqw 2cqw 0;border-top:.2cqw solid #e8edeb;background:#ffffffed}
-.cedoly-tab{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.3cqw;width:18%;color:#8c9698}
-.cedoly-tab svg{width:4.5cqw;height:4.5cqw;stroke-width:1.8}
-.cedoly-tab>span{font-size:2.25cqw;line-height:1;font-weight:500}
-.cedoly-tab.active{color:#075467}
-.cedoly-tab.active>span{font-weight:700}
-.cedoly-home-indicator{position:absolute;left:50%;bottom:2.2cqw;width:31cqw;height:1.1cqw;background:#151a20;border-radius:2cqw;transform:translateX(-50%)}
-.cedoly-scene .cedoly-symbols{position:absolute;width:0;height:0;overflow:hidden}
-.cedoly-device .ios-home-toolbar{display:flex;align-items:center;gap:2cqw;height:11cqw}
-.cedoly-device .ios-company-badge{display:flex;align-items:center;justify-content:center;width:11cqw;height:11cqw;border-radius:50%;background:#082e39;color:#55d7b1;font-size:3.2cqw;font-weight:800;flex:none}
-.cedoly-device .ios-search-pill,.cedoly-device .ios-search-field{display:flex;align-items:center;gap:2.4cqw;background:#f1f2f3;color:#626872;border-radius:8cqw}
-.cedoly-device .ios-search-pill{height:11cqw;padding:0 3cqw;min-width:0;flex:1}
-.cedoly-device .ios-search-pill svg,.cedoly-device .ios-search-field svg{width:5cqw;height:5cqw;flex:none}
-.cedoly-device .ios-search-pill span{font-size:3.2cqw}
-.cedoly-device .ios-toolbar-button{display:flex;align-items:center;justify-content:center;width:10.5cqw;height:10.5cqw;border-radius:50%;background:#f1f2f3;flex:none}
-.cedoly-device .ios-toolbar-button svg{width:5.4cqw;height:5.4cqw;stroke-width:2.2}
-.cedoly-device .ios-company-name{margin:14cqw 0 10cqw;text-align:center;color:#075467;font-size:7.4cqw;font-weight:800;line-height:1.03;letter-spacing:-.02em}
-.cedoly-device .ios-quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.2cqw}
-.cedoly-device .ios-quick-grid>div{height:21cqw;padding:4cqw 3cqw 3cqw;border-radius:5.5cqw;background:#f1f2f3;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;min-width:0}
-.cedoly-device .ios-quick-grid svg{width:5.5cqw;height:5.5cqw;stroke-width:2.2}
-.cedoly-device .ios-quick-grid strong{font-size:2.65cqw;color:#075467;white-space:nowrap}
-.cedoly-device .ios-feature-card{border-radius:5.5cqw;background:#f1f2f3}
-.cedoly-device .ios-upload-card{margin-top:4.5cqw;padding:3.7cqw 4.8cqw 4cqw;text-align:center}
-.cedoly-device .ios-upload-card p{font-size:2.85cqw;line-height:1.35;color:#606670}
-.cedoly-device .ios-mint-action{height:10.5cqw;border-radius:7cqw;background:#3dd2a9;color:#054c5c;display:flex;align-items:center;justify-content:center;gap:2.2cqw;margin-top:3.5cqw;font-size:3.2cqw;font-weight:750;white-space:nowrap}
-.cedoly-device .ios-mint-action svg{width:4.5cqw;height:4.5cqw;stroke-width:2.2}
-.cedoly-device .ios-process-flow{display:grid;grid-template-columns:auto minmax(3cqw,1fr) auto minmax(3cqw,1fr) auto;align-items:start;text-align:center}
-.cedoly-device .ios-process-step{display:flex;flex-direction:column;align-items:center;gap:.8cqw;min-width:10cqw}
-.cedoly-device .ios-process-dot{display:flex;align-items:center;justify-content:center;width:5.2cqw;height:5.2cqw;border-radius:50%;background:#d9f5ec;color:#075467;font-size:2.2cqw;font-style:normal;font-weight:800;box-shadow:inset 0 0 0 .45cqw #3dd2a9;transform-box:fill-box;transform-origin:center}
-.cedoly-device .ios-process-step small{font-size:1.95cqw;line-height:1.15;color:#5d6970;font-weight:650;white-space:nowrap}
-.cedoly-device .ios-process-line{height:1cqw;margin:2.1cqw -.4cqw 0;border-radius:2cqw;background:#d9dfe0;overflow:hidden}
-.cedoly-device .ios-process-line>i{display:block;width:100%;height:100%;border-radius:inherit;background:#20bd93;transform-origin:left center}
-.cedoly-device .ios-home-flow{margin:2.7cqw .5cqw .4cqw}
-.cedoly-device .ios-home-flow+.ios-mint-action{margin-top:2.6cqw}
-.cedoly-device .ios-salary-card{margin-top:4.5cqw;padding:4.2cqw 4.8cqw;height:24cqw;overflow:hidden}
-.cedoly-device .ios-salary-card .row>span{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:2cqw;row-gap:1cqw}
-.cedoly-device .ios-salary-card .row>span svg{grid-row:1;width:4cqw;height:4cqw;color:#15171d}
-.cedoly-device .ios-salary-card .row strong{font-size:3.1cqw;font-weight:650}
-.cedoly-device .ios-salary-card .row small{grid-column:1/-1;font-size:2.5cqw;color:#656b75}
-.cedoly-device .ios-trend-icon{width:5cqw!important;height:5cqw!important;flex:none}
-.cedoly-device .ios-salary-card>b{display:block;margin-top:3cqw;font-size:7.5cqw;line-height:1;letter-spacing:-.025em}
-.cedoly-device .ios-screen-title{display:flex;align-items:center;justify-content:center;min-height:11cqw;text-align:center;font-size:4cqw;font-weight:700;line-height:1.2;margin:0 0 3cqw}
-.cedoly-device .ios-search-field{height:11cqw;padding:0 3.5cqw;margin-bottom:4cqw;background:#f5f5f5}
-.cedoly-device .ios-search-field span{font-size:3.3cqw;color:#7b7e83;white-space:nowrap}
-.cedoly-device .ios-native-card{background:#f1f2f3;border-radius:5.5cqw}
-.cedoly-device .ios-qr-card{height:20cqw;padding:4cqw 4.5cqw;display:flex;align-items:center;gap:3.5cqw}
-.cedoly-device .ios-qr-card>svg{width:7cqw;height:7cqw;color:#17191f;stroke-width:2.4;flex:none}
-.cedoly-device .ios-qr-card>span,.cedoly-device .ios-enable-card>span{display:flex;flex-direction:column;gap:1.3cqw;min-width:0}
-.cedoly-device .ios-qr-card strong,.cedoly-device .ios-enable-card strong{font-size:3.5cqw;color:#17191f;white-space:nowrap}
-.cedoly-device .ios-qr-card small,.cedoly-device .ios-enable-card small{font-size:2.8cqw;color:#656a74;white-space:nowrap}
-.cedoly-device .ios-qr-card>b{font-size:6cqw;font-weight:400;margin-left:auto}
-.cedoly-device .ios-enable-card{height:21cqw;padding:4.2cqw 4.5cqw;margin-top:4cqw;display:flex;align-items:center;justify-content:space-between;gap:2cqw}
-.cedoly-device .ios-switch{width:14cqw;height:7cqw;border-radius:8cqw;background:#07586a;padding:.7cqw;flex:none}
-.cedoly-device .ios-switch:after{content:"";display:block;width:5.6cqw;height:5.6cqw;border-radius:50%;background:#fff;margin-left:auto}
-.cedoly-device .ios-report-card{margin-top:4cqw;padding:4cqw 4.5cqw 4.5cqw}
-.cedoly-device .ios-card-title{display:flex;align-items:center;gap:2.2cqw;font-size:3.7cqw}
-.cedoly-device .ios-card-title svg{width:5cqw;height:5cqw;color:#17191f}
-.cedoly-device .ios-month-select{height:10.5cqw;border-radius:6cqw;background:#e2e4e5;margin-top:3.5cqw;padding:0 3cqw;display:flex;align-items:center;justify-content:space-between}
-.cedoly-device .ios-month-select b{font-size:5.5cqw;font-weight:400;line-height:1}
-.cedoly-device .ios-month-select strong{font-size:3.4cqw}
-.cedoly-device .ios-hours{display:flex;align-items:flex-end;justify-content:space-between;margin-top:4cqw}
-.cedoly-device .ios-hours strong{font-size:7.4cqw;line-height:1;letter-spacing:-.025em}
-.cedoly-device .ios-hours span{font-size:2.5cqw;color:#686e78}
-.cedoly-device .ios-shift-flow{margin:3cqw .4cqw 0}
-.cedoly-device .ios-shift-flow .ios-process-dot{width:4.6cqw;height:4.6cqw;background:#e1e5e6;box-shadow:inset 0 0 0 .45cqw #075467}
-.cedoly-device .ios-shift-flow .ios-process-dot:after{content:"";width:1.5cqw;height:1.5cqw;border-radius:50%;background:#075467}
-.cedoly-device .ios-shift-flow .ios-process-line{margin-top:1.8cqw}
-.cedoly-device .ios-shift-flow .ios-process-line>i{background:#075467}
-.cedoly-device .ios-report-card .ios-mint-action{margin-top:2.7cqw}
-.cedoly-device .ios-people-preview{margin-top:3.5cqw}
-.cedoly-device .ios-people-preview>.row{font-size:3.5cqw}
-.cedoly-device .ios-people-preview>.row>span{color:#686e78}
-.cedoly-device .ios-people-preview>small{display:block;margin:3cqw 0 1.5cqw;color:#075467;font-size:2.7cqw;font-weight:700}
-.cedoly-device .ios-attendance-person{display:flex;align-items:center;gap:2.5cqw;border-radius:4.5cqw;background:#f1f2f3;padding:3cqw}
-.cedoly-device .ios-attendance-person>span:nth-child(2){display:flex;flex-direction:column;gap:1cqw;min-width:0}
-.cedoly-device .ios-attendance-person strong{font-size:3cqw}
-.cedoly-device .ios-attendance-person small{font-size:2.35cqw;color:#696e76}
-.cedoly-device .ios-attendance-person>b{font-size:2.8cqw;margin-left:auto;white-space:nowrap}
-.cedoly-device .ios-attendance-person>i{font-size:4cqw;font-style:normal}
-.cedoly-device .ios-analytics{padding-left:0;padding-right:0}
-.cedoly-device .ios-analytics-head{height:11cqw;padding:0 5cqw;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;text-align:center}
-.cedoly-device .ios-analytics-head>span{display:flex;align-items:center;justify-content:center;width:10cqw;height:10cqw;border-radius:50%;background:#f4f4f4;font-size:7cqw;justify-self:start}
-.cedoly-device .ios-analytics-head>strong{font-size:3.8cqw}
-.cedoly-device .ios-analytics-head>i{width:10cqw}
-.cedoly-device .ios-analytics-total{display:flex;align-items:center;flex-direction:column;margin-top:8cqw}
-.cedoly-device .ios-analytics-total>span{font-size:3.2cqw;color:#656b75}
-.cedoly-device .ios-analytics-total>strong{font-size:10.8cqw;line-height:1;letter-spacing:-.025em;margin-top:3.5cqw;white-space:nowrap}
-.cedoly-device .ios-analytics-total>small{font-size:2.8cqw;color:#656b75;margin-top:4cqw}
-.cedoly-device .ios-chart{display:block;width:100%;height:39cqw;margin-top:6cqw;overflow:visible}
-.cedoly-device .ios-chart-grid-line{stroke:#dce1e2;stroke-width:1;vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:left center}
-.cedoly-device .ios-chart-area{fill:#054c5c;fill-opacity:.14;stroke:none;transform-origin:left center;transform-box:fill-box}
-.cedoly-device .ios-chart-line{fill:none;stroke:#202731;stroke-width:3.4;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:0}
-.cedoly-device .ios-chart-point{fill:#202731;stroke:#fff;stroke-width:1.4;vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center}
-.cedoly-device .ios-chart-caption{text-align:center;margin-top:4cqw;font-size:2.7cqw;color:#656b75}
-.cedoly-device .ios-range{display:grid;grid-template-columns:repeat(4,1fr);align-items:center;text-align:center;margin:5cqw 5cqw 0;font-size:2.8cqw;color:#646a74;font-weight:650}
-.cedoly-device .ios-range>*{height:10cqw;display:flex;align-items:center;justify-content:center}
-.cedoly-device .ios-range>strong{border-radius:6cqw;background:#f1f2f3;color:#17191f}
-.cedoly-device .ios-summary-card{margin:5cqw 5cqw 0;padding:4.3cqw;border-radius:5.5cqw;background:#f1f2f3}
-.cedoly-device .ios-summary-card>span{font-size:2.7cqw;color:#646a74}
-.cedoly-device .ios-summary-card>div{display:grid;grid-template-columns:1fr 1fr;margin-top:4cqw}
-.cedoly-device .ios-summary-card p{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;align-items:center;column-gap:2.5cqw;row-gap:.5cqw}
-.cedoly-device .ios-summary-card svg{grid-row:1/-1;width:5cqw;height:5cqw;color:#656b75}
-.cedoly-device .ios-summary-card strong{font-size:4.5cqw;font-variant-numeric:tabular-nums}
-.cedoly-device .ios-summary-card small{font-size:2.7cqw;color:#656b75}
-
-@media(min-width:1600px){.cedoly-device-home{left:20%}.cedoly-device-attendance{left:80%}}
-@media(max-width:1100px){.cedoly-device{width:310px}.cedoly-device-home{left:9%;top:35%}.cedoly-device-attendance{left:91%;top:69%}.cedoly-shade{background:radial-gradient(ellipse 46% 100% at 50% 50%,#061820f2 8%,#061820dc 38%,#06182036 82%,transparent 100%)}}
-@media(max-width:650px){.card.cedoly{padding:76px 28px;gap:24px}.cedoly-device{width:clamp(220px,66vw,290px)}.cedoly-device-home{left:14%;top:5%;transform:translate(-50%,-50%) rotate(-18deg)}.cedoly-device-attendance{left:87%;top:100%;transform:translate(-50%,-50%) rotate(16deg)}.cedoly-shade{background:linear-gradient(180deg,#0618200a 0,#06182063 22%,#061820e8 39%,#061820ed 61%,#06182059 79%,#0618201a 100%)}.cedoly .card-logo img{width:245px;max-width:78vw}.cedoly .card-caption{font-size:1rem;max-width:320px}}
-@media(max-height:600px) and (min-width:651px){.card.cedoly{padding:70px 28px;gap:20px}.cedoly-device{width:260px}.cedoly-device-home{left:15%;top:36%}.cedoly-device-attendance{left:86%;top:72%}.cedoly .card-logo img{width:230px}}
+@media(max-width:650px){.card.cedoly{padding:76px 28px;gap:24px}.cedoly .card-logo img{width:245px;max-width:78vw}.cedoly .card-caption{font-size:1rem;max-width:320px}}
+@media(max-height:600px) and (min-width:651px){.card.cedoly{padding:70px 28px;gap:20px}.cedoly .card-logo img{width:230px}}
 
 /* ============ SECTION / HEADS ============ */
 .section{padding:170px 0;position:relative}
@@ -613,85 +489,11 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-go">Vai al sito <span class="arr">→</span></span>
   </a>
   <a id="cedoly" class="card cedoly" href="https://cedoly.it/" target="_blank" rel="noopener" aria-label="Cedoly">
-    <div class="cedoly-scene" aria-hidden="true" inert>
-      <svg class="cedoly-symbols" xmlns="http://www.w3.org/2000/svg"><defs><symbol id="cedoly-icon-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 2v6m10-6v6M3 11h18m-13 5h3m3 0h3"/></symbol><symbol id="cedoly-icon-chart" viewBox="0 0 24 24"><path d="M4 20V10m5 10V4m5 16v-7m5 7V7M2 20h20"/></symbol><symbol id="cedoly-icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5H8"/></symbol><symbol id="cedoly-icon-coins" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15 8.5c-.7-.7-1.7-1-2.8-1-1.8 0-3.2 1-3.2 2.4 0 1.5 1.2 2 3.3 2.5 2 .5 3.2 1 3.2 2.5 0 1.4-1.4 2.5-3.3 2.5-1.3 0-2.5-.4-3.2-1.2M12 5.5v13"/></symbol><symbol id="cedoly-icon-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 13h8m-8 4h5"/></symbol><symbol id="cedoly-icon-folder" viewBox="0 0 24 24"><path d="M3 6.5h7l2 2h9v9.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol><symbol id="cedoly-icon-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></symbol><symbol id="cedoly-icon-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5Zm-9 10 9 5 9-5M3 17l9 5 9-5"/></symbol><symbol id="cedoly-icon-qr" viewBox="0 0 24 24"><path d="M3 3h7v7H3Zm11 0h7v7h-7ZM3 14h7v7H3Zm12 0h2m4 0v3m-7 4h3m4 0v-2m-7-2h4"/></symbol><symbol id="cedoly-icon-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></symbol><symbol id="cedoly-icon-trend" viewBox="0 0 24 24"><path d="M3 18 9 12l4 4 8-9M16 7h5v5"/></symbol><symbol id="cedoly-icon-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol><symbol id="cedoly-icon-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21v-3a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v3m1-17a4 4 0 0 1 0 8m2 2a5 5 0 0 1 3 4v3"/></symbol></defs></svg>
-      <div class="cedoly-device cedoly-device-home">
-        <span class="cedoly-bezel"></span>
-        <div class="cedoly-screen">
-          <div class="cedoly-status"><span>9:41</span><svg viewBox="0 0 34 12"><path d="M1 10V7m4 3V5m4 5V2"/><path d="M14 4q4-4 8 0m-6 3q2-2 4 0"/><rect x="25" y="2" width="7" height="8" rx="1.5"/></svg></div>
-          <span class="cedoly-island"></span>
-          <div class="cedoly-app"><div class="app-screen ios-company-home">
-                  <div class="ios-home-toolbar">
-                    <span class="ios-company-badge" aria-hidden="true">N</span>
-                    <span class="ios-search-pill"><svg><use href="#cedoly-icon-search"/></svg><span>Cerca</span></span>
-                    <span class="ios-toolbar-button"><svg><use href="#cedoly-icon-layers"/></svg></span>
-                    <span class="ios-toolbar-button"><svg><use href="#cedoly-icon-chart"/></svg></span>
-                  </div>
-                  <p class="ios-company-name">NOVALUME<br>S.R.L.</p>
-                  <div class="ios-quick-grid">
-                    <div><svg><use href="#cedoly-icon-users"/></svg><strong>Personale</strong></div>
-                    <div><svg><use href="#cedoly-icon-clock"/></svg><strong>Timbrature</strong></div>
-                    <div><svg><use href="#cedoly-icon-folder"/></svg><strong>Documenti</strong></div>
-                  </div>
-                  <div class="ios-feature-card ios-upload-card">
-                    <p>Carica il PDF delle buste paga e controlla i destinatari prima dell’invio.</p>
-                    <div class="ios-process-flow ios-home-flow">
-                      <span class="ios-process-step"><i class="ios-process-dot">1</i><small>Carica</small></span>
-                      <span class="ios-process-line"><i></i></span>
-                      <span class="ios-process-step"><i class="ios-process-dot">2</i><small>Controlla</small></span>
-                      <span class="ios-process-line"><i></i></span>
-                      <span class="ios-process-step"><i class="ios-process-dot">3</i><small>Invia</small></span>
-                    </div>
-                    <span class="ios-mint-action"><svg><use href="#cedoly-icon-upload"/></svg>Carica i cedolini</span>
-                  </div>
-                  <div class="ios-feature-card ios-salary-card">
-                    <div class="row"><span><svg><use href="#cedoly-icon-coins"/></svg><strong>Stipendi netti</strong><small>Agosto 2026</small></span><svg class="ios-trend-icon"><use href="#cedoly-icon-trend"/></svg></div>
-                    <b>18.420,00 €</b>
-                  </div>
-                </div></div>
-          <div class="cedoly-app-nav"><span class="cedoly-tab active"><svg><use href="#cedoly-icon-home"/></svg><span>Home</span></span><span class="cedoly-tab"><svg><use href="#cedoly-icon-clock"/></svg><span>Timbrature</span></span><span class="cedoly-tab"><svg><use href="#cedoly-icon-users"/></svg><span>Personale</span></span><span class="cedoly-tab"><svg><use href="#cedoly-icon-calendar"/></svg><span>Richieste</span></span><span class="cedoly-tab"><svg><use href="#cedoly-icon-layers"/></svg><span>Gestione</span></span></div>
-          <span class="cedoly-home-indicator"></span>
-        </div>
-      </div>
-      <div class="cedoly-device cedoly-device-attendance">
-        <span class="cedoly-bezel"></span>
-        <div class="cedoly-screen">
-          <div class="cedoly-status"><span>9:41</span><svg viewBox="0 0 34 12"><path d="M1 10V7m4 3V5m4 5V2"/><path d="M14 4q4-4 8 0m-6 3q2-2 4 0"/><rect x="25" y="2" width="7" height="8" rx="1.5"/></svg></div>
-          <span class="cedoly-island"></span>
-          <div class="cedoly-app"><div class="app-screen ios-attendance">
-                  <p class="ios-screen-title">Timbrature</p>
-                  <span class="ios-search-field"><svg><use href="#cedoly-icon-search"/></svg><span>Nome, email o codice fiscale</span></span>
-                  <div class="ios-native-card ios-qr-card">
-                    <svg><use href="#cedoly-icon-qr"/></svg><span><strong>Mostra codice QR</strong><small>Novalume S.r.l.</small></span><b aria-hidden="true">›</b>
-                  </div>
-                  <div class="ios-native-card ios-enable-card">
-                    <span><strong>Attiva tutti i lavoratori</strong><small>12 di 12 abilitati alle timbrature.</small></span><i class="ios-switch" aria-hidden="true"></i>
-                  </div>
-                  <div class="ios-native-card ios-report-card">
-                    <strong class="ios-card-title"><svg><use href="#cedoly-icon-calendar"/></svg>Report presenze</strong>
-                    <div class="ios-month-select"><b aria-hidden="true">‹</b><strong>Settembre 2026⌄</strong><b aria-hidden="true">›</b></div>
-                    <div class="ios-hours"><strong>128h 24m</strong><span>Ore registrate</span></div>
-                    <div class="ios-process-flow ios-shift-flow">
-                      <span class="ios-process-step"><i class="ios-process-dot"></i><small>Entrata</small></span>
-                      <span class="ios-process-line"><i></i></span>
-                      <span class="ios-process-step"><i class="ios-process-dot"></i><small>In corso</small></span>
-                      <span class="ios-process-line"><i></i></span>
-                      <span class="ios-process-step"><i class="ios-process-dot"></i><small>Uscita</small></span>
-                    </div>
-                    <span class="ios-mint-action"><svg><use href="#cedoly-icon-file"/></svg>Scarica timbrature</span>
-                  </div>
-                  <div class="ios-people-preview">
-                    <div class="row"><strong>Personale</strong><span>12</span></div>
-                    <small>A</small>
-                    <div class="ios-attendance-person"><span class="avatar avatar-teal">AC</span><span><strong>Andrea C.</strong><small>18 giorni registrati</small></span><b>128h 24m</b><i>›</i></div>
-                  </div>
-                </div></div>
-          <div class="cedoly-app-nav"><span class="cedoly-tab"><svg><use href="#cedoly-icon-home"/></svg><span>Home</span></span><span class="cedoly-tab active"><svg><use href="#cedoly-icon-clock"/></svg><span>Timbrature</span></span><span class="cedoly-tab"><svg><use href="#cedoly-icon-users"/></svg><span>Personale</span></span><span class="cedoly-tab"><svg><use href="#cedoly-icon-calendar"/></svg><span>Richieste</span></span><span class="cedoly-tab"><svg><use href="#cedoly-icon-layers"/></svg><span>Gestione</span></span></div>
-          <span class="cedoly-home-indicator"></span>
-        </div>
-      </div>
-    </div>
-    <span class="cedoly-shade" aria-hidden="true"></span>
+    <video id="cedolyVideo" class="card-video" poster="/Phone%20App%20Presentation%20Mockup.webp" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+      <source src="/Phone%20App%20Presentation%20Mockup.webm" type="video/webm">
+      <source src="/Phone%20App%20Presentation%20Mockup.mp4" type="video/mp4">
+    </video>
+    <span class="card-video-overlay" aria-hidden="true"></span>
     <span class="card-logo"><img src="/logo-cedoly%20bianco.png" width="6718" height="1797" alt="Cedoly" decoding="async" loading="lazy"></span>
     <h2 class="sr-only">Cedoly — l’app per la gestione del personale</h2>
     <span class="card-caption">Buste paga, presenze e documenti.<br>Tutto in un’app.</span>
