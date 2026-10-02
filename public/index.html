@@ -310,9 +310,10 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 }
 .card:focus-visible{outline:3px solid var(--blue-soft);outline-offset:-5px}
 @media(max-width:720px){
-  .cards{--rail-gutter:16px;--rail-gap:12px;--rail-peek:52px;--rail-top:calc(var(--header-h) + 12px);--rail-bottom:18px;--rail-card:min(82vw,340px)}
-  .brand-stage{height:calc(100% + 24px);margin-block:-12px;padding-block:12px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain}
-  .brand-track{padding-inline:var(--rail-gutter)}
+  .cards{--rail-gutter:16px;--rail-gap:12px;--rail-peek:52px;--rail-top:calc(var(--header-h) + 10px);--rail-bottom:12px;--rail-card:min(82vw,340px)}
+  .brand-pin{height:auto;min-height:0;padding:var(--rail-top) 0 var(--rail-bottom)}
+  .brand-stage{height:calc(min(62svh,520px) + 24px);margin-block:-12px;padding-block:12px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain}
+  .brand-track{height:100%;padding-inline:var(--rail-gutter)}
   .card{--card-logo-height:clamp(40px,13vw,52px);--card-caption-lines:3;height:min(62svh,520px);min-height:min(340px,62svh);max-height:520px;padding:28px 22px;border-radius:32px;gap:22px;scroll-snap-align:center;scroll-snap-stop:normal}
 }
 @media(max-width:360px){.card{--card-caption-lines:4}}
@@ -471,6 +472,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 }
 @media (max-width:720px){
   .wrap{padding:0 22px}
+  #contatti.section{padding:52px 0 112px}
   .form-row{grid-template-columns:1fr}
   .form-card{padding:0}
   .footer-top{grid-template-columns:1fr;gap:32px}
