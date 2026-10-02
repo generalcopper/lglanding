@@ -18,6 +18,26 @@
         "source": "/index",
         "destination": "/",
         "type": 301
+      },
+      {
+        "source": "/cedoly",
+        "destination": "https://www.ilovepaghe.com/",
+        "type": 301
+      },
+      {
+        "source": "/cedoly/",
+        "destination": "https://www.ilovepaghe.com/",
+        "type": 301
+      },
+      {
+        "source": "/ilovepaghe",
+        "destination": "https://www.ilovepaghe.com/",
+        "type": 301
+      },
+      {
+        "source": "/ilovepaghe/",
+        "destination": "https://www.ilovepaghe.com/",
+        "type": 301
       }
     ],
     "headers": [

@@ -83,7 +83,7 @@
       "name": "LG Trading SRL",
       "description": "LG Trading SRL sviluppa e gestisce progetti a marchio proprio nei settori dei prodotti di consumo e dei servizi digitali per le imprese.",
       "inLanguage": "it-IT",
-      "dateModified": "2026-07-15",
+      "dateModified": "2026-10-02",
       "isPartOf": {
         "@id": "https://www.lgtrading.it/#website"
       },
@@ -439,7 +439,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     </a>
     <nav class="nav" aria-label="Navigazione rapida" data-nosnippet>
       <a href="#bionee">Bionee</a>
-      <a href="#cedoly">Cedoly</a>
+      <a href="#ilovepaghe">iLovePaghe</a>
       <a href="#contatti">Contatti</a>
     </nav>
     <button class="burger" id="burger" aria-label="Apri il menu" aria-expanded="false">
@@ -452,7 +452,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 <nav class="mobile-nav" id="mobileNav" aria-label="Menu mobile" data-nosnippet>
   <button class="mobile-close" id="mobileClose" aria-label="Chiudi il menu"></button>
   <a href="#bionee"><small>01</small>Bionee</a>
-  <a href="#cedoly"><small>02</small>Cedoly</a>
+  <a href="#ilovepaghe"><small>02</small>iLovePaghe</a>
   <a href="#contatti"><small>03</small>Contatti</a>
 </nav>
 
@@ -466,11 +466,11 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-caption">Il nostro brand di prodotti naturali per la cura della casa, degli animali e delle piante.</span>
     <span class="card-go">Scopri lo store <span class="arr">→</span></span>
   </a>
-  <a id="cedoly" class="card ilp" href="https://cedoly.it/" target="_blank" rel="noopener" aria-label="Cedoly">
+  <a id="ilovepaghe" class="card ilp" href="https://www.ilovepaghe.com/" target="_blank" rel="noopener" aria-label="iLovePaghe">
     <video class="card-video" src="/macbookmockupvideo.webm" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
-    <span class="card-logo"><img src="/logo-cedoly%20bianco.png" width="6718" height="1797" alt="Cedoly - gestione buste paga" decoding="async" loading="lazy"></span>
-    <h2 class="sr-only">Cedoly — piattaforma per l'invio e la gestione digitale delle buste paga</h2>
+    <span class="card-logo"><img src="/ilovepaghe_logo.png" width="5697" height="1246" alt="iLovePaghe - gestione buste paga" decoding="async" loading="lazy"></span>
+    <h2 class="sr-only">iLovePaghe — piattaforma per l'invio e la gestione digitale delle buste paga</h2>
     <span class="card-caption">La piattaforma che gestisce cedolini, timbrature e presenze del personale.</span>
     <span class="card-go">Vai al sito <span class="arr">→</span></span>
   </a>
@@ -538,7 +538,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       <div class="footer-col">
         <h5>Brand</h5>
         <a href="https://bionee.shop/" target="_blank" rel="noopener">Bionee</a>
-        <a href="https://cedoly.it/" target="_blank" rel="noopener">Cedoly</a>
+        <a href="https://www.ilovepaghe.com/" target="_blank" rel="noopener">iLovePaghe</a>
       </div>
       <div class="footer-col">
         <h5>Contatti</h5>
@@ -564,6 +564,15 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 <script>
 (function(){
+  /* Keep previously shared brand anchors working. */
+  function restoreBrandAnchor(){
+    if(window.location.hash.toLowerCase()==='#cedoly'){
+      window.location.replace('#ilovepaghe');
+    }
+  }
+  restoreBrandAnchor();
+  window.addEventListener('hashchange',restoreBrandAnchor);
+
   /* ===== SITE ENTRANCE ===== */
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){document.body.classList.add('site-ready');});
