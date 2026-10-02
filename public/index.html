@@ -198,17 +198,16 @@ input,select,textarea{font-family:inherit;font-size:inherit}
 .burger.active span:nth-child(3){top:20px;transform:rotate(-45deg)}
 
 /* premium site entrance */
-.header,.cards,.section,.footer{
+.header,.section,.footer{
   opacity:0;transform:translateY(22px);
   transition:opacity 1s var(--ease-out),transform 1s var(--ease-out);
 }
 .header{transform:translateY(-100%)}
 body.site-ready .header{opacity:1;transform:translateY(0);transition-delay:.05s}
-body.site-ready .cards{opacity:1;transform:translateY(0);transition-delay:.15s}
 body.site-ready .section{opacity:1;transform:translateY(0);transition-delay:.25s}
 body.site-ready .footer{opacity:1;transform:translateY(0);transition-delay:.3s}
 @media (prefers-reduced-motion:reduce){
-  .header,.cards,.section,.footer{opacity:1;transform:none;transition:none}
+  .header,.section,.footer{opacity:1;transform:none;transition:none}
 }
 
 /* mobile menu */
@@ -255,23 +254,48 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 
 /* ============ CARDS (entry) ============ */
+/* The native page scroll is the single position source for the pinned rail. */
 .cards{
-  display:flex;
-  flex-direction:column;
-  gap:0;
-  padding:0;
+  --rail-gutter:clamp(20px,4.2vw,76px);
+  --rail-gap:clamp(16px,2vw,32px);
+  --rail-peek:clamp(28px,4vw,72px);
+  --rail-card:calc(100vw - var(--rail-gutter)*2 - var(--rail-peek));
+  position:relative;background:var(--bg);
 }
+.brand-pin{
+  height:100vh;height:100svh;
+  padding:calc(var(--header-h) + 22px) 0 clamp(24px,4vh,44px);
+  overflow:hidden;
+}
+.brand-stage{height:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-snap-type:x mandatory}
+.brand-stage::-webkit-scrollbar{display:none}
+.brand-track{display:flex;align-items:stretch;gap:var(--rail-gap);width:max-content;height:100%;padding:0 var(--rail-gutter)}
+.cards.is-enhanced{height:var(--rail-height)}
+.cards.is-enhanced .brand-pin{position:sticky;top:0}
+.cards.is-enhanced .brand-stage{overflow:visible;scroll-snap-type:none}
+.cards.is-enhanced .brand-track{will-change:transform}
 .card{
-  width:100%;
-  min-height:100vh;
+  flex:0 0 var(--rail-card);width:var(--rail-card);height:100%;min-height:0;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;text-align:center;gap:26px;
-  padding:calc(var(--header-h) + 40px) clamp(28px,6vw,96px) 80px;
-  border-radius:0;
+  padding:48px clamp(28px,6vw,96px);
+  border-radius:clamp(26px,2.6vw,40px);
   background:#0A0C11;
-  box-shadow:none;
-  transition:transform .5s var(--ease-out),filter .5s var(--ease-out);
-  position:relative;overflow:hidden;
+  box-shadow:0 20px 38px -30px rgba(6,10,20,.4);
+  position:relative;overflow:hidden;isolation:isolate;scroll-snap-align:center;
+  -webkit-tap-highlight-color:transparent;
+}
+.card:focus-visible{outline:3px solid var(--blue-soft);outline-offset:-5px}
+@media(max-width:720px){
+  .cards{--rail-gutter:20px;--rail-gap:16px;--rail-peek:18px}
+  .brand-pin{padding-top:calc(var(--header-h) + 16px);padding-bottom:26px}
+  .card{padding:32px 24px;border-radius:28px;gap:24px}
+}
+@media(max-height:580px){
+  .brand-pin{padding-top:calc(var(--header-h) + 10px);padding-bottom:16px}
+  .card{gap:16px;padding:24px}
+  .card-logo img{max-height:70px;width:auto!important;object-fit:contain}
+  .card-caption{font-size:.95rem!important;line-height:1.4!important}
 }
 .card::before{
   content:"";position:absolute;inset:0;opacity:.5;
@@ -344,15 +368,15 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 
 /* Cedoly: full-screen video with the shared brand overlay. */
-.card.cedoly{min-height:100vh;min-height:100svh;isolation:isolate;background:#061a24;color:#fff;gap:25px;padding:96px 28px;scroll-margin-top:0}
+.card.cedoly{background:#061a24;color:#fff;scroll-margin-top:0}
 .card.cedoly::before{display:none}
 .cedoly .card-logo,.cedoly .card-caption,.cedoly .card-go{position:relative;z-index:2}
 .cedoly .card-logo img{width:clamp(235px,23vw,300px);max-width:100%;height:auto;filter:drop-shadow(0 4px 24px #00131f40)}
 .cedoly .card-caption{max-width:390px;color:#f1f7f8;font-size:1.075rem;line-height:1.65;text-shadow:0 2px 16px #00111bb3}
 .cedoly .card-go,.cedoly:hover .card-go{color:#fff}
 .cedoly:focus-visible{outline:3px solid #50dfbf;outline-offset:-5px}
-@media(max-width:650px){.card.cedoly{padding:76px 28px;gap:24px}.cedoly .card-logo img{width:245px;max-width:78vw}.cedoly .card-caption{font-size:1rem;max-width:320px}}
-@media(max-height:600px) and (min-width:651px){.card.cedoly{padding:70px 28px;gap:20px}.cedoly .card-logo img{width:230px}}
+@media(max-width:650px){.cedoly .card-logo img{width:245px;max-width:78vw}.cedoly .card-caption{font-size:1rem;max-width:320px}}
+@media(max-height:600px) and (min-width:651px){.cedoly .card-logo img{width:230px}}
 
 /* ============ SECTION / HEADS ============ */
 .section{padding:170px 0;position:relative}
@@ -423,8 +447,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   .footer-top{grid-template-columns:1fr 1fr;gap:36px}
 }
 @media (max-width:720px){
-  .cards{padding-top:0}
-  .card{min-height:100vh;padding:calc(var(--header-h) + 28px) 24px 56px}
   .wrap{padding:0 22px}
   .form-row{grid-template-columns:1fr}
   .form-card{padding:0}
@@ -471,7 +493,10 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 </nav>
 
 <!-- ============ ENTRY CARDS ============ -->
-<section class="cards" aria-label="I nostri brand" data-nosnippet>
+<section class="cards" id="brands" aria-label="I nostri brand" data-nosnippet>
+  <div class="brand-pin">
+    <div class="brand-stage">
+      <div class="brand-track">
   <a id="bionee" class="card bionee" href="https://bionee.shop/" target="_blank" rel="noopener" aria-label="Bionee">
     <video id="bioneeVideo" class="card-video" src="/4807709_Farm_Tomato_1920x1080.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
@@ -499,6 +524,9 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-caption">Buste paga, presenze e documenti.<br>Tutto in un’app.</span>
     <span class="card-go">Scopri Cedoly <span class="arr">→</span></span>
   </a>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ============ CONTATTI ============ -->
@@ -618,7 +646,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     }
 
     // vicino alla cima: header sempre visibile
-    if(y <= REVEAL_AT_TOP){
+    if(y <= REVEAL_AT_TOP || (window.lgBrandRail && window.lgBrandRail.isPinned())){
       header.classList.remove('hidden');
       accUp = accDown = 0;
       lastY = y;
@@ -656,6 +684,10 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       var el=document.querySelector(href);
       if(!el)return;
       e.preventDefault();
+      if(el.classList.contains('card') && window.lgBrandRail){
+        window.lgBrandRail.goToCard(el);
+        return;
+      }
       var hh=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||80;
       var y=el.getBoundingClientRect().top+window.pageYOffset-hh-8;
       window.scrollTo({top:y<0?0:y,behavior:'smooth'});
@@ -749,6 +781,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 })();
 </script>
+<script src="/brand-rail.js?v=20261002" defer></script>
 <script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>

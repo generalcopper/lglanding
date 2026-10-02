@@ -18,6 +18,7 @@ jobs:
       - name: Validate contact form and backend
         run: |
           node --check public/contact.js
+          node --check public/brand-rail.js
           node --check backend/contact/server.js
           node --check backend/contact/store.js
           node --test backend/contact/test/*.test.js
