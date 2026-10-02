@@ -265,7 +265,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   position:relative;background:var(--bg);
 }
 .brand-pin{
-  height:100vh;height:100svh;
+  position:relative;height:100vh;height:100svh;
   padding:var(--rail-top) 0 var(--rail-bottom);
   overflow:hidden;
 }
@@ -274,10 +274,27 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .brand-stage::-webkit-scrollbar{display:none}
 .brand-track{display:flex;align-items:center;gap:var(--rail-gap);width:max-content;height:100%;padding:0 var(--rail-gutter)}
 .cards.is-enhanced .brand-stage{scroll-snap-type:none}
+.brand-nav{display:none}
+@media(min-width:721px) and (hover:hover) and (pointer:fine){
+  .brand-stage,.brand-stage .card{cursor:grab;user-select:none;-webkit-user-select:none}
+  .brand-stage.is-dragging,.brand-stage.is-dragging .card{cursor:grabbing}
+  .brand-nav{
+    position:absolute;z-index:3;top:calc(50% + (var(--rail-top) - var(--rail-bottom))/2);transform:translateY(-50%);
+    display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid rgba(255,255,255,.14);border-radius:50%;
+    background:rgba(0,0,0,.72);color:#fff;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.25);
+    transition:opacity .2s,background .2s;
+  }
+  .brand-nav-prev{left:12px}.brand-nav-next{right:12px}
+  .brand-nav:hover{background:rgba(32,32,32,.94)}
+  .brand-nav:disabled{opacity:.2;cursor:default}
+  .brand-nav:focus-visible{outline:2px solid var(--blue-soft);outline-offset:3px}
+  .brand-nav svg{width:20px;height:20px;pointer-events:none}
+}
 .card{
   flex:0 0 var(--rail-card);width:var(--rail-card);height:calc(var(--rail-card)/1.12);max-height:100%;min-height:min(100%,280px);
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;text-align:center;gap:26px;
+  --card-logo-height:68px;--card-caption-lines:2;
+  display:grid;grid-template-rows:var(--card-logo-height) auto auto;
+  align-content:center;align-items:start;justify-items:center;text-align:center;gap:26px;
   padding:48px clamp(28px,6vw,96px);
   border-radius:clamp(32px,3.4vw,50px);
   background:#0A0C11;
@@ -293,12 +310,12 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .card:focus-visible{outline:3px solid var(--blue-soft);outline-offset:-5px}
 @media(max-width:720px){
   .cards{--rail-gutter:20px;--rail-gap:16px;--rail-peek:18px;--rail-top:calc(var(--header-h) + 16px);--rail-bottom:26px}
-  .card{height:100%;padding:32px 24px;border-radius:34px;gap:24px}
+  .card{--card-logo-height:clamp(40px,13vw,52px);--card-caption-lines:3;height:100%;padding:32px 24px;border-radius:34px;gap:24px}
 }
+@media(max-width:360px){.card{--card-caption-lines:4}}
 @media(max-height:580px){
   .cards{--rail-top:calc(var(--header-h) + 10px);--rail-bottom:16px}
-  .card{gap:16px;padding:24px}
-  .card-logo img{max-height:70px;width:auto!important;object-fit:contain}
+  .card{--card-logo-height:min(48px,13vw);--card-caption-lines:4;gap:16px;padding:24px}
   .card-caption{font-size:.95rem!important;line-height:1.4!important}
 }
 .card::before{
@@ -336,11 +353,11 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .card.ilp .card-caption,
 .card.ilp .card-go{position:relative;z-index:2}
 .card-logo{
-  display:flex;align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:center;width:100%;height:var(--card-logo-height);
 }
-.card-logo img{max-width:min(70%,300px);height:auto}
+.card-logo img{display:block;width:auto;height:100%;max-width:100%;object-fit:contain}
 .card-caption{
-  max-width:440px;text-align:center;
+  width:100%;max-width:440px;height:calc(1em * 1.55 * var(--card-caption-lines));text-align:center;
   font-size:1.05rem;line-height:1.55;font-weight:500;
   color:rgba(255,255,255,.92);letter-spacing:-.01em;text-wrap:pretty;
 }
@@ -349,6 +366,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   font-size:.9rem;font-weight:600;color:var(--muted);
   letter-spacing:-.01em;transition:color .3s var(--ease),gap .3s var(--ease);
 }
+@media(max-width:720px){.card-caption{font-size:1rem}}
+@media(max-height:580px){.card-caption{height:calc(1em * 1.4 * var(--card-caption-lines))}}
 .card:hover .card-go{color:var(--blue);gap:12px}
 .card-go .arr{transition:transform .3s var(--ease)}
 .card:hover .card-go .arr{transform:translateX(4px)}
@@ -373,12 +392,11 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .card.cedoly{background:#061a24;color:#fff;scroll-margin-top:0}
 .card.cedoly::before{display:none}
 .cedoly .card-logo,.cedoly .card-caption,.cedoly .card-go{position:relative;z-index:2}
-.cedoly .card-logo img{width:clamp(235px,23vw,300px);max-width:100%;height:auto;filter:drop-shadow(0 4px 24px #00131f40)}
-.cedoly .card-caption{max-width:390px;color:#f1f7f8;font-size:1.075rem;line-height:1.65;text-shadow:0 2px 16px #00111bb3}
+.cedoly .card-logo img{filter:drop-shadow(0 4px 24px #00131f40)}
+.cedoly .card-caption{color:#f1f7f8;text-shadow:0 2px 16px #00111bb3}
 .cedoly .card-go,.cedoly:hover .card-go{color:#fff}
 .cedoly:focus-visible{outline:3px solid #50dfbf;outline-offset:-5px}
-@media(max-width:650px){.cedoly .card-logo img{width:245px;max-width:78vw}.cedoly .card-caption{font-size:1rem;max-width:320px}}
-@media(max-height:600px) and (min-width:651px){.cedoly .card-logo img{width:230px}}
+
 
 /* ============ SECTION / HEADS ============ */
 .section{padding:170px 0;position:relative}
@@ -528,6 +546,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   </a>
       </div>
     </div>
+    <button class="brand-nav brand-nav-prev" type="button" aria-label="Brand precedente" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m14 5-7 7 7 7"/></svg></button>
+    <button class="brand-nav brand-nav-next" type="button" aria-label="Brand successivo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m10 5 7 7-7 7"/></svg></button>
   </div>
 </section>
 
@@ -786,7 +806,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 })();
 </script>
-<script src="/brand-rail.js?v=20261002-free-scroll" defer></script>
+<script src="/brand-rail.js?v=20261002-card-navigation" defer></script>
 <script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>

@@ -7,27 +7,32 @@
   var cards=Array.from(track.querySelectorAll('.card'));
   var motion=window.matchMedia('(prefers-reduced-motion: reduce)');
   var hoverCapable=window.matchMedia('(hover: hover) and (pointer: fine)');
+  var desktop=window.matchMedia('(min-width: 721px) and (hover: hover) and (pointer: fine)');
+  var previous=section.querySelector('.brand-nav-prev');
+  var next=section.querySelector('.brand-nav-next');
   var travel=0,speed=0,carry=0,expectedX=stage.scrollLeft;
-  var raf=0,lastFrame=0,lastManual=-Infinity,wakeTimer=0,resizeFrame=0;
+  var raf=0,lastFrame=0,resizeFrame=0,autoDeadline=0;
+  var autoStopped=!desktop.matches||motion.matches,drag=null,suppressClick=false;
   var hovered=false,touching=false,visible=false;
   var clamp=function(v,min,max){return Math.max(min,Math.min(max,v));};
   section.classList.add('is-enhanced');
 
   function wake(){if(!raf&&!document.hidden){lastFrame=performance.now();raf=requestAnimationFrame(tick);}}
   function manual(){
-    lastManual=performance.now();speed=0;carry=0;
-    clearTimeout(wakeTimer);
-    wakeTimer=setTimeout(wake,2100);
-    wake();
+    autoStopped=true;speed=0;carry=0;wake();
   }
   function position(x){
     stage.scrollLeft=x;
     expectedX=stage.scrollLeft;
   }
+  function updateControls(){
+    previous.disabled=stage.scrollLeft<=1;
+    next.disabled=stage.scrollLeft>=travel-1;
+  }
   function measure(){
     var ratio=travel?clamp(stage.scrollLeft/travel,0,1):0;
     travel=Math.max(0,stage.scrollWidth-stage.clientWidth);
-    position(ratio*travel);
+    position(ratio*travel);updateControls();
     var bounds=section.getBoundingClientRect();
     visible=bounds.bottom>0&&bounds.top<window.innerHeight;
     wake();
@@ -37,12 +42,16 @@
     if(document.hidden)return;
     var dt=Math.min((now-lastFrame)/1000,.05);lastFrame=now;
     var at=stage.scrollLeft;
+    if(visible&&desktop.matches&&!autoStopped&&!autoDeadline)autoDeadline=now+5000;
+    if(autoDeadline&&now>=autoDeadline)autoStopped=true;
     var focused=section.contains(document.activeElement);
-    var running=visible&&!motion.matches&&!hovered&&!touching&&!focused&&
-      !document.body.classList.contains('menu-open')&&now-lastManual>2000&&at<travel-1;
-    var wanted=running?Math.max(18,window.innerWidth*.028)*clamp((travel-at)/140,.18,1):0;
+    var running=visible&&desktop.matches&&!autoStopped&&!motion.matches&&!hovered&&!touching&&!focused&&
+      !document.body.classList.contains('menu-open')&&at<travel-1;
+    var fade=autoDeadline?Math.pow(clamp((autoDeadline-now)/1400,0,1),2):1;
+    var wanted=running?Math.max(18,window.innerWidth*.028)*clamp((travel-at)/140,.18,1)*fade:0;
     speed+=(wanted-speed)*(1-Math.exp(-dt/.24));
     if(speed<.04)speed=0;
+    if(!desktop.matches||motion.matches){speed=0;carry=0;}
     if(visible&&speed>0){
       carry+=speed*dt;
       var step=Math.floor(carry);
@@ -63,15 +72,54 @@
     var top=section.getBoundingClientRect().top+window.scrollY;
     window.scrollTo({left:0,top:top,behavior:instant||motion.matches?'instant':'smooth'});
   }
+  function stepCard(direction){
+    var center=stage.scrollLeft+stage.clientWidth/2;
+    var nearest=0,distance=Infinity;
+    cards.forEach(function(card,index){
+      var delta=Math.abs(card.offsetLeft+card.offsetWidth/2-center);
+      if(delta<distance){distance=delta;nearest=index;}
+    });
+    centerCard(cards[clamp(nearest+direction,0,cards.length-1)]);
+  }
+  previous.addEventListener('click',function(){stepCard(-1);});
+  next.addEventListener('click',function(){stepCard(1);});
   window.lgBrandRail={goToCard:goToCard};
 
   // Native wheel, touch and keyboard scrolling never capture the vertical page.
   stage.addEventListener('scroll',function(){
     if(Math.abs(stage.scrollLeft-expectedX)>2){manual();expectedX=stage.scrollLeft;}
+    updateControls();
   },{passive:true});
   stage.addEventListener('wheel',manual,{passive:true});
   stage.addEventListener('keydown',manual);
-  stage.addEventListener('pointerdown',manual,{passive:true});
+  stage.addEventListener('pointerdown',function(event){
+    manual();suppressClick=false;
+    if(event.pointerType==='mouse'&&event.button===0&&!event.ctrlKey&&!event.metaKey){
+      drag={id:event.pointerId,x:event.clientX,y:event.clientY,left:stage.scrollLeft,active:false};
+    }
+  });
+  stage.addEventListener('pointermove',function(event){
+    if(!drag||event.pointerId!==drag.id)return;
+    var dx=event.clientX-drag.x,dy=event.clientY-drag.y;
+    if(!drag.active){
+      if(Math.abs(dx)<6||Math.abs(dx)<=Math.abs(dy))return;
+      drag.active=true;suppressClick=true;stage.setPointerCapture(drag.id);stage.classList.add('is-dragging');
+    }
+    event.preventDefault();position(clamp(drag.left-dx,0,travel));
+  });
+  function endDrag(){
+    if(!drag)return;
+    var id=drag.id;drag=null;stage.classList.remove('is-dragging');
+    if(stage.hasPointerCapture(id))stage.releasePointerCapture(id);
+  }
+  stage.addEventListener('pointerup',endDrag);
+  stage.addEventListener('pointercancel',endDrag);
+  stage.addEventListener('lostpointercapture',endDrag);
+  stage.addEventListener('pointerleave',function(){if(drag&&!drag.active)endDrag();});
+  stage.addEventListener('dragstart',function(event){event.preventDefault();});
+  stage.addEventListener('click',function(event){
+    if(suppressClick&&event.detail){suppressClick=false;event.preventDefault();event.stopPropagation();}
+  },true);
   stage.addEventListener('touchstart',function(){touching=true;manual();},{passive:true});
   function endTouch(){touching=false;manual();}
   stage.addEventListener('touchend',endTouch,{passive:true});
@@ -82,7 +130,7 @@
   });
   section.addEventListener('focusin',function(event){
     var card=event.target.closest('.card');
-    if(card)centerCard(card);
+    if(card&&!drag)centerCard(card);
     wake();
   });
   section.addEventListener('focusout',function(){setTimeout(wake,0);});
@@ -107,7 +155,8 @@
     else wake();
   });
   new MutationObserver(wake).observe(document.body,{attributes:true,attributeFilter:['class']});
-  motion.addEventListener('change',function(){speed=0;carry=0;wake();});
+  motion.addEventListener('change',manual);
+  desktop.addEventListener('change',manual);
   measure();
   var initial=null;
   if(location.hash){
