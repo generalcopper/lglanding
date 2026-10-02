@@ -274,7 +274,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .brand-stage::-webkit-scrollbar{display:none}
 .brand-stage .card,.brand-stage .card img{-webkit-user-drag:none}
 .brand-track{display:flex;align-items:center;gap:var(--rail-gap);width:max-content;height:100%;padding:0 var(--rail-gutter)}
-.cards.is-enhanced .brand-stage{scroll-snap-type:none}
+.cards.is-enhanced .brand-stage{scroll-snap-type:none;overflow-anchor:none}
+.cards.is-enhanced .card{transition-property:none}
 .brand-nav{display:none}
 @media(min-width:721px) and (hover:hover) and (pointer:fine){
   .brand-stage .card{cursor:pointer}
@@ -790,7 +791,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
           video.pause();
         }
       });
-    },{rootMargin:'150px 0px',threshold:.08});
+    },{rootMargin:'150px 300px',threshold:.08});
     bgVideos.forEach(function(video){videoObs.observe(video);});
     document.addEventListener('visibilitychange',function(){
       if(document.visibilityState==='visible'){
@@ -804,9 +805,22 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     });
   }
 
+  // Extra copies are only needed when a wide viewport shows most of the brands.
+  window.lgObserveBrandCard=function(card,enabled){
+    var video=card.querySelector('.card-video');
+    if(!video)return;
+    if(!enabled){
+      if(videoObs)videoObs.unobserve(video);
+      video.pause();return;
+    }
+    card.classList.add('in-view');
+    if(reduceMotion){video.pause();video.removeAttribute('autoplay');}
+    else if(videoObs)videoObs.observe(video);
+  };
+
 })();
 </script>
-<script src="/brand-rail.js?v=20261002-hover-pause" defer></script>
+<script src="/brand-rail.js?v=20261002-loop-ten-seconds" defer></script>
 <script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>
