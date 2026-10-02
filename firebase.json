@@ -21,12 +21,12 @@
       },
       {
         "source": "/cedoly",
-        "destination": "https://www.ilovepaghe.com/",
+        "destination": "https://cedoly.it/",
         "type": 301
       },
       {
         "source": "/cedoly/",
-        "destination": "https://www.ilovepaghe.com/",
+        "destination": "https://cedoly.it/",
         "type": 301
       },
       {
