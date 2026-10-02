@@ -18,6 +18,26 @@
   var navigation=null,normalizing=false;
   var clamp=function(v,min,max){return Math.max(min,Math.min(max,v));};
   cards.forEach(function(card,index){card.dataset.brandIndex=index;});
+
+  // Touch-first phones use the browser's native compositor scroll path.
+  // No loop normalization, DOM reordering or animation frame work runs while a finger is moving.
+  var nativeMobile=window.matchMedia('(max-width: 720px) and (pointer: coarse)');
+  if(nativeMobile.matches){
+    section.classList.add('is-native-mobile');
+    function nativeTarget(card){return Math.max(0,Math.min(stage.scrollWidth-stage.clientWidth,card.offsetLeft+(card.offsetWidth-stage.clientWidth)/2));}
+    function nativeGoToCard(card,instant){
+      if(cards.indexOf(card)<0)return;
+      stage.scrollTo({left:nativeTarget(card),behavior:instant||motion.matches?'instant':'smooth'});
+      var top=section.getBoundingClientRect().top+window.scrollY;
+      window.scrollTo({left:0,top:top,behavior:instant||motion.matches?'instant':'smooth'});
+    }
+    window.lgBrandRail={goToCard:nativeGoToCard};
+    var nativeInitial=null;
+    if(location.hash){try{nativeInitial=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(nativeInitial&&cards.indexOf(nativeInitial)>=0)nativeGoToCard(nativeInitial,true);}catch(ignore){}}
+    window.addEventListener('pageshow',function(){if(nativeInitial&&cards.indexOf(nativeInitial)>=0)nativeGoToCard(nativeInitial,true);},{passive:true});
+    return;
+  }
+
   section.classList.add('is-enhanced');
 
   function wake(){if(!raf&&!document.hidden){lastFrame=performance.now();raf=requestAnimationFrame(tick);}}

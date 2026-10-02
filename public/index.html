@@ -310,8 +310,10 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 }
 .card:focus-visible{outline:3px solid var(--blue-soft);outline-offset:-5px}
 @media(max-width:720px){
-  .cards{--rail-gutter:20px;--rail-gap:16px;--rail-peek:18px;--rail-top:calc(var(--header-h) + 16px);--rail-bottom:26px}
-  .card{--card-logo-height:clamp(40px,13vw,52px);--card-caption-lines:3;height:100%;padding:32px 24px;border-radius:34px;gap:24px}
+  .cards{--rail-gutter:16px;--rail-gap:12px;--rail-peek:52px;--rail-top:calc(var(--header-h) + 12px);--rail-bottom:18px;--rail-card:min(82vw,340px)}
+  .brand-stage{height:calc(100% + 24px);margin-block:-12px;padding-block:12px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain}
+  .brand-track{padding-inline:var(--rail-gutter)}
+  .card{--card-logo-height:clamp(40px,13vw,52px);--card-caption-lines:3;height:min(62svh,520px);min-height:min(340px,62svh);max-height:520px;padding:28px 22px;border-radius:32px;gap:22px;scroll-snap-align:center;scroll-snap-stop:normal}
 }
 @media(max-width:360px){.card{--card-caption-lines:4}}
 @media(max-height:580px){
@@ -777,6 +779,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   /* background video performance */
   var bgVideos=document.querySelectorAll('.card-video');
   var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var compactVideoRail=window.matchMedia&&window.matchMedia('(max-width: 720px)').matches;
   if(reduceMotion){
     bgVideos.forEach(function(video){video.pause();video.removeAttribute('autoplay');});
   }else if('IntersectionObserver' in window){
@@ -791,7 +794,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
           video.pause();
         }
       });
-    },{rootMargin:'150px 300px',threshold:.08});
+    },{rootMargin:compactVideoRail?'80px 16px':'150px 300px',threshold:compactVideoRail?.3:.08});
     bgVideos.forEach(function(video){videoObs.observe(video);});
     document.addEventListener('visibilitychange',function(){
       if(document.visibilityState==='visible'){
@@ -820,7 +823,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 })();
 </script>
-<script src="/brand-rail.js?v=20261002-independent-scroll" defer></script>
+<script src="/brand-rail.js?v=20261002-native-mobile" defer></script>
 <script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>
