@@ -254,7 +254,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 
 /* ============ CARDS (entry) ============ */
-/* The native page scroll is the single position source for the pinned rail. */
+/* Horizontal brand browsing is independent of normal page scrolling. */
 .cards{
   --rail-gutter:clamp(20px,4.2vw,76px);
   --rail-gap:clamp(16px,2vw,32px);
@@ -269,13 +269,11 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   padding:var(--rail-top) 0 var(--rail-bottom);
   overflow:hidden;
 }
-.brand-stage{height:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-snap-type:x mandatory}
+.brand-stage{position:relative;height:calc(100% + 48px);margin-block:-24px;padding-block:24px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-snap-type:x mandatory}
+.brand-stage:focus-visible{outline:2px solid var(--blue-soft);outline-offset:-24px}
 .brand-stage::-webkit-scrollbar{display:none}
 .brand-track{display:flex;align-items:center;gap:var(--rail-gap);width:max-content;height:100%;padding:0 var(--rail-gutter)}
-.cards.is-enhanced{height:var(--rail-height)}
-.cards.is-enhanced .brand-pin{position:sticky;top:0}
-.cards.is-enhanced .brand-stage{overflow:visible;scroll-snap-type:none}
-.cards.is-enhanced .brand-track{will-change:transform}
+.cards.is-enhanced .brand-stage{scroll-snap-type:none}
 .card{
   flex:0 0 var(--rail-card);width:var(--rail-card);height:calc(var(--rail-card)/1.12);max-height:100%;min-height:min(100%,280px);
   display:flex;flex-direction:column;
@@ -499,7 +497,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 <!-- ============ ENTRY CARDS ============ -->
 <section class="cards" id="brands" aria-label="I nostri brand" data-nosnippet>
   <div class="brand-pin">
-    <div class="brand-stage">
+    <div class="brand-stage" tabindex="0" role="group" aria-label="I nostri brand">
       <div class="brand-track">
   <a id="bionee" class="card bionee" href="https://bionee.shop/" target="_blank" rel="noopener" aria-label="Bionee">
     <video id="bioneeVideo" class="card-video" src="/4807709_Farm_Tomato_1920x1080.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
@@ -640,8 +638,10 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     var y = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     var delta = y - lastY;
 
-    var horizontalActive=window.lgBrandRail&&window.lgBrandRail.isPinned();
-    header.classList.toggle('scrolled', y > 24 && !horizontalActive);
+    var brands=document.getElementById('brands');
+    var fullHeaderHeight=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||84;
+    var brandsVisible=brands&&brands.getBoundingClientRect().bottom>fullHeaderHeight;
+    header.classList.toggle('scrolled', y > 24 && !brandsVisible);
 
     // menu mobile aperto: non nascondere mai
     if(document.body.classList.contains('menu-open')){
@@ -651,7 +651,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     }
 
     // vicino alla cima: header sempre visibile
-    if(y <= REVEAL_AT_TOP || horizontalActive){
+    if(y <= REVEAL_AT_TOP || brandsVisible){
       header.classList.remove('hidden');
       accUp = accDown = 0;
       lastY = y;
@@ -786,7 +786,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 })();
 </script>
-<script src="/brand-rail.js?v=20261002" defer></script>
+<script src="/brand-rail.js?v=20261002-free-scroll" defer></script>
 <script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>
