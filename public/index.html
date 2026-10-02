@@ -259,23 +259,25 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   --rail-gutter:clamp(20px,4.2vw,76px);
   --rail-gap:clamp(16px,2vw,32px);
   --rail-peek:clamp(28px,4vw,72px);
-  --rail-card:calc(100vw - var(--rail-gutter)*2 - var(--rail-peek));
+  --rail-top:calc(var(--header-h) + 22px);
+  --rail-bottom:clamp(24px,4vh,44px);
+  --rail-card:min(calc((100svh - var(--rail-top) - var(--rail-bottom))*1.12),calc(100vw - var(--rail-gutter)*2 - var(--rail-peek)));
   position:relative;background:var(--bg);
 }
 .brand-pin{
   height:100vh;height:100svh;
-  padding:calc(var(--header-h) + 22px) 0 clamp(24px,4vh,44px);
+  padding:var(--rail-top) 0 var(--rail-bottom);
   overflow:hidden;
 }
 .brand-stage{height:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-snap-type:x mandatory}
 .brand-stage::-webkit-scrollbar{display:none}
-.brand-track{display:flex;align-items:stretch;gap:var(--rail-gap);width:max-content;height:100%;padding:0 var(--rail-gutter)}
+.brand-track{display:flex;align-items:center;gap:var(--rail-gap);width:max-content;height:100%;padding:0 var(--rail-gutter)}
 .cards.is-enhanced{height:var(--rail-height)}
 .cards.is-enhanced .brand-pin{position:sticky;top:0}
 .cards.is-enhanced .brand-stage{overflow:visible;scroll-snap-type:none}
 .cards.is-enhanced .brand-track{will-change:transform}
 .card{
-  flex:0 0 var(--rail-card);width:var(--rail-card);height:100%;min-height:0;
+  flex:0 0 var(--rail-card);width:var(--rail-card);height:calc(var(--rail-card)/1.12);max-height:100%;min-height:min(100%,280px);
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;text-align:center;gap:26px;
   padding:48px clamp(28px,6vw,96px);
@@ -287,12 +289,11 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 }
 .card:focus-visible{outline:3px solid var(--blue-soft);outline-offset:-5px}
 @media(max-width:720px){
-  .cards{--rail-gutter:20px;--rail-gap:16px;--rail-peek:18px}
-  .brand-pin{padding-top:calc(var(--header-h) + 16px);padding-bottom:26px}
-  .card{padding:32px 24px;border-radius:28px;gap:24px}
+  .cards{--rail-gutter:20px;--rail-gap:16px;--rail-peek:18px;--rail-top:calc(var(--header-h) + 16px);--rail-bottom:26px}
+  .card{height:100%;padding:32px 24px;border-radius:28px;gap:24px}
 }
 @media(max-height:580px){
-  .brand-pin{padding-top:calc(var(--header-h) + 10px);padding-bottom:16px}
+  .cards{--rail-top:calc(var(--header-h) + 10px);--rail-bottom:16px}
   .card{gap:16px;padding:24px}
   .card-logo img{max-height:70px;width:auto!important;object-fit:contain}
   .card-caption{font-size:.95rem!important;line-height:1.4!important}
