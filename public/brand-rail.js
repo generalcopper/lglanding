@@ -94,12 +94,15 @@
   stage.addEventListener('keydown',manual);
   stage.addEventListener('pointerdown',function(event){
     manual();suppressClick=false;
-    if(event.pointerType==='mouse'&&event.button===0&&!event.ctrlKey&&!event.metaKey){
+    if(event.pointerType==='mouse'&&event.button===0&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.altKey){
+      // Cancel native link/image dragging before the browser starts its drag gesture.
+      event.preventDefault();
       drag={id:event.pointerId,x:event.clientX,y:event.clientY,left:stage.scrollLeft,active:false};
     }
   });
   stage.addEventListener('pointermove',function(event){
     if(!drag||event.pointerId!==drag.id)return;
+    if(!(event.buttons&1)){endDrag();return;}
     var dx=event.clientX-drag.x,dy=event.clientY-drag.y;
     if(!drag.active){
       if(Math.abs(dx)<6||Math.abs(dx)<=Math.abs(dy))return;
@@ -116,7 +119,8 @@
   stage.addEventListener('pointercancel',endDrag);
   stage.addEventListener('lostpointercapture',endDrag);
   stage.addEventListener('pointerleave',function(){if(drag&&!drag.active)endDrag();});
-  stage.addEventListener('dragstart',function(event){event.preventDefault();});
+  window.addEventListener('blur',endDrag);
+  stage.addEventListener('dragstart',function(event){event.preventDefault();},true);
   stage.addEventListener('click',function(event){
     if(suppressClick&&event.detail){suppressClick=false;event.preventDefault();event.stopPropagation();}
   },true);

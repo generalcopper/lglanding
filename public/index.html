@@ -272,6 +272,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .brand-stage{position:relative;height:calc(100% + 48px);margin-block:-24px;padding-block:24px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-snap-type:x mandatory}
 .brand-stage:focus-visible{outline:2px solid var(--blue-soft);outline-offset:-24px}
 .brand-stage::-webkit-scrollbar{display:none}
+.brand-stage .card,.brand-stage .card img{-webkit-user-drag:none}
 .brand-track{display:flex;align-items:center;gap:var(--rail-gap);width:max-content;height:100%;padding:0 var(--rail-gutter)}
 .cards.is-enhanced .brand-stage{scroll-snap-type:none}
 .brand-nav{display:none}
@@ -517,29 +518,29 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   <div class="brand-pin">
     <div class="brand-stage" tabindex="0" role="group" aria-label="I nostri brand">
       <div class="brand-track">
-  <a id="bionee" class="card bionee" href="https://bionee.shop/" target="_blank" rel="noopener" aria-label="Bionee">
+  <a id="bionee" class="card bionee" draggable="false" href="https://bionee.shop/" target="_blank" rel="noopener" aria-label="Bionee">
     <video id="bioneeVideo" class="card-video" src="/4807709_Farm_Tomato_1920x1080.webm" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
-    <span class="card-logo"><img src="/logo%20bionee.png" alt="Bionee - prodotti naturali" decoding="async"></span>
+    <span class="card-logo"><img draggable="false" src="/logo%20bionee.png" alt="Bionee - prodotti naturali" decoding="async"></span>
     <h2 class="sr-only">Bionee — prodotti naturali per la cura della casa, degli animali e delle piante</h2>
     <span class="card-caption">Il nostro brand di prodotti naturali per la cura della casa, degli animali e delle piante.</span>
     <span class="card-go">Scopri lo store <span class="arr">→</span></span>
   </a>
-  <a id="ilovepaghe" class="card ilp" href="https://www.ilovepaghe.com/" target="_blank" rel="noopener" aria-label="iLovePaghe">
+  <a id="ilovepaghe" class="card ilp" draggable="false" href="https://www.ilovepaghe.com/" target="_blank" rel="noopener" aria-label="iLovePaghe">
     <video class="card-video" src="/macbookmockupvideo.webm" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
     <span class="card-video-overlay" aria-hidden="true"></span>
-    <span class="card-logo"><img src="/ilovepaghe_logo.png" width="5697" height="1246" alt="iLovePaghe - gestione buste paga" decoding="async" loading="lazy"></span>
+    <span class="card-logo"><img draggable="false" src="/ilovepaghe_logo.png" width="5697" height="1246" alt="iLovePaghe - gestione buste paga" decoding="async" loading="lazy"></span>
     <h2 class="sr-only">iLovePaghe — piattaforma per l'invio e la gestione digitale delle buste paga</h2>
     <span class="card-caption">La piattaforma che gestisce cedolini, timbrature e presenze del personale.</span>
     <span class="card-go">Vai al sito <span class="arr">→</span></span>
   </a>
-  <a id="cedoly" class="card cedoly" href="https://cedoly.it/" target="_blank" rel="noopener" aria-label="Cedoly">
+  <a id="cedoly" class="card cedoly" draggable="false" href="https://cedoly.it/" target="_blank" rel="noopener" aria-label="Cedoly">
     <video id="cedolyVideo" class="card-video" poster="/Phone%20App%20Presentation%20Mockup.webp" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
       <source src="/Phone%20App%20Presentation%20Mockup.webm" type="video/webm">
       <source src="/Phone%20App%20Presentation%20Mockup.mp4" type="video/mp4">
     </video>
     <span class="card-video-overlay" aria-hidden="true"></span>
-    <span class="card-logo"><img src="/logo-cedoly%20bianco.png" width="6718" height="1797" alt="Cedoly" decoding="async" loading="lazy"></span>
+    <span class="card-logo"><img draggable="false" src="/logo-cedoly%20bianco.png" width="6718" height="1797" alt="Cedoly" decoding="async" loading="lazy"></span>
     <h2 class="sr-only">Cedoly — l’app per la gestione del personale</h2>
     <span class="card-caption">Buste paga, presenze e documenti.<br>Tutto in un’app.</span>
     <span class="card-go">Scopri Cedoly <span class="arr">→</span></span>
@@ -806,7 +807,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 })();
 </script>
-<script src="/brand-rail.js?v=20261002-card-navigation" defer></script>
+<script src="/brand-rail.js?v=20261002-mouse-drag" defer></script>
 <script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>
