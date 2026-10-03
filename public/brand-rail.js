@@ -21,7 +21,7 @@
 
   // Reserve the same measured caption height on every card at each viewport size.
   // This keeps the logos and actions aligned without clipping longer descriptions.
-  var captionFrame=0,captionWidth=window.innerWidth;
+  var captionFrame=0;
   function sizeCaptions(){
     captionFrame=0;
     track.style.setProperty('--card-caption-height','auto');
@@ -34,217 +34,80 @@
   }
   function scheduleCaptions(){cancelAnimationFrame(captionFrame);captionFrame=requestAnimationFrame(sizeCaptions);}
   sizeCaptions();
-  window.addEventListener('resize',function(){
-    if(window.innerWidth===captionWidth)return;
-    captionWidth=window.innerWidth;scheduleCaptions();
-  },{passive:true});
+  window.addEventListener('resize',scheduleCaptions,{passive:true});
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(scheduleCaptions);
 
 
-  // Touch input updates one transform directly. Snapping runs on the compositor,
-  // independent of JavaScript frame scheduling on iOS ProMotion.
-  // The same four card/video nodes stay mounted throughout the loop.
+  // One gesture controller owns dragging, looping and the final centered snap.
+  // Looping uses transforms, so the original cards and videos stay mounted.
   var nativeMobile=window.matchMedia('(pointer: coarse)');
-  if(nativeMobile.matches&&typeof track.animate==='function'){
+  if(nativeMobile.matches&&window.EmblaCarousel){
     section.classList.add('is-native-mobile','is-snap-loop');
     cards.forEach(function(card){card.classList.add('in-view');});
-    var mobileStride=0,mobileCenter=0,mobileWidth=0,mobilePosition=0;
-    var mobileAnimation=null,mobileGesture=null,mobileResize=0;
-    var mobileOffsets=[],mobileSuppressClick=false;
-    var mobileInitial=0;
+    var nativeInitial=0,nativeMoving=false;
     if(location.hash){try{
-      var mobileHash=document.getElementById(decodeURIComponent(location.hash.slice(1)));
-      if(cards.indexOf(mobileHash)>=0)mobileInitial=cards.indexOf(mobileHash);
+      var nativeHashCard=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if(cards.indexOf(nativeHashCard)>=0)nativeInitial=cards.indexOf(nativeHashCard);
     }catch(ignore){}}
-    function mobileTransform(position){
-      return 'translate3d('+(mobileCenter-position)+'px,0,0)';
-    }
-    function mobileArrange(position){
-      var cycle=mobileStride*cards.length;
-      cards.forEach(function(card,index){
-        var offset=Math.round((position-index*mobileStride)/cycle)*cycle;
-        if(mobileOffsets[index]===offset)return;
-        mobileOffsets[index]=offset;
-        card.style.transform='translate3d('+offset+'px,0,0)';
-      });
-    }
-    function mobileDraw(position){
-      mobilePosition=position;
-      mobileArrange(position);
-      track.style.transform=mobileTransform(position);
-    }
-    function mobileStop(){
-      if(!mobileAnimation)return;
-      // Read the currently displayed compositor position only when interrupted.
-      var matrix=getComputedStyle(track).transform;
-      var x=matrix==='none'?mobileCenter-mobilePosition:new DOMMatrixReadOnly(matrix).m41;
-      mobilePosition=mobileCenter-x;
-      track.style.transform=mobileTransform(mobilePosition);
-      mobileAnimation.onfinish=null;
-      mobileAnimation.cancel();
-      mobileAnimation=null;
-      mobileArrange(mobilePosition);
-    }
-    function mobileCanAutoplay(){
+    var touchRail=window.EmblaCarousel(stage,{
+      container:track,slides:cards,align:'center',loop:true,
+      dragFree:false,skipSnaps:false,slidesToScroll:1,containScroll:false,
+      startIndex:nativeInitial,duration:25,
+      breakpoints:{'(prefers-reduced-motion: reduce)':{duration:0}}
+    });
+    function nativeCanAutoplay(){
       var focused=section.contains(document.activeElement)&&document.activeElement.matches(':focus-visible');
-      return visible&&!motion.matches&&!document.hidden&&!touching&&!mobileAnimation&&!focused&&
+      return visible&&!motion.matches&&!document.hidden&&!touching&&!nativeMoving&&!focused&&
         !document.body.classList.contains('menu-open')&&cards.length>1;
     }
-    function mobileScheduleAutoplay(){
+    function nativeScheduleAutoplay(){
       clearAutoplay();
-      if(mobileCanAutoplay())autoTimer=setTimeout(function(){
+      if(nativeCanAutoplay())autoTimer=setTimeout(function(){
         autoTimer=0;
-        if(mobileCanAutoplay())mobileSnap((Math.round(mobilePosition/mobileStride)+1)*mobileStride,false,0,true);
+        if(nativeCanAutoplay())touchRail.scrollNext();
       },AUTO_INTERVAL);
     }
-    function mobileSettled(){
-      var count=cards.length,index=Math.round(mobilePosition/mobileStride);
-      mobileDraw(((index%count+count)%count)*mobileStride);
-      mobileScheduleAutoplay();
-    }
-    function mobileSnap(destination,instant,velocity,automatic){
-      clearAutoplay();
-      mobileStop();
-      var from=mobilePosition,delta=destination-from;
-      if(instant||motion.matches||Math.abs(delta)<.1){
-        mobileDraw(destination);mobileSettled();return;
-      }
-      // Long menu jumps travel one slot at a time so both edge peeks stay filled.
-      var to=destination;
-      if(Math.abs(delta)>mobileStride*1.5)to=(Math.round(from/mobileStride)+Math.sign(delta))*mobileStride;
-      var distance=to-from;
-      mobileArrange((from+to)/2);
-      var duration=automatic?SWIPE_DURATION:clamp(Math.abs(distance)/mobileStride*440,180,440);
-      var slope=velocity&&Math.sign(velocity)===Math.sign(distance)?
-        clamp(Math.abs(velocity)*duration*.22/Math.abs(distance),0,.8):0;
-      track.style.transform=mobileTransform(to);
-      mobilePosition=to;
-      var animation=track.animate([
-        {transform:mobileTransform(from)},
-        {transform:mobileTransform(to)}
-      ],{duration:duration,easing:'cubic-bezier(.22,'+slope+',.3,1)'});
-      mobileAnimation=animation;
-      animation.onfinish=function(){
-        if(mobileAnimation!==animation)return;
-        mobileAnimation=null;
-        if(to!==destination)mobileSnap(destination,false,0,automatic);
-        else mobileSettled();
-      };
-    }
-    function mobileMeasure(){
-      mobileResize=0;
-      var width=stage.clientWidth,cardWidth=cards[0].getBoundingClientRect().width;
-      var gap=parseFloat(getComputedStyle(track).columnGap)||0;
-      if(mobileStride&&Math.abs(width-mobileWidth)<.25&&Math.abs(cardWidth+gap-mobileStride)<.25)return;
-      mobileStop();
-      var selected=mobileStride?Math.round(mobilePosition/mobileStride):mobileInitial;
-      mobileGesture=null;touching=false;
-      mobileWidth=width;mobileStride=cardWidth+gap;mobileCenter=(width-cardWidth)/2;
-      mobileOffsets=[];
-      mobileDraw(selected*mobileStride);
-      mobileSettled();
-    }
-    function mobileGoToCard(card,instant){
+    function nativeGoToCard(card,instant){
       var index=cards.indexOf(card);
       if(index<0)return;
-      mobileStop();
-      var current=Math.round(mobilePosition/mobileStride);
-      var target=index+Math.round((current-index)/cards.length)*cards.length;
-      mobileSnap(target*mobileStride,Boolean(instant),0,false);
+      clearAutoplay();
+      touchRail.scrollTo(index,Boolean(instant||motion.matches));
       var top=section.getBoundingClientRect().top+window.scrollY;
       window.scrollTo({left:0,top:top,behavior:instant||motion.matches?'instant':'smooth'});
+      if(instant||motion.matches)nativeScheduleAutoplay();
     }
-    window.lgBrandRail={goToCard:mobileGoToCard};
-    function mobileStart(x,y,time){
-      mobileStop();clearAutoplay();touching=true;mobileSuppressClick=false;
-      mobileGesture={x:x,y:y,lastX:x,lastTime:time,at:mobilePosition,
-        anchor:Math.round(mobilePosition/mobileStride),velocity:0,axis:null,moved:false};
-    }
-    function mobileMove(x,y,time,event){
-      var gesture=mobileGesture;
-      if(!gesture)return;
-      var dx=x-gesture.x,dy=y-gesture.y;
-      if(!gesture.axis){
-        if(Math.max(Math.abs(dx),Math.abs(dy))<5)return;
-        gesture.axis=Math.abs(dx)>Math.abs(dy)?'x':'y';
-      }
-      if(gesture.axis!=='x')return;
-      if(!event.cancelable){mobileEnd(time,true);return;}
-      event.preventDefault();
-      var elapsed=time-gesture.lastTime;
-      if(elapsed>0)gesture.velocity=clamp((gesture.lastX-x)/elapsed,-3,3);
-      gesture.lastX=x;gesture.lastTime=time;
-      gesture.moved=true;mobileSuppressClick=Infinity;
-      mobileDraw(gesture.at-dx);
-    }
-    function mobileEnd(time,cancelled){
-      var gesture=mobileGesture;
-      if(!gesture)return;
-      mobileGesture=null;touching=false;
-      if(!gesture.moved){
-        if(Math.abs(mobilePosition/mobileStride-Math.round(mobilePosition/mobileStride))>.001){
-          mobileSnap(Math.round(mobilePosition/mobileStride)*mobileStride,false,0,false);
-        }else mobileScheduleAutoplay();
-        return;
-      }
-      mobileSuppressClick=performance.now()+350;
-      var velocity=cancelled||time-gesture.lastTime>100?0:gesture.velocity;
-      var target=Math.round((mobilePosition+velocity*160)/mobileStride);
-      target=clamp(target,gesture.anchor-1,gesture.anchor+1);
-      mobileSnap(target*mobileStride,false,velocity,false);
-    }
-    stage.addEventListener('touchstart',function(event){
-      if(event.touches.length!==1){mobileEnd(event.timeStamp,true);return;}
-      var touch=event.touches[0];
-      mobileStart(touch.clientX,touch.clientY,event.timeStamp);
-    },{passive:true});
-    stage.addEventListener('touchmove',function(event){
-      if(event.touches.length!==1){mobileEnd(event.timeStamp,true);return;}
-      var touch=event.touches[0];
-      mobileMove(touch.clientX,touch.clientY,event.timeStamp,event);
-    },{passive:false});
-    stage.addEventListener('touchend',function(event){mobileEnd(event.timeStamp,false);},{passive:true});
-    stage.addEventListener('touchcancel',function(event){mobileEnd(event.timeStamp,true);},{passive:true});
-    stage.addEventListener('click',function(event){
-      if(!mobileSuppressClick||performance.now()>mobileSuppressClick)return;
-      mobileSuppressClick=false;event.preventDefault();event.stopPropagation();
-    },true);
-    stage.addEventListener('dragstart',function(event){event.preventDefault();});
+    window.lgBrandRail={goToCard:nativeGoToCard};
+    touchRail.on('pointerDown',function(){touching=true;clearAutoplay();});
+    touchRail.on('pointerUp',function(){touching=false;nativeScheduleAutoplay();});
+    touchRail.on('scroll',function(){nativeMoving=true;clearAutoplay();});
+    touchRail.on('settle',function(){nativeMoving=false;nativeScheduleAutoplay();});
+    touchRail.on('reInit',function(){nativeMoving=false;nativeScheduleAutoplay();});
+    section.addEventListener('focusin',nativeScheduleAutoplay);
+    section.addEventListener('focusout',function(){setTimeout(nativeScheduleAutoplay,0);});
     stage.addEventListener('keydown',function(event){
       if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;
-      event.preventDefault();mobileStop();
-      mobileSnap((Math.round(mobilePosition/mobileStride)+(event.key==='ArrowLeft'?-1:1))*mobileStride,false,0,false);
+      event.preventDefault();clearAutoplay();
+      if(event.key==='ArrowLeft')touchRail.scrollPrev(motion.matches);
+      else touchRail.scrollNext(motion.matches);
     });
-    section.addEventListener('focusin',function(event){
-      var card=event.target.closest('.card');
-      if(card&&event.target.matches(':focus-visible'))mobileGoToCard(card);
-      else mobileScheduleAutoplay();
-    });
-    section.addEventListener('focusout',function(){setTimeout(mobileScheduleAutoplay,0);});
-    function mobileVisibility(){
+    function nativeVisibility(){
       var bounds=section.getBoundingClientRect();
       visible=bounds.bottom>0&&bounds.top<window.innerHeight;
-      mobileScheduleAutoplay();
+      nativeScheduleAutoplay();
     }
     if('IntersectionObserver' in window){
       new IntersectionObserver(function(entries){
-        visible=entries[0].isIntersecting;mobileScheduleAutoplay();
+        visible=entries[0].isIntersecting;nativeScheduleAutoplay();
       }).observe(section);
-    }else window.addEventListener('scroll',mobileVisibility,{passive:true});
-    document.addEventListener('visibilitychange',mobileScheduleAutoplay);
-    new MutationObserver(mobileScheduleAutoplay).observe(document.body,{attributes:true,attributeFilter:['class']});
-    motion.addEventListener('change',function(){
-      if(motion.matches)mobileSnap(mobilePosition,true,0,false);
-      mobileScheduleAutoplay();
-    });
-    function mobileScheduleMeasure(){
-      cancelAnimationFrame(mobileResize);
-      mobileResize=requestAnimationFrame(mobileMeasure);
-    }
-    window.addEventListener('resize',mobileScheduleMeasure,{passive:true});
-    if('ResizeObserver' in window)new ResizeObserver(mobileScheduleMeasure).observe(stage);
-    window.addEventListener('pageshow',function(){mobileMeasure();mobileVisibility();},{passive:true});
-    mobileMeasure();mobileVisibility();
+    }else window.addEventListener('scroll',nativeVisibility,{passive:true});
+    document.addEventListener('visibilitychange',nativeScheduleAutoplay);
+    new MutationObserver(nativeScheduleAutoplay).observe(document.body,{attributes:true,attributeFilter:['class']});
+    motion.addEventListener('change',nativeScheduleAutoplay);
+    window.addEventListener('pageshow',function(event){
+      if(event.persisted)touchRail.reInit();
+      nativeVisibility();
+    },{passive:true});
+    nativeVisibility();
     return;
   }
 
