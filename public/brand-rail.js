@@ -38,22 +38,118 @@
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(scheduleCaptions);
 
 
-  // Touch-first phones use the browser's native compositor scroll path.
-  // No loop normalization, DOM reordering or animation frame work runs while a finger is moving.
-  var nativeMobile=window.matchMedia('(max-width: 720px) and (pointer: coarse)');
+  // Keep touch scrolling native. Recycle only offscreen cards after momentum
+  // and snap have finished, preserving the visible DOM nodes and video playback.
+  var nativeMobile=window.matchMedia('(pointer: coarse)');
   if(nativeMobile.matches){
     section.classList.add('is-native-mobile');
-    function nativeTarget(card){return Math.max(0,Math.min(stage.scrollWidth-stage.clientWidth,card.offsetLeft+(card.offsetWidth-stage.clientWidth)/2));}
+    cards.forEach(function(card){card.classList.add('in-view');});
+    var nativeSettleTimer=0,nativeMoving=false,nativeResizeFrame=0;
+    function nativeCanAutoplay(){
+      var focused=section.contains(document.activeElement)&&document.activeElement.matches(':focus-visible');
+      return visible&&!motion.matches&&!document.hidden&&!touching&&!nativeMoving&&!normalizing&&!focused&&
+        !document.body.classList.contains('menu-open')&&cards.length>1;
+    }
+    function nativeScheduleAutoplay(){
+      clearAutoplay();
+      if(nativeCanAutoplay())autoTimer=setTimeout(function(){
+        autoTimer=0;
+        if(!nativeCanAutoplay())return;
+        var index=ordered.indexOf(nearestCard());
+        nativeCenter(ordered[(index+1)%ordered.length],false);
+      },AUTO_INTERVAL);
+    }
+    function nativeNormalize(){
+      if(touching||normalizing||cards.length<3)return;
+      var nearest=nearestCard(),bounds=stage.getBoundingClientRect(),direction=0;
+      if(nearest===ordered[0]&&ordered[ordered.length-1].getBoundingClientRect().left>bounds.right)direction=-1;
+      else if(nearest===ordered[ordered.length-1]&&ordered[0].getBoundingClientRect().right<bounds.left)direction=1;
+      if(!direction)return;
+      normalizing=true;
+      stage.style.scrollSnapType='none';
+      rotate(direction);
+      requestAnimationFrame(function(){
+        stage.style.scrollSnapType='';
+        requestAnimationFrame(function(){normalizing=false;nativeScheduleAutoplay();});
+      });
+    }
+    function nativeSettled(){
+      clearTimeout(nativeSettleTimer);
+      if(touching||normalizing)return;
+      nativeMoving=false;
+      nativeNormalize();
+      nativeScheduleAutoplay();
+    }
+    function nativeQueueSettle(){
+      clearTimeout(nativeSettleTimer);
+      nativeSettleTimer=setTimeout(nativeSettled,180);
+    }
+    function nativeCenter(card,instant){
+      if(cards.indexOf(card)<0)return;
+      clearAutoplay();
+      var target=clamp(targetPosition(card),0,stage.scrollWidth-stage.clientWidth);
+      nativeMoving=true;
+      stage.scrollTo({left:target,behavior:instant||motion.matches?'instant':'smooth'});
+      if(instant||motion.matches)nativeSettled();
+      else nativeQueueSettle();
+    }
     function nativeGoToCard(card,instant){
       if(cards.indexOf(card)<0)return;
-      stage.scrollTo({left:nativeTarget(card),behavior:instant||motion.matches?'instant':'smooth'});
+      nativeCenter(card,instant);
       var top=section.getBoundingClientRect().top+window.scrollY;
       window.scrollTo({left:0,top:top,behavior:instant||motion.matches?'instant':'smooth'});
     }
     window.lgBrandRail={goToCard:nativeGoToCard};
-    var nativeInitial=null;
-    if(location.hash){try{nativeInitial=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(nativeInitial&&cards.indexOf(nativeInitial)>=0)nativeGoToCard(nativeInitial,true);}catch(ignore){}}
-    window.addEventListener('pageshow',function(){if(nativeInitial&&cards.indexOf(nativeInitial)>=0)nativeGoToCard(nativeInitial,true);},{passive:true});
+    stage.addEventListener('scroll',function(){
+      if(normalizing)return;
+      nativeMoving=true;
+      clearAutoplay();
+      nativeQueueSettle();
+    },{passive:true});
+    stage.addEventListener('scrollend',nativeSettled,{passive:true});
+    stage.addEventListener('touchstart',function(){
+      touching=true;clearAutoplay();clearTimeout(nativeSettleTimer);
+    },{passive:true});
+    function nativeEndTouch(){touching=false;nativeQueueSettle();}
+    stage.addEventListener('touchend',nativeEndTouch,{passive:true});
+    stage.addEventListener('touchcancel',nativeEndTouch,{passive:true});
+    section.addEventListener('focusin',function(event){
+      var card=event.target.closest('.card');
+      if(card&&event.target.matches(':focus-visible'))nativeCenter(card,false);
+      nativeScheduleAutoplay();
+    });
+    section.addEventListener('focusout',function(){setTimeout(nativeScheduleAutoplay,0);});
+    function nativeVisibility(){
+      var bounds=section.getBoundingClientRect();
+      visible=bounds.bottom>0&&bounds.top<window.innerHeight;
+      nativeScheduleAutoplay();
+    }
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(entries){
+        visible=entries[0].isIntersecting;nativeScheduleAutoplay();
+      }).observe(section);
+    }else window.addEventListener('scroll',nativeVisibility,{passive:true});
+    window.addEventListener('resize',function(){
+      clearAutoplay();cancelAnimationFrame(nativeResizeFrame);
+      nativeResizeFrame=requestAnimationFrame(function(){
+        if(touching)return;
+        nativeCenter(nearestCard(),true);
+      });
+    },{passive:true});
+    document.addEventListener('visibilitychange',nativeScheduleAutoplay);
+    new MutationObserver(nativeScheduleAutoplay).observe(document.body,{attributes:true,attributeFilter:['class']});
+    motion.addEventListener('change',nativeScheduleAutoplay);
+    var nativeInitial=cards[0];
+    if(location.hash){try{
+      var nativeHashCard=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if(cards.indexOf(nativeHashCard)>=0)nativeInitial=nativeHashCard;
+    }catch(ignore){}}
+    nativeCenter(nativeInitial,true);
+    nativeVisibility();
+    window.addEventListener('pageshow',function(){
+      if(!touching)nativeCenter(nearestCard(),true);
+      nativeVisibility();
+    },{passive:true});
     return;
   }
 

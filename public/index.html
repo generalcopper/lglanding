@@ -278,6 +278,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .cards.is-enhanced .brand-track{padding-inline:var(--rail-gutter)}
 .cards.is-enhanced .brand-stage{scroll-snap-type:none;overflow-anchor:none}
 .cards.is-enhanced .card{transition-property:none}
+.cards.is-native-mobile .brand-stage{scroll-snap-type:x mandatory;overflow-anchor:none}
+.cards.is-native-mobile .card-logo,.cards.is-native-mobile .card-caption,.cards.is-native-mobile .card-go{transition:none}
 .brand-nav{display:none}
 @media(min-width:721px) and (hover:hover) and (pointer:fine){
   .brand-stage .card{cursor:pointer}
@@ -563,7 +565,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-caption">Buste paga, presenze e documenti.<br>Tutto in un’app.</span>
     <span class="card-go">Scopri Cedoly <span class="arr">→</span></span>
   </a>
-  <a id="capannone3d" class="card capannone3d" draggable="false" href="#contatti" aria-label="Capannone 3D — Scopri di più e contattaci">
+  <a id="capannone3d" class="card capannone3d" draggable="false" href="#contatti" aria-label="Capannone 3D — Richiedi una demo">
     <video id="capannone3dVideo" class="card-video" poster="/capannone3d_mockup.webp" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
       <source src="/capannone3d_mockup.webm" type="video/webm">
       <source src="/capannone3d_mockup.mp4" type="video/mp4">
@@ -571,8 +573,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-video-overlay" aria-hidden="true"></span>
     <span class="card-logo"><img draggable="false" src="/capannone3d-scaffale-logo-dark-transparent.png" width="2614" height="596" alt="Capannone 3D" decoding="async"></span>
     <h2 class="sr-only">Capannone 3D — magazzino, inventario in tempo reale e agenti IA</h2>
-    <span class="card-caption">Il vostro capannone in 3D, con inventario in tempo reale e agenti IA su misura.</span>
-    <span class="card-go">Scopri di più <span class="arr">→</span></span>
+    <span class="card-caption">Il gestionale che automatizza il magazzino e riduce i tempi di evasione degli ordini.</span>
+    <span class="card-go">Richiedi una demo <span class="arr">→</span></span>
   </a>
       </div>
     </div>
@@ -851,7 +853,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 })();
 </script>
-<script src="/brand-rail.js?v=20261003-capannone3d" defer></script>
+<script src="/brand-rail.js?v=20261004-mobile-loop" defer></script>
 <script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>
