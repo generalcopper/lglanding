@@ -12,9 +12,9 @@
   var desktop=window.matchMedia('(min-width: 721px) and (hover: hover) and (pointer: fine)');
   var previous=section.querySelector('.brand-nav-prev');
   var next=section.querySelector('.brand-nav-next');
-  var travel=0,speed=0,carry=0;
-  var raf=0,lastFrame=0,resizeFrame=0,lastManual=-Infinity,wakeTimer=0,autoDeadline=0;
-  var hovered=false,hoverStarted=0,touching=false,visible=false,initialized=false;
+  var AUTO_INTERVAL=5000,SWIPE_DURATION=650;
+  var travel=0,raf=0,resizeFrame=0,autoTimer=0;
+  var hovered=false,touching=false,visible=false,initialized=false;
   var navigation=null,normalizing=false;
   var clamp=function(v,min,max){return Math.max(min,Math.min(max,v));};
   cards.forEach(function(card,index){card.dataset.brandIndex=index;});
@@ -40,11 +40,23 @@
 
   section.classList.add('is-enhanced');
 
-  function wake(){if(!raf&&!document.hidden){lastFrame=performance.now();raf=requestAnimationFrame(tick);}}
-  function manual(){
-    navigation=null;lastManual=performance.now();speed=0;carry=0;
-    clearTimeout(wakeTimer);wakeTimer=setTimeout(wake,2100);wake();
+  function clearAutoplay(){clearTimeout(autoTimer);autoTimer=0;}
+  function cancelNavigation(){cancelAnimationFrame(raf);raf=0;navigation=null;}
+  function canAutoplay(){
+    var focused=section.contains(document.activeElement)&&document.activeElement.matches(':focus-visible');
+    return visible&&desktop.matches&&!motion.matches&&!document.hidden&&!hovered&&!touching&&!focused&&
+      !document.body.classList.contains('menu-open')&&!navigation&&travel>0;
   }
+  // Stay still between swipes. Only animate while advancing to the next card.
+  function scheduleAutoplay(){
+    clearAutoplay();
+    if(canAutoplay())autoTimer=setTimeout(function(){
+      autoTimer=0;
+      if(canAutoplay())stepCard(1);
+    },AUTO_INTERVAL);
+  }
+  function wake(){if(navigation&&!raf&&!document.hidden)raf=requestAnimationFrame(tick);}
+  function manual(){cancelNavigation();scheduleAutoplay();}
   function position(x){stage.scrollLeft=x;}
   function applyOrder(){ordered.forEach(function(card,index){card.style.order=index;});}
   function nearestCard(){
@@ -85,6 +97,7 @@
     return copy;
   }
   function measure(){
+    cancelNavigation();
     var anchor=initialized?nearestCard():cards[0];
     var bounds=anchor.getBoundingClientRect();
     var offset=bounds.left+bounds.width/2-stage.getBoundingClientRect().left-stage.clientWidth/2;
@@ -106,37 +119,25 @@
     else position(0);
     initialized=true;normalize();
     previous.disabled=next.disabled=cards.length<2||travel<1;
-    var rect=section.getBoundingClientRect();visible=rect.bottom>0&&rect.top<window.innerHeight;wake();
+    var rect=section.getBoundingClientRect();visible=rect.bottom>0&&rect.top<window.innerHeight;scheduleAutoplay();
   }
   function targetPosition(card){return card.offsetLeft+(card.offsetWidth-stage.clientWidth)/2;}
   function tick(now){
-    raf=0;if(document.hidden)return;
-    var dt=Math.min((now-lastFrame)/1000,.05);lastFrame=now;
-    if(visible&&desktop.matches&&!motion.matches&&!autoDeadline)autoDeadline=now+10000;
-    if(navigation){
-      var delta=targetPosition(navigation)-stage.scrollLeft;
-      if(Math.abs(delta)<1.5){position(stage.scrollLeft+delta);navigation=null;}
-      else position(stage.scrollLeft+Math.sign(delta)*Math.max(1,Math.abs(delta)*(1-Math.exp(-dt/.16))));
-      normalize();
-      if(navigation)raf=requestAnimationFrame(tick);
-      return;
-    }
-    var at=stage.scrollLeft,expired=autoDeadline&&now>=autoDeadline;
-    var hoverElapsed=hovered?now-hoverStarted:0;
-    var hoverPaused=hovered&&hoverElapsed>=3000;
-    var focused=section.contains(document.activeElement)&&document.activeElement.matches(':focus-visible');
-    var running=visible&&desktop.matches&&!motion.matches&&!expired&&!hoverPaused&&!touching&&!focused&&
-      !document.body.classList.contains('menu-open')&&now-lastManual>2000&&travel>0;
-    var hoverFade=hovered?Math.pow(clamp((3000-hoverElapsed)/1200,0,1),2):1;
-    var finishFade=autoDeadline?Math.pow(clamp((autoDeadline-now)/1400,0,1),2):1;
-    var wanted=running?Math.max(18,window.innerWidth*.028)*hoverFade*finishFade:0;
-    speed+=(wanted-speed)*(1-Math.exp(-dt/.24));if(speed<.04)speed=0;
-    if(!desktop.matches||motion.matches||hoverPaused||expired){speed=0;carry=0;}
-    if(visible&&speed>0){
-      carry+=speed*dt;var step=Math.floor(carry);
-      if(step){carry-=step;position(at+step);normalize();}
-    }
-    if(running||speed>0)raf=requestAnimationFrame(tick);
+    raf=0;if(document.hidden||!navigation)return;
+    var progress=clamp((now-navigation.started)/SWIPE_DURATION,0,1);
+    var eased=1-Math.pow(1-progress,3);
+    var fraction=(eased-navigation.progress)/(1-navigation.progress);
+    var delta=targetPosition(navigation.card)-stage.scrollLeft;
+    position(stage.scrollLeft+delta*fraction);
+    navigation.progress=eased;normalize();
+    if(progress>=1){
+      var card=navigation.card;
+      for(var attempt=0;attempt<items.length;attempt++){
+        position(clamp(targetPosition(card),0,travel));normalize();
+        if(Math.abs(targetPosition(card)-stage.scrollLeft)<1.5)break;
+      }
+      navigation=null;scheduleAutoplay();
+    }else wake();
   }
   function centerCard(card,instant){
     if(items.indexOf(card)<0)return;
@@ -146,7 +147,10 @@
         position(clamp(targetPosition(card),0,travel));normalize();
         if(Math.abs(targetPosition(card)-stage.scrollLeft)<1.5)break;
       }
-    }else{navigation=card;wake();}
+      scheduleAutoplay();
+    }else{
+      clearAutoplay();navigation={card:card,started:performance.now(),progress:0};wake();
+    }
   }
   function goToCard(card,instant){
     if(items.indexOf(card)<0)return;
@@ -165,44 +169,61 @@
   window.lgBrandRail={goToCard:goToCard};
 
   // Native wheel, touch and keyboard scrolling never capture the vertical page.
-  stage.addEventListener('scroll',normalize,{passive:true});
+  stage.addEventListener('scroll',function(){
+    normalize();
+    if(!navigation)scheduleAutoplay();
+  },{passive:true});
   stage.addEventListener('wheel',function(event){
-    if(Math.abs(event.deltaX)>Math.abs(event.deltaY)||(event.shiftKey&&event.deltaY)){manual();}
+    if(Math.abs(event.deltaX)>Math.abs(event.deltaY)||(event.shiftKey&&event.deltaY))manual();
   },{passive:true});
   stage.addEventListener('keydown',function(event){
     if(event.key==='ArrowLeft'||event.key==='ArrowRight')manual();
   });
-  // Page scrolling is independent; only a stationary hover starts the pause.
-  window.addEventListener('scroll',function(){
-    if(hovered){hoverStarted=performance.now();wake();}
-  },{passive:true});
-  stage.addEventListener('pointerdown',manual,{passive:true});
+  stage.addEventListener('pointerdown',function(){touching=true;manual();},{passive:true});
+  function endPointer(){if(touching){touching=false;manual();}}
+  window.addEventListener('pointerup',endPointer,{passive:true});
+  window.addEventListener('pointercancel',endPointer,{passive:true});
   stage.addEventListener('dragstart',function(event){event.preventDefault();},true);
-  stage.addEventListener('touchstart',function(){touching=true;manual();},{passive:true});
-  function endTouch(){touching=false;manual();}
-  stage.addEventListener('touchend',endTouch,{passive:true});
-  stage.addEventListener('touchcancel',endTouch,{passive:true});
-  pin.addEventListener('pointerenter',function(event){
-    if(hoverCapable.matches&&event.pointerType!=='touch'){hovered=true;hoverStarted=performance.now();wake();}
-  });
+  function pauseForPointer(event){
+    if(!hovered&&hoverCapable.matches&&event.pointerType!=='touch'){hovered=true;scheduleAutoplay();}
+  }
+  pin.addEventListener('pointerenter',pauseForPointer);
+  pin.addEventListener('pointermove',pauseForPointer);
+  // Scrolling the page must not leave the rail paused under a stationary cursor.
+  window.addEventListener('scroll',function(){
+    if(hovered){hovered=false;scheduleAutoplay();}
+  },{passive:true});
   pin.addEventListener('pointerleave',function(event){
-    if(event.pointerType!=='touch'){hovered=false;hoverStarted=0;wake();}
+    if(event.pointerType!=='touch'){hovered=false;scheduleAutoplay();}
   });
   section.addEventListener('focusin',function(event){
     var card=event.target.closest('.card');
-    if(card&&event.target.matches(':focus-visible'))centerCard(card);wake();
+    if(card&&event.target.matches(':focus-visible'))centerCard(card);
+    scheduleAutoplay();
   });
-  section.addEventListener('focusout',function(){setTimeout(wake,0);});
+  section.addEventListener('focusout',function(){setTimeout(scheduleAutoplay,0);});
   if('IntersectionObserver' in window){
-    new IntersectionObserver(function(entries){visible=entries[0].isIntersecting;if(!visible){speed=0;carry=0;}wake();}).observe(section);
+    new IntersectionObserver(function(entries){
+      visible=entries[0].isIntersecting;
+      if(!visible)cancelNavigation();
+      scheduleAutoplay();
+    }).observe(section);
   }else{
-    window.addEventListener('scroll',function(){var bounds=section.getBoundingClientRect();visible=bounds.bottom>0&&bounds.top<window.innerHeight;wake();},{passive:true});
+    window.addEventListener('scroll',function(){
+      var bounds=section.getBoundingClientRect();visible=bounds.bottom>0&&bounds.top<window.innerHeight;
+      if(!visible)cancelNavigation();
+      scheduleAutoplay();
+    },{passive:true});
   }
   window.addEventListener('resize',function(){cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(measure);},{passive:true});
   document.addEventListener('visibilitychange',function(){
-    if(document.hidden){cancelAnimationFrame(raf);raf=0;speed=0;carry=0;}else wake();
+    if(document.hidden)cancelNavigation();
+    scheduleAutoplay();
   });
-  new MutationObserver(wake).observe(document.body,{attributes:true,attributeFilter:['class']});
+  new MutationObserver(function(){
+    if(document.body.classList.contains('menu-open'))cancelNavigation();
+    scheduleAutoplay();
+  }).observe(document.body,{attributes:true,attributeFilter:['class']});
   motion.addEventListener('change',manual);desktop.addEventListener('change',manual);
   measure();
   var initial=null;
