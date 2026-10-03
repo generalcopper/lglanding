@@ -55,6 +55,19 @@
       startIndex:nativeInitial,duration:25,
       breakpoints:{'(prefers-reduced-motion: reduce)':{duration:0}}
     });
+    var nativeVideoMoving=false;
+    var nativeVideoTolerance=1/Math.max(stage.clientWidth*cards.length,1);
+    function nativeSyncVideo(moving){
+      nativeVideoMoving=Boolean(moving||touching);
+      if(window.lgSetBrandVideoState)window.lgSetBrandVideoState(cards[touchRail.selectedScrollSnap()],nativeVideoMoving);
+    }
+    function nativeResumeVideo(){
+      if(touching||!nativeVideoMoving)return;
+      // Resume at the visible snap, without waiting for the spring's subpixel tail.
+      var target=touchRail.scrollSnapList()[touchRail.selectedScrollSnap()];
+      var distance=Math.abs((touchRail.scrollProgress()-target)%1);
+      if(Math.min(distance,1-distance)<=nativeVideoTolerance)nativeSyncVideo(false);
+    }
     function nativeCanAutoplay(){
       var focused=section.contains(document.activeElement)&&document.activeElement.matches(':focus-visible');
       return visible&&!motion.matches&&!document.hidden&&!touching&&!nativeMoving&&!focused&&
@@ -74,14 +87,26 @@
       touchRail.scrollTo(index,Boolean(instant||motion.matches));
       var top=section.getBoundingClientRect().top+window.scrollY;
       window.scrollTo({left:0,top:top,behavior:instant||motion.matches?'instant':'smooth'});
-      if(instant||motion.matches)nativeScheduleAutoplay();
+      if(instant||motion.matches){nativeSyncVideo(false);nativeScheduleAutoplay();}
     }
     window.lgBrandRail={goToCard:nativeGoToCard};
-    touchRail.on('pointerDown',function(){touching=true;clearAutoplay();});
-    touchRail.on('pointerUp',function(){touching=false;nativeScheduleAutoplay();});
-    touchRail.on('scroll',function(){nativeMoving=true;clearAutoplay();});
-    touchRail.on('settle',function(){nativeMoving=false;nativeScheduleAutoplay();});
-    touchRail.on('reInit',function(){nativeMoving=false;nativeScheduleAutoplay();});
+    touchRail.on('pointerDown',function(){touching=true;clearAutoplay();nativeSyncVideo(true);});
+    touchRail.on('pointerUp',function(){
+      touching=false;
+      if(!nativeMoving)nativeSyncVideo(false);
+      else nativeResumeVideo();
+      nativeScheduleAutoplay();
+    });
+    touchRail.on('scroll',function(){
+      if(!nativeMoving){nativeMoving=true;clearAutoplay();nativeSyncVideo(true);}
+      nativeResumeVideo();
+    });
+    touchRail.on('settle',function(){nativeMoving=false;nativeSyncVideo(false);nativeScheduleAutoplay();});
+    touchRail.on('reInit',function(){
+      nativeMoving=false;
+      nativeVideoTolerance=1/Math.max(stage.clientWidth*cards.length,1);
+      nativeSyncVideo(false);nativeScheduleAutoplay();
+    });
     section.addEventListener('focusin',nativeScheduleAutoplay);
     section.addEventListener('focusout',function(){setTimeout(nativeScheduleAutoplay,0);});
     stage.addEventListener('keydown',function(event){
@@ -107,6 +132,7 @@
       if(event.persisted)touchRail.reInit();
       nativeVisibility();
     },{passive:true});
+    nativeSyncVideo(false);
     nativeVisibility();
     return;
   }
