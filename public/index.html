@@ -280,7 +280,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .cards.is-enhanced .card,.cards.is-native-mobile .card{transition-property:none}
 .cards.is-snap-loop .brand-stage{overflow:hidden;scroll-snap-type:none;overflow-anchor:none;touch-action:pan-y pinch-zoom}
 .cards.is-snap-loop .brand-track{width:100%;padding-inline:0;touch-action:pan-y pinch-zoom;will-change:transform;transition:none}
-.cards.is-snap-loop .card{min-width:0;scroll-snap-align:none}
+.cards.is-snap-loop .card{min-width:0;scroll-snap-align:none;will-change:transform;backface-visibility:hidden}
+.cards.is-native-mobile .brand-track{-webkit-user-select:none;user-select:none}
 .cards.is-snap-loop .card:last-child{margin-inline-end:var(--rail-gap)}
 .cards.is-native-mobile .card-logo,.cards.is-native-mobile .card-caption,.cards.is-native-mobile .card-go{transition:none}
 .brand-nav{display:none}
@@ -379,9 +380,11 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 }
 @media(max-width:720px){.card-caption{font-size:1rem}}
 @media(max-height:580px){.card-caption{height:var(--card-caption-height,calc(1em * 1.4 * var(--card-caption-lines)))}}
-.card:hover .card-go{color:var(--blue);gap:12px}
 .card-go .arr{transition:transform .3s var(--ease)}
-.card:hover .card-go .arr{transform:translateX(4px)}
+@media(hover:hover) and (pointer:fine){
+  .card:hover .card-go{color:var(--blue);gap:12px}
+  .card:hover .card-go .arr{transform:translateX(4px)}
+}
 
 /* entrance animation for inner elements — triggered on scroll */
 .card-logo,.card-caption,.card-go{
@@ -856,8 +859,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 })();
 </script>
-<script src="/embla-carousel.umd.js?v=8.6.0" defer></script>
-<script src="/brand-rail.js?v=20261004-centered-swipe" defer></script>
+<script src="/brand-rail.js?v=20261004-compositor-swipe" defer></script>
 <script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>
