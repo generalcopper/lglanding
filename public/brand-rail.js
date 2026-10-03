@@ -115,13 +115,16 @@
       if(items.indexOf(anchor)<0)anchor=cards[Number(anchor.dataset.brandIndex)];
     }
     applyOrder();travel=Math.max(0,stage.scrollWidth-stage.clientWidth);navigation=null;
-    if(initialized)position(anchor.offsetLeft+anchor.offsetWidth/2-stage.clientWidth/2-offset);
-    else position(0);
+    if(initialized)position(targetPosition(anchor)-offset);
+    else centerCard(cards[0],true);
     initialized=true;normalize();
     previous.disabled=next.disabled=cards.length<2||travel<1;
     var rect=section.getBoundingClientRect();visible=rect.bottom>0&&rect.top<window.innerHeight;scheduleAutoplay();
   }
-  function targetPosition(card){return card.offsetLeft+(card.offsetWidth-stage.clientWidth)/2;}
+  function targetPosition(card){
+    var bounds=card.getBoundingClientRect(),viewport=stage.getBoundingClientRect();
+    return stage.scrollLeft+bounds.left+bounds.width/2-viewport.left-stage.clientWidth/2;
+  }
   function tick(now){
     raf=0;if(document.hidden||!navigation)return;
     var progress=clamp((now-navigation.started)/SWIPE_DURATION,0,1);
