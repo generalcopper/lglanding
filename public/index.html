@@ -277,7 +277,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .brand-track{display:flex;align-items:center;gap:var(--rail-gap);width:max-content;height:100%;padding:0 max(var(--rail-gutter),calc((100vw - var(--rail-card))/2))}
 .cards.is-enhanced .brand-track{padding-inline:var(--rail-gutter)}
 .cards.is-enhanced .brand-stage{scroll-snap-type:none;overflow-anchor:none}
-.cards.is-enhanced .card{transition-property:none}
+.cards.is-enhanced .card,.cards.is-native-mobile .card{transition-property:none}
 .cards.is-native-mobile .brand-stage{scroll-snap-type:x mandatory;overflow-anchor:none}
 .cards.is-native-mobile .card-logo,.cards.is-native-mobile .card-caption,.cards.is-native-mobile .card-go{transition:none}
 .brand-nav{display:none}
@@ -853,7 +853,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 })();
 </script>
-<script src="/brand-rail.js?v=20261004-mobile-loop" defer></script>
+<script src="/brand-rail.js?v=20261004-continuous-loop" defer></script>
 <script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>

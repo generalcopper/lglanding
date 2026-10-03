@@ -38,13 +38,13 @@
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(scheduleCaptions);
 
 
-  // Keep touch scrolling native. Recycle only offscreen cards after momentum
-  // and snap have finished, preserving the visible DOM nodes and video playback.
+  // Keep touch scrolling native. Recycle fully offscreen cards before reaching
+  // either edge, including during consecutive swipes, without replacing videos.
   var nativeMobile=window.matchMedia('(pointer: coarse)');
   if(nativeMobile.matches){
     section.classList.add('is-native-mobile');
     cards.forEach(function(card){card.classList.add('in-view');});
-    var nativeSettleTimer=0,nativeMoving=false,nativeResizeFrame=0;
+    var nativeSettleTimer=0,nativeMoving=false,nativeProgrammatic=false,nativeResizeFrame=0;
     function nativeCanAutoplay(){
       var focused=section.contains(document.activeElement)&&document.activeElement.matches(':focus-visible');
       return visible&&!motion.matches&&!document.hidden&&!touching&&!nativeMoving&&!normalizing&&!focused&&
@@ -60,7 +60,7 @@
       },AUTO_INTERVAL);
     }
     function nativeNormalize(){
-      if(touching||normalizing||cards.length<3)return;
+      if(normalizing||cards.length<3)return;
       var nearest=nearestCard(),bounds=stage.getBoundingClientRect(),direction=0;
       if(nearest===ordered[0]&&ordered[ordered.length-1].getBoundingClientRect().left>bounds.right)direction=-1;
       else if(nearest===ordered[ordered.length-1]&&ordered[0].getBoundingClientRect().right<bounds.left)direction=1;
@@ -76,7 +76,7 @@
     function nativeSettled(){
       clearTimeout(nativeSettleTimer);
       if(touching||normalizing)return;
-      nativeMoving=false;
+      nativeMoving=false;nativeProgrammatic=false;
       nativeNormalize();
       nativeScheduleAutoplay();
     }
@@ -88,7 +88,7 @@
       if(cards.indexOf(card)<0)return;
       clearAutoplay();
       var target=clamp(targetPosition(card),0,stage.scrollWidth-stage.clientWidth);
-      nativeMoving=true;
+      nativeMoving=true;nativeProgrammatic=true;
       stage.scrollTo({left:target,behavior:instant||motion.matches?'instant':'smooth'});
       if(instant||motion.matches)nativeSettled();
       else nativeQueueSettle();
@@ -104,11 +104,12 @@
       if(normalizing)return;
       nativeMoving=true;
       clearAutoplay();
+      if(!nativeProgrammatic)nativeNormalize();
       nativeQueueSettle();
     },{passive:true});
     stage.addEventListener('scrollend',nativeSettled,{passive:true});
     stage.addEventListener('touchstart',function(){
-      touching=true;clearAutoplay();clearTimeout(nativeSettleTimer);
+      nativeProgrammatic=false;touching=true;clearAutoplay();clearTimeout(nativeSettleTimer);
     },{passive:true});
     function nativeEndTouch(){touching=false;nativeQueueSettle();}
     stage.addEventListener('touchend',nativeEndTouch,{passive:true});
