@@ -19,6 +19,25 @@
   var clamp=function(v,min,max){return Math.max(min,Math.min(max,v));};
   cards.forEach(function(card,index){card.dataset.brandIndex=index;});
 
+  // Reserve the same measured caption height on every card at each viewport size.
+  // This keeps the logos and actions aligned without clipping longer descriptions.
+  var captionFrame=0;
+  function sizeCaptions(){
+    captionFrame=0;
+    track.style.setProperty('--card-caption-height','auto');
+    var height=0;
+    cards.forEach(function(card){
+      var caption=card.querySelector('.card-caption');
+      if(caption)height=Math.max(height,caption.getBoundingClientRect().height);
+    });
+    track.style.setProperty('--card-caption-height',Math.ceil(height)+'px');
+  }
+  function scheduleCaptions(){cancelAnimationFrame(captionFrame);captionFrame=requestAnimationFrame(sizeCaptions);}
+  sizeCaptions();
+  window.addEventListener('resize',scheduleCaptions,{passive:true});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(scheduleCaptions);
+
+
   // Touch-first phones use the browser's native compositor scroll path.
   // No loop normalization, DOM reordering or animation frame work runs while a finger is moving.
   var nativeMobile=window.matchMedia('(max-width: 720px) and (pointer: coarse)');

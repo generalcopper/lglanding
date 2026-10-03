@@ -83,7 +83,7 @@
       "name": "LG Trading SRL",
       "description": "LG Trading SRL sviluppa e gestisce progetti a marchio proprio nei settori dei prodotti di consumo e dei servizi digitali per le imprese.",
       "inLanguage": "it-IT",
-      "dateModified": "2026-10-02",
+      "dateModified": "2026-10-03",
       "isPartOf": {
         "@id": "https://www.lgtrading.it/#website"
       },
@@ -234,6 +234,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .mobile-nav.open a:nth-child(2){transition-delay:.26s}
 .mobile-nav.open a:nth-child(3){transition-delay:.34s}
 .mobile-nav.open a:nth-child(4){transition-delay:.42s}
+.mobile-nav.open a:nth-child(5){transition-delay:.5s}
 .mobile-nav a small{color:var(--blue-soft);font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;margin-right:14px}
 .mobile-close{display:none;
   position:absolute;top:24px;right:24px;width:44px;height:44px;
@@ -362,7 +363,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 }
 .card-logo img{display:block;width:auto;height:100%;max-width:100%;object-fit:contain}
 .card-caption{
-  width:100%;max-width:440px;height:calc(1em * 1.55 * var(--card-caption-lines));text-align:center;
+  width:100%;max-width:440px;height:var(--card-caption-height,calc(1em * 1.55 * var(--card-caption-lines)));text-align:center;
   font-size:1.05rem;line-height:1.55;font-weight:500;
   color:rgba(255,255,255,.92);letter-spacing:-.01em;text-wrap:pretty;
 }
@@ -372,7 +373,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   letter-spacing:-.01em;transition:color .3s var(--ease),gap .3s var(--ease);
 }
 @media(max-width:720px){.card-caption{font-size:1rem}}
-@media(max-height:580px){.card-caption{height:calc(1em * 1.4 * var(--card-caption-lines))}}
+@media(max-height:580px){.card-caption{height:var(--card-caption-height,calc(1em * 1.4 * var(--card-caption-lines)))}}
 .card:hover .card-go{color:var(--blue);gap:12px}
 .card-go .arr{transition:transform .3s var(--ease)}
 .card:hover .card-go .arr{transform:translateX(4px)}
@@ -402,6 +403,15 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .cedoly .card-go,.cedoly:hover .card-go{color:#fff}
 .cedoly:focus-visible{outline:3px solid #50dfbf;outline-offset:-5px}
 
+
+/* Capannone 3D uses the shared logo, caption and action dimensions. */
+.card.capannone3d{background:#090c10;color:#fff;scroll-margin-top:0}
+.card.capannone3d::before{display:none}
+.capannone3d .card-video-overlay{background:linear-gradient(180deg,rgba(3,7,12,.3),rgba(3,7,12,.62) 30%,rgba(3,7,12,.78) 65%,rgba(3,7,12,.4))}
+.capannone3d .card-logo,.capannone3d .card-caption,.capannone3d .card-go{position:relative;z-index:2}
+.capannone3d .card-caption{text-shadow:0 2px 16px rgba(0,0,0,.7)}
+.capannone3d .card-go,.capannone3d:hover .card-go{color:#fff}
+.capannone3d:focus-visible{outline-color:#c9ff00}
 
 /* ============ SECTION / HEADS ============ */
 .section{padding:170px 0;position:relative}
@@ -501,6 +511,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       <a href="#bionee">Bionee</a>
       <a href="#ilovepaghe">iLovePaghe</a>
       <a href="#cedoly">Cedoly</a>
+      <a href="#capannone3d">Capannone 3D</a>
       <a href="#contatti">Contatti</a>
     </nav>
     <button class="burger" id="burger" aria-label="Apri il menu" aria-expanded="false">
@@ -515,7 +526,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   <a href="#bionee"><small>01</small>Bionee</a>
   <a href="#ilovepaghe"><small>02</small>iLovePaghe</a>
   <a href="#cedoly"><small>03</small>Cedoly</a>
-  <a href="#contatti"><small>04</small>Contatti</a>
+  <a href="#capannone3d"><small>04</small>Capannone 3D</a>
+  <a href="#contatti"><small>05</small>Contatti</a>
 </nav>
 
 <!-- ============ ENTRY CARDS ============ -->
@@ -549,6 +561,17 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <h2 class="sr-only">Cedoly — l’app per la gestione del personale</h2>
     <span class="card-caption">Buste paga, presenze e documenti.<br>Tutto in un’app.</span>
     <span class="card-go">Scopri Cedoly <span class="arr">→</span></span>
+  </a>
+  <a id="capannone3d" class="card capannone3d" draggable="false" href="#contatti" aria-label="Capannone 3D — Scopri di più e contattaci">
+    <video id="capannone3dVideo" class="card-video" poster="/capannone3d_mockup.webp" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+      <source src="/capannone3d_mockup.webm" type="video/webm">
+      <source src="/capannone3d_mockup.mp4" type="video/mp4">
+    </video>
+    <span class="card-video-overlay" aria-hidden="true"></span>
+    <span class="card-logo"><img draggable="false" src="/capannone3d-scaffale-logo-dark-transparent.png" width="2614" height="596" alt="Capannone 3D" decoding="async"></span>
+    <h2 class="sr-only">Capannone 3D — magazzino, inventario in tempo reale e agenti IA</h2>
+    <span class="card-caption">Mappiamo il tuo capannone in 3D e lo colleghiamo al tuo inventario in tempo reale. Scaffali, ubicazioni e giacenze in un'unica vista, con agenti IA creati per la tua azienda.</span>
+    <span class="card-go">Scopri di più <span class="arr">→</span></span>
   </a>
       </div>
     </div>
@@ -621,6 +644,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
         <a href="https://bionee.shop/" target="_blank" rel="noopener">Bionee</a>
         <a href="https://www.ilovepaghe.com/" target="_blank" rel="noopener">iLovePaghe</a>
         <a href="https://cedoly.it/" target="_blank" rel="noopener">Cedoly</a>
+        <a href="#capannone3d">Capannone 3D</a>
       </div>
       <div class="footer-col">
         <h5>Contatti</h5>
@@ -826,7 +850,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 })();
 </script>
-<script src="/brand-rail.js?v=20261003-centered-entry" defer></script>
+<script src="/brand-rail.js?v=20261003-capannone3d" defer></script>
 <script src="/contact.js?v=20260909" defer></script>
 </body>
 </html>
