@@ -97,7 +97,7 @@
 <link rel="preload" href="/4807709_Farm_Tomato_1920x1080.webm" as="video" type="video/webm">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ================================================================
    LG TRADING — PORTAL 2026 · Brand entry + contatti + footer
@@ -429,17 +429,17 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .company-stat-title{
   display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:0 .19em;
   font-family:'Inter Tight','Inter',sans-serif;
-  font-size:clamp(3.125rem,8.68vw,9.375rem);font-weight:500;
+  font-size:clamp(3.125rem,8.68vw,9.375rem);font-weight:400;
   line-height:1.02;letter-spacing:-.045em;text-wrap:balance;color:#f5f6f8;
 }
 .company-stat-amount{display:inline-flex;align-items:baseline;gap:.13em;white-space:nowrap}
 .company-stat-number{
   font-family:'Space Grotesk','Inter Tight','Inter',sans-serif;font-size:1.48em;
-  font-weight:700;line-height:1;letter-spacing:-.055em;color:#7ea7ff;
+  font-weight:500;line-height:1;letter-spacing:-.05em;color:#7ea7ff;
 }
 .company-stat-plus{
   display:inline-block;font-size:.55em;vertical-align:.3em;margin-left:.04em;
-  font-weight:600;letter-spacing:-.02em;color:#b5ceff;
+  font-weight:400;letter-spacing:-.02em;color:#b5ceff;
 }
 .company-stat-unit{display:inline-block}
 .company-stat-caption{
@@ -464,6 +464,29 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 @media(prefers-reduced-motion:reduce){
   .company-stats.has-scroll-motion .company-stat-content,
   .company-stats.has-scroll-motion .company-stat.is-revealed .company-stat-content{opacity:1;transform:none;transition:none}
+}
+
+/* ============ COMPANY STORY ============ */
+.company-story{
+  padding:clamp(72px,7.5vw,112px) clamp(22px,6vw,96px) clamp(64px,6vw,96px);
+  background:var(--bg);
+}
+.company-story-copy{max-width:1180px;margin:0 auto}
+.company-story-copy p{
+  font-family:'Inter Tight','Inter',sans-serif;
+  font-size:clamp(1.75rem,3.2vw,3.25rem);font-weight:400;
+  line-height:1.3;letter-spacing:-.025em;color:#e6eaf1;text-wrap:pretty;
+}
+.company-story-copy p+p{margin-top:clamp(36px,4.5vw,64px)}
+.company-story-copy strong{font-weight:600;color:#9abbff}
+.company-story.has-scroll-motion .company-story-copy p{
+  opacity:0;transform:translate3d(0,36px,0);
+  transition:opacity .85s cubic-bezier(.16,1,.3,1),transform 1.1s cubic-bezier(.16,1,.3,1);
+}
+.company-story.has-scroll-motion .company-story-copy p.is-revealed{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .company-story.has-scroll-motion .company-story-copy p,
+  .company-story.has-scroll-motion .company-story-copy p.is-revealed{opacity:1;transform:none;transition:none}
 }
 
 /* ============ SECTION / HEADS ============ */
@@ -634,20 +657,30 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 </section>
 
 <!-- ============ COMPANY FIGURES ============ -->
-<section class="company-stats" id="numeri" aria-labelledby="company-stats-title">
+<section class="company-stats" id="numeri" aria-labelledby="company-stats-title" data-scroll-reveal-group>
   <h2 class="sr-only" id="company-stats-title">LG Trading in numeri</h2>
-  <article class="company-stat" aria-labelledby="orders-stat-title">
+  <article class="company-stat" aria-labelledby="orders-stat-title" data-scroll-reveal>
     <div class="company-stat-content">
       <h3 class="company-stat-title" id="orders-stat-title"><span class="company-stat-amount"><span class="company-stat-number">150<span class="company-stat-plus">+</span></span> <span class="company-stat-unit">mila</span></span></h3>
       <p class="company-stat-caption">ordini spediti nel 2026</p>
     </div>
   </article>
-  <article class="company-stat" aria-labelledby="customers-stat-title">
+  <article class="company-stat" aria-labelledby="customers-stat-title" data-scroll-reveal>
     <div class="company-stat-content">
       <h3 class="company-stat-title" id="customers-stat-title"><span class="company-stat-amount"><span class="company-stat-number">200<span class="company-stat-plus">+</span></span> <span class="company-stat-unit">mila</span></span></h3>
       <p class="company-stat-caption">clienti dal 2025</p>
     </div>
   </article>
+</section>
+
+<!-- ============ COMPANY STORY ============ -->
+<section class="company-story" id="azienda" aria-labelledby="company-story-title" data-scroll-reveal-group>
+  <h2 class="sr-only" id="company-story-title">LG Trading</h2>
+  <div class="company-story-copy">
+    <p data-scroll-reveal>LG Trading nasce nel 2024 da un'esperienza decennale nell'e-commerce e nello sviluppo di software per la gestione aziendale.</p>
+    <p data-scroll-reveal>Nel settembre 2024 registra il marchio <strong>Bionee</strong>, con cui gestisce centinaia di prodotti a marchio proprio per l'hobbistica e il giardinaggio, distribuiti tramite la logistica Amazon. Dopo un 2025 di consolidamento, nel 2026 l'azienda raggiunge picchi di 1.000 ordini giornalieri.</p>
+    <p data-scroll-reveal>Oggi LG Trading sviluppa software per le aziende, con l'obiettivo di eliminare i tempi morti e ridurre al minimo le procedure manuali, che sono la principale fonte di errori. Ogni soluzione nasce dall'esperienza operativa diretta: viene progettata e collaudata internamente, poi resa disponibile ad altre imprese.</p>
+  </div>
 </section>
 
 <!-- ============ CONTATTI ============ -->
@@ -846,12 +879,12 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     if(e.key==='Escape'&&mobileNav.classList.contains('open')){closeMenu();}
   });
 
-  /* Reveal each figure once; completion is retained when scrolling back. */
+  /* Reveal figures and story paragraphs once, retaining completed entrances. */
   (function(){
-    var section=document.getElementById('numeri');
-    if(!section||!window.matchMedia)return;
+    var groups=document.querySelectorAll('[data-scroll-reveal-group]');
+    if(!groups.length||!window.matchMedia)return;
     var preference=window.matchMedia('(prefers-reduced-motion: reduce)');
-    var pending=Array.prototype.slice.call(section.querySelectorAll('.company-stat'));
+    var pending=Array.prototype.slice.call(document.querySelectorAll('[data-scroll-reveal]'));
     var frame=0;
     function stop(){
       window.removeEventListener('scroll',schedule);
@@ -882,7 +915,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       }
     }
     if(preference.matches){finishForReducedMotion();return;}
-    section.classList.add('has-scroll-motion');
+    Array.prototype.forEach.call(groups,function(group){group.classList.add('has-scroll-motion');});
     window.addEventListener('scroll',schedule,{passive:true});
     window.addEventListener('resize',schedule,{passive:true});
     window.addEventListener('pageshow',schedule);
