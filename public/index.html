@@ -97,7 +97,7 @@
 <link rel="preload" href="/4807709_Farm_Tomato_1920x1080.webm" as="video" type="video/webm">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Manrope:wght@600&display=swap" rel="stylesheet">
 <style>
 /* ================================================================
    LG TRADING — PORTAL 2026 · Brand entry + contatti + footer
@@ -419,6 +419,41 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .capannone3d .card-go,.capannone3d:hover .card-go{color:#fff}
 .capannone3d:focus-visible{outline-color:#c9ff00}
 
+/* ============ COMPANY FIGURES ============ */
+.company-stats{
+  padding:clamp(36px,6vw,100px) clamp(22px,5vw,80px) clamp(12px,4vw,60px);
+  background:var(--bg);overflow:hidden;
+}
+.company-stat{
+  display:grid;place-items:center;min-height:clamp(340px,62vh,700px);
+  max-width:1600px;margin:0 auto;text-align:center;
+}
+@supports (height:1svh){.company-stat{min-height:clamp(340px,62svh,700px)}}
+.company-stat+.company-stat{margin-top:clamp(40px,4vw,80px)}
+.company-stat-content{width:100%;padding:36px 0}
+.company-stat-title{
+  font-family:'Manrope','Inter Tight','Inter',sans-serif;
+  font-size:clamp(3.4rem,9vw,10.5rem);font-weight:600;
+  line-height:1.08;letter-spacing:-.065em;text-wrap:balance;color:#f5f6f8;
+}
+.company-stat-title span{display:inline-block}
+.company-stat-amount{white-space:nowrap}
+.company-stat-caption{
+  margin-top:clamp(20px,2.3vw,32px);color:var(--muted);
+  font-size:clamp(1rem,1.25vw,1.2rem);font-weight:400;line-height:1.5;letter-spacing:-.015em;
+}
+.company-stats.has-scroll-motion .company-stat-content{
+  opacity:var(--stat-opacity,1);transform:translate3d(0,var(--stat-shift,0px),0);
+}
+.company-stats.has-scroll-motion.is-in-view .company-stat-content{will-change:opacity,transform}
+@media(max-width:600px){
+  .company-stat-title{font-size:clamp(3.25rem,13.8vw,5.1rem);line-height:1.09}
+  .company-stat-title span{display:block}
+}
+@media(prefers-reduced-motion:reduce){
+  .company-stats.has-scroll-motion .company-stat-content{opacity:1;transform:none;will-change:auto}
+}
+
 /* ============ SECTION / HEADS ============ */
 .section{padding:170px 0;position:relative}
 .eyebrow{
@@ -584,6 +619,23 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <button class="brand-nav brand-nav-prev" type="button" aria-label="Brand precedente" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m14 5-7 7 7 7"/></svg></button>
     <button class="brand-nav brand-nav-next" type="button" aria-label="Brand successivo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m10 5 7 7-7 7"/></svg></button>
   </div>
+</section>
+
+<!-- ============ COMPANY FIGURES ============ -->
+<section class="company-stats" id="numeri" aria-labelledby="company-stats-title">
+  <h2 class="sr-only" id="company-stats-title">LG Trading in numeri</h2>
+  <article class="company-stat" aria-labelledby="orders-stat-title">
+    <div class="company-stat-content">
+      <h3 class="company-stat-title" id="orders-stat-title"><span class="company-stat-amount">+100 mila</span> <span>ordini</span></h3>
+      <p class="company-stat-caption">spediti in un anno.</p>
+    </div>
+  </article>
+  <article class="company-stat" aria-labelledby="customers-stat-title">
+    <div class="company-stat-content">
+      <h3 class="company-stat-title" id="customers-stat-title"><span class="company-stat-amount">+200 mila</span> <span>clienti</span></h3>
+      <p class="company-stat-caption">dal 2025</p>
+    </div>
+  </article>
 </section>
 
 <!-- ============ CONTATTI ============ -->
@@ -781,6 +833,64 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape'&&mobileNav.classList.contains('open')){closeMenu();}
   });
+
+  /* Company figures follow native scrolling in both directions. */
+  (function(){
+    var section=document.getElementById('numeri');
+    if(!section||!window.matchMedia||!('IntersectionObserver' in window))return;
+    var preference=window.matchMedia('(prefers-reduced-motion: reduce)');
+    var items=Array.prototype.map.call(section.querySelectorAll('.company-stat'),function(row){
+      return {row:row,content:row.querySelector('.company-stat-content')};
+    });
+    var frame=0,active=false;
+    function ease(value){
+      value=Math.max(0,Math.min(1,value));
+      return value*value*(3-2*value);
+    }
+    function render(){
+      frame=0;
+      var height=document.documentElement.clientHeight||window.innerHeight;
+      var positions=items.map(function(item){
+        var rect=item.row.getBoundingClientRect();
+        var center=rect.top+rect.height/2;
+        var entering=ease((height*1.03-center)/(height*.35));
+        var leaving=ease((center+height*.02)/(height*.30));
+        return {opacity:Math.min(entering,leaving),shift:(1-entering)*44-(1-leaving)*28};
+      });
+      items.forEach(function(item,index){
+        item.content.style.setProperty('--stat-opacity',positions[index].opacity.toFixed(4));
+        item.content.style.setProperty('--stat-shift',positions[index].shift.toFixed(2)+'px');
+      });
+    }
+    function schedule(){
+      if(!frame&&!preference.matches)frame=requestAnimationFrame(render);
+    }
+    function setActive(next){
+      active=next;
+      section.classList.toggle('is-in-view',active);
+      window.removeEventListener('scroll',schedule);
+      if(active)window.addEventListener('scroll',schedule,{passive:true});
+    }
+    var observer=new IntersectionObserver(function(entries){
+      setActive(entries.some(function(entry){return entry.isIntersecting;})&&!preference.matches);
+      if(active)schedule();
+    },{rootMargin:'160px 0px'});
+    function configure(){
+      observer.disconnect();
+      setActive(false);
+      if(frame){cancelAnimationFrame(frame);frame=0;}
+      section.classList.remove('has-scroll-motion');
+      if(preference.matches)return;
+      render();
+      section.classList.add('has-scroll-motion');
+      observer.observe(section);
+    }
+    window.addEventListener('resize',schedule,{passive:true});
+    window.addEventListener('pageshow',schedule);
+    if(preference.addEventListener)preference.addEventListener('change',configure);
+    else preference.addListener(configure);
+    configure();
+  })();
 
   /* scroll reveal for cards */
   var cards=document.querySelectorAll('.card');
