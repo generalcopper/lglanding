@@ -468,10 +468,10 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 /* ============ COMPANY STORY ============ */
 .company-story{
-  padding:clamp(72px,7.5vw,112px) clamp(28px,8vw,128px) clamp(64px,6vw,96px);
+  padding:clamp(72px,7.5vw,112px) clamp(24px,6vw,104px) clamp(64px,6vw,96px);
   background:var(--bg);
 }
-.company-story-copy{max-width:1080px;margin:0 auto}
+.company-story-copy{max-width:1180px;margin:0 auto}
 .company-story-copy p{
   font-family:'Inter Tight','Inter',sans-serif;
   font-size:clamp(1.75rem,3.2vw,3.25rem);font-weight:400;
@@ -479,14 +479,12 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 }
 .company-story-copy p+p{margin-top:clamp(36px,4.5vw,64px)}
 .company-story-copy strong{font-weight:600;color:#9abbff}
-.company-story.has-scroll-motion .company-story-copy p{
-  opacity:0;transform:translate3d(0,36px,0);
-  transition:opacity .85s cubic-bezier(.16,1,.3,1),transform 1.1s cubic-bezier(.16,1,.3,1);
-}
-.company-story.has-scroll-motion .company-story-copy p.is-revealed{opacity:1;transform:none}
+.company-story.has-scroll-writing .story-word{opacity:var(--word-opacity,1)}
 @media(prefers-reduced-motion:reduce){
-  .company-story.has-scroll-motion .company-story-copy p,
-  .company-story.has-scroll-motion .company-story-copy p.is-revealed{opacity:1;transform:none;transition:none}
+  .company-story.has-scroll-writing .story-word{opacity:1}
+}
+@media print{
+  .company-story.has-scroll-writing .story-word{opacity:1}
 }
 
 /* ============ SECTION / HEADS ============ */
@@ -674,12 +672,12 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 </section>
 
 <!-- ============ COMPANY STORY ============ -->
-<section class="company-story" id="azienda" aria-labelledby="company-story-title" data-scroll-reveal-group>
+<section class="company-story" id="azienda" aria-labelledby="company-story-title">
   <h2 class="sr-only" id="company-story-title">LG Trading</h2>
   <div class="company-story-copy">
-    <p data-scroll-reveal>LG Trading nasce nel 2024 da un'esperienza decennale nell'e-commerce e nello sviluppo di software per la gestione aziendale.</p>
-    <p data-scroll-reveal>Nel settembre 2024 registra il marchio <strong>Bionee</strong>, con cui gestisce centinaia di prodotti a marchio proprio per l'hobbistica e il giardinaggio, distribuiti tramite la logistica Amazon. Dopo un 2025 di consolidamento, nel 2026 l'azienda raggiunge picchi di 1.000 ordini giornalieri.</p>
-    <p data-scroll-reveal>Oggi LG Trading sviluppa software per le aziende, con l'obiettivo di eliminare i tempi morti e ridurre al minimo le procedure manuali, che sono la principale fonte di errori. Ogni soluzione nasce dall'esperienza operativa diretta: viene progettata e collaudata internamente, poi resa disponibile ad altre imprese.</p>
+    <p>LG Trading nasce nel 2024 da un'esperienza decennale nell'e-commerce e nello sviluppo di software per la gestione aziendale.</p>
+    <p>Nel settembre 2024 registra il marchio <strong>Bionee</strong>, con cui gestisce centinaia di prodotti a marchio proprio per l'hobbistica e il giardinaggio, distribuiti tramite la logistica Amazon. Dopo un 2025 di consolidamento, nel 2026 l'azienda raggiunge picchi di 1.000 ordini giornalieri.</p>
+    <p>Oggi LG Trading sviluppa software per le aziende, con l'obiettivo di eliminare i tempi morti e ridurre al minimo le procedure manuali, che sono la principale fonte di errori. Ogni soluzione nasce dall'esperienza operativa diretta: viene progettata e collaudata internamente, poi resa disponibile ad altre imprese.</p>
   </div>
 </section>
 
@@ -879,7 +877,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     if(e.key==='Escape'&&mobileNav.classList.contains('open')){closeMenu();}
   });
 
-  /* Reveal figures and story paragraphs once, retaining completed entrances. */
+  /* Reveal figures once, retaining completed entrances. */
   (function(){
     var groups=document.querySelectorAll('[data-scroll-reveal-group]');
     if(!groups.length||!window.matchMedia)return;
@@ -922,6 +920,100 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     if(preference.addEventListener)preference.addEventListener('change',finishForReducedMotion);
     else preference.addListener(finishForReducedMotion);
     schedule();
+  })();
+
+  /* Reversible word-by-word reading, scoped to the three company paragraphs. */
+  (function(){
+    var section=document.querySelector('.company-story');
+    if(!section||!window.matchMedia||!window.requestAnimationFrame)return;
+    var paragraphs=Array.prototype.slice.call(section.querySelectorAll('.company-story-copy > p'));
+    if(!paragraphs.length)return;
+    var preference=window.matchMedia('(prefers-reduced-motion: reduce)');
+    var rows=[],frame=0,nearby=true,listening=false;
+
+    function prepareWords(){
+      if(rows.length)return;
+      rows=paragraphs.map(function(paragraph){
+        var walker=document.createTreeWalker(paragraph,NodeFilter.SHOW_TEXT);
+        var nodes=[],node,words=[];
+        while((node=walker.nextNode())){
+          if(node.nodeValue.trim())nodes.push(node);
+        }
+        nodes.forEach(function(textNode){
+          var fragment=document.createDocumentFragment();
+          textNode.nodeValue.split(/(\s+)/).forEach(function(part){
+            if(!part)return;
+            if(/^\s+$/.test(part)){fragment.appendChild(document.createTextNode(part));return;}
+            var word=document.createElement('span');
+            word.className='story-word';
+            word.textContent=part;
+            fragment.appendChild(word);
+            words.push({element:word,opacity:''});
+          });
+          textNode.parentNode.replaceChild(fragment,textNode);
+        });
+        return {element:paragraph,words:words};
+      });
+    }
+    function clamp(value){return Math.max(0,Math.min(1,value));}
+    function render(){
+      frame=0;
+      if(preference.matches||!rows.length)return;
+      var viewport=document.documentElement.clientHeight||window.innerHeight;
+      // Read all geometry before updating opacity; no transforms or moving layout.
+      var progress=rows.map(function(row){
+        var rect=row.element.getBoundingClientRect();
+        return clamp((viewport*.84-rect.top)/(rect.height+viewport*.30));
+      });
+      rows.forEach(function(row,index){
+        var head=progress[index]*(row.words.length+2);
+        row.words.forEach(function(word,wordIndex){
+          var fill=clamp((head-wordIndex)/3);
+          var opacity=(.18+.82*fill*fill*(3-2*fill)).toFixed(3);
+          if(word.opacity!==opacity){
+            word.element.style.setProperty('--word-opacity',opacity);
+            word.opacity=opacity;
+          }
+        });
+      });
+    }
+    function schedule(){
+      if(!preference.matches&&rows.length&&!frame)frame=requestAnimationFrame(render);
+    }
+    function updateScrollListener(){
+      var enabled=nearby&&!preference.matches;
+      if(enabled===listening)return;
+      listening=enabled;
+      if(enabled)window.addEventListener('scroll',schedule,{passive:true});
+      else window.removeEventListener('scroll',schedule);
+    }
+    function updatePreference(){
+      if(preference.matches){
+        section.classList.remove('has-scroll-writing');
+        if(frame){cancelAnimationFrame(frame);frame=0;}
+      }else{
+        prepareWords();
+        render();
+        section.classList.add('has-scroll-writing');
+      }
+      updateScrollListener();
+    }
+
+    updatePreference();
+    if('IntersectionObserver' in window){
+      var observer=new IntersectionObserver(function(entries){
+        nearby=entries[0].isIntersecting;
+        updateScrollListener();
+        // Also settle the first/last words after a fast jump past the section.
+        schedule();
+      },{rootMargin:'160px 0px',threshold:0});
+      observer.observe(section);
+    }
+    window.addEventListener('resize',schedule,{passive:true});
+    window.addEventListener('pageshow',schedule);
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(schedule);
+    if(preference.addEventListener)preference.addEventListener('change',updatePreference);
+    else preference.addListener(updatePreference);
   })();
 
   /* scroll reveal for cards */
