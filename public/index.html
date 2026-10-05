@@ -474,12 +474,13 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .company-story-copy{max-width:1180px;margin:0 auto}
 .company-story-copy p{
   font-family:'Inter Tight','Inter',sans-serif;
-  font-size:clamp(1.75rem,3.2vw,3.25rem);font-weight:400;
+  font-size:clamp(2.625rem,4.8vw,4.875rem);font-weight:400;
   line-height:1.3;letter-spacing:-.025em;color:#e6eaf1;text-wrap:pretty;
+  overflow-wrap:break-word;hyphens:auto;
 }
 .company-story-copy p+p{margin-top:clamp(36px,4.5vw,64px)}
 .company-story-copy strong{font-weight:600;color:#9abbff}
-.company-story.has-scroll-writing .story-word{opacity:var(--word-opacity,1)}
+.company-story.has-scroll-writing .story-word{opacity:var(--word-opacity,0)}
 @media(prefers-reduced-motion:reduce){
   .company-story.has-scroll-writing .story-word{opacity:1}
 }
@@ -922,14 +923,14 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     schedule();
   })();
 
-  /* Reversible word-by-word reading, scoped to the three company paragraphs. */
+  /* One reversible reading cursor: finish each paragraph before starting the next. */
   (function(){
     var section=document.querySelector('.company-story');
     if(!section||!window.matchMedia||!window.requestAnimationFrame)return;
     var paragraphs=Array.prototype.slice.call(section.querySelectorAll('.company-story-copy > p'));
     if(!paragraphs.length)return;
     var preference=window.matchMedia('(prefers-reduced-motion: reduce)');
-    var rows=[],frame=0,nearby=true,listening=false;
+    var rows=[],frame=0,nearby=true,listening=false,cursor=null,lastTime=0,feather=4;
 
     function prepareWords(){
       if(rows.length)return;
@@ -952,30 +953,51 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
           });
           textNode.parentNode.replaceChild(fragment,textNode);
         });
-        return {element:paragraph,words:words};
+        return {element:paragraph,words:words,units:words.length+feather-1};
       });
     }
     function clamp(value){return Math.max(0,Math.min(1,value));}
-    function render(){
+    function measureCursor(){
+      var viewport=document.documentElement.clientHeight||window.innerHeight;
+      var bounds=rows.map(function(row){return row.element.getBoundingClientRect();});
+      var readingLine=viewport*.76,target=0;
+      for(var index=0;index<rows.length;index++){
+        var start=bounds[index].top;
+        var end=index+1<bounds.length?bounds[index+1].top:bounds[index].bottom;
+        var progress=clamp((readingLine-start)/Math.max(1,end-start));
+        target+=progress*rows[index].units;
+        if(progress<1)break;
+      }
+      return target;
+    }
+    function render(timestamp){
       frame=0;
       if(preference.matches||!rows.length)return;
-      var viewport=document.documentElement.clientHeight||window.innerHeight;
-      // Read all geometry before updating opacity; no transforms or moving layout.
-      var progress=rows.map(function(row){
-        var rect=row.element.getBoundingClientRect();
-        return clamp((viewport*.84-rect.top)/(rect.height+viewport*.30));
-      });
-      rows.forEach(function(row,index){
-        var head=progress[index]*(row.words.length+2);
+      // Read geometry first, then ease one shared cursor in either scroll direction.
+      var target=measureCursor();
+      var time=typeof timestamp==='number'?timestamp:performance.now();
+      if(cursor===null||!nearby){cursor=target;}
+      else{
+        var elapsed=lastTime?Math.min(time-lastTime,64):16.67;
+        cursor+=(target-cursor)*(1-Math.exp(-elapsed/75));
+        if(Math.abs(target-cursor)<.008)cursor=target;
+      }
+      var offset=0;
+      rows.forEach(function(row){
+        var head=cursor-offset;
         row.words.forEach(function(word,wordIndex){
-          var fill=clamp((head-wordIndex)/3);
-          var opacity=(.18+.82*fill*fill*(3-2*fill)).toFixed(3);
+          var fill=clamp((head-wordIndex)/feather);
+          var opacity=(fill*fill*fill*(fill*(fill*6-15)+10)).toFixed(3);
           if(word.opacity!==opacity){
             word.element.style.setProperty('--word-opacity',opacity);
             word.opacity=opacity;
           }
         });
+        offset+=row.units;
       });
+      var easing=nearby&&cursor!==target;
+      lastTime=easing?time:0;
+      if(easing)frame=requestAnimationFrame(render);
     }
     function schedule(){
       if(!preference.matches&&rows.length&&!frame)frame=requestAnimationFrame(render);
@@ -991,8 +1013,10 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       if(preference.matches){
         section.classList.remove('has-scroll-writing');
         if(frame){cancelAnimationFrame(frame);frame=0;}
+        cursor=null;lastTime=0;
       }else{
         prepareWords();
+        cursor=null;lastTime=0;
         render();
         section.classList.add('has-scroll-writing');
       }
