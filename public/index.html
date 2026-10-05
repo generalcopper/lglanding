@@ -468,10 +468,10 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 
 /* ============ COMPANY STORY ============ */
 .company-story{
-  padding:clamp(72px,7.5vw,112px) clamp(24px,6vw,104px) clamp(64px,6vw,96px);
+  padding:clamp(72px,7.5vw,112px) clamp(20px,3vw,52px) clamp(64px,6vw,96px);
   background:var(--bg);
 }
-.company-story-copy{max-width:1180px;margin:0 auto}
+.company-story-copy{max-width:1652px;margin:0 auto}
 .company-story-copy p{
   font-family:'Inter Tight','Inter',sans-serif;
   font-size:clamp(2.1rem,3.84vw,3.9rem);font-weight:400;
@@ -930,7 +930,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     var paragraphs=Array.prototype.slice.call(section.querySelectorAll('.company-story-copy > p'));
     if(!paragraphs.length)return;
     var preference=window.matchMedia('(prefers-reduced-motion: reduce)');
-    var rows=[],frame=0,nearby=true,listening=false,cursor=null,lastTime=0,feather=4;
+    var rows=[],frame=0,nearby=true,listening=false,cursor=null,lastTime=0,feather=6;
 
     function prepareWords(){
       if(rows.length)return;
