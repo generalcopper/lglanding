@@ -236,7 +236,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .mobile-nav.open a:nth-of-type(4){transition-delay:.42s}
 .mobile-nav.open a:nth-of-type(5){transition-delay:.5s}
 .mobile-nav.open a:nth-of-type(6){transition-delay:.58s}
-@media(max-height:700px){
+.mobile-nav.open a:nth-of-type(7){transition-delay:.66s}
+@media(max-height:800px){
   .mobile-nav{justify-content:flex-start;overflow-y:auto;padding-top:84px;padding-bottom:24px;gap:2px}
   .mobile-nav a{padding:10px 0;font-size:1.5rem}
 }
@@ -434,6 +435,15 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .ubi-ia .card-go,.ubi-ia:hover .card-go{color:#fff}
 .ubi-ia:focus-visible{outline-color:#20b8ef}
 
+/* Picking uses the shared video overlay and brand card dimensions. */
+.card.picking{background:#0B1220;color:#fff;scroll-margin-top:0}
+.card.picking::before{display:none}
+.picking .card-logo,.picking .card-caption,.picking .card-go{position:relative;z-index:2}
+.picking .card-logo img{filter:drop-shadow(0 2px 14px rgba(0,0,0,.4))}
+.picking .card-caption{text-shadow:0 2px 16px rgba(0,0,0,.7)}
+.picking .card-go,.picking:hover .card-go{color:#fff}
+.picking:focus-visible{outline-color:#f45116}
+
 /* ============ COMPANY FIGURES ============ */
 .company-stats{
   padding:clamp(64px,7.2vw,104px) clamp(22px,4.45vw,80px) clamp(32px,5vw,72px);
@@ -603,6 +613,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       <a href="#cedoly">Cedoly</a>
       <a href="#capannone3d">Capannone 3D</a>
       <a href="#ubi-ia">UBI ia</a>
+      <a href="#picking">Picking</a>
       <a href="#contatti">Contatti</a>
     </nav>
     <button class="burger" id="burger" aria-label="Apri il menu" aria-expanded="false">
@@ -619,7 +630,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   <a href="#cedoly"><small>03</small>Cedoly</a>
   <a href="#capannone3d"><small>04</small>Capannone 3D</a>
   <a href="#ubi-ia"><small>05</small>UBI ia</a>
-  <a href="#contatti"><small>06</small>Contatti</a>
+  <a href="#picking"><small>06</small>Picking</a>
+  <a href="#contatti"><small>07</small>Contatti</a>
 </nav>
 
 <!-- ============ ENTRY CARDS ============ -->
@@ -671,6 +683,14 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-logo"><img draggable="false" src="/ubi-ia-logo-bianco.png" width="2400" height="818" alt="UBI ia" decoding="async" loading="lazy"></span>
     <h2 class="sr-only">UBI ia — l’agente IA integrato per le aziende</h2>
     <span class="card-caption">L’agente IA integrato in azienda per conoscere in tempo reale la situazione della tua attività.</span>
+    <span class="card-go">Richiedi una demo <span class="arr">→</span></span>
+  </a>
+  <a id="picking" class="card picking" draggable="false" href="#contatti" aria-label="Picking — Richiedi una demo">
+    <video id="pickingVideo" class="card-video" src="/Mockup%204.webm" poster="/Mockup%204.webp" autoplay muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+    <span class="card-video-overlay" aria-hidden="true"></span>
+    <span class="card-logo"><img draggable="false" src="/picking-logo-fondo-scuro-2400.png" width="2400" height="468" alt="Picking" decoding="async" loading="lazy"></span>
+    <h2 class="sr-only">Picking — l’app per gestire il magazzino collegata a Shopify e WooCommerce</h2>
+    <span class="card-caption">L’app per gestire il magazzino, collegata a piattaforme e-commerce come Shopify e WooCommerce.</span>
     <span class="card-go">Richiedi una demo <span class="arr">→</span></span>
   </a>
       </div>
@@ -773,6 +793,7 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
         <a href="https://cedoly.it/" target="_blank" rel="noopener">Cedoly</a>
         <a href="#capannone3d">Capannone 3D</a>
         <a href="#ubi-ia">UBI ia</a>
+        <a href="#picking">Picking</a>
       </div>
       <div class="footer-col">
         <h5>Contatti</h5>
