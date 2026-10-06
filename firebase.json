@@ -102,6 +102,9 @@
           }
         ]
       }
+    ],
+    "predeploy": [
+      "node scripts/prepare-release.mjs"
     ]
   }
 }

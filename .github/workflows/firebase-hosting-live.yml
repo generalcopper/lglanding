@@ -6,17 +6,25 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: lgtrading-production
+  cancel-in-progress: false
+
 jobs:
   deploy_live:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Validate contact form and backend
         run: |
+          node scripts/prepare-release.mjs --check-only
           node --check public/analytics.js
           node --test scripts/analytics.test.js
           node --check public/contact.js
