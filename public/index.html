@@ -358,16 +358,13 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .card.ilp::before{display:none}
 .card.ilp .card-go{color:#fff}
 .card.ilp:hover .card-go{color:#fff}
-.card-video,.card-video-poster{
+.card-video{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;z-index:0;pointer-events:none;filter:saturate(1.1);
 }
-.card-video{opacity:0;transition:opacity .2s ease}
-.card-video.is-playing{opacity:1}
 .card-video::-webkit-media-controls,
 .card-video::-webkit-media-controls-enclosure,
 .card-video::-webkit-media-controls-start-playback-button{display:none!important;-webkit-appearance:none}
-@media(prefers-reduced-motion:reduce){.card-video{transition:none}}
 .card-video-overlay{
   position:absolute;inset:0;z-index:1;pointer-events:none;
   background:
@@ -650,7 +647,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <div class="brand-stage" tabindex="0" role="group" aria-label="I nostri brand">
       <div class="brand-track">
   <a id="bionee" class="card bionee" draggable="false" href="https://bionee.shop/" target="_blank" rel="noopener" aria-label="Bionee">
-    <img class="card-video-poster" src="/4807709_Farm_Tomato_1920x1080.webp" alt="" aria-hidden="true" width="1280" height="720" loading="eager" decoding="async" draggable="false">
     <video id="bioneeVideo" class="card-video" poster="/4807709_Farm_Tomato_1920x1080.webp" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback preload="none" aria-hidden="true" tabindex="-1">
       <source data-src="/4807709_Farm_Tomato_1920x1080.mp4" type="video/mp4">
       <source data-src="/4807709_Farm_Tomato_1920x1080.webm" type="video/webm">
@@ -662,7 +658,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-go">Scopri lo store <span class="arr">→</span></span>
   </a>
   <a id="ilovepaghe" class="card ilp" draggable="false" href="https://www.ilovepaghe.com/" target="_blank" rel="noopener" aria-label="iLovePaghe">
-    <img class="card-video-poster" src="/macbookmockupvideo.webp" alt="" aria-hidden="true" width="1280" height="720" loading="lazy" decoding="async" draggable="false">
     <video id="ilovepagheVideo" class="card-video" poster="/macbookmockupvideo.webp" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback preload="none" aria-hidden="true" tabindex="-1">
       <source data-src="/macbookmockupvideo.mp4" type="video/mp4">
       <source data-src="/macbookmockupvideo.webm" type="video/webm">
@@ -674,7 +669,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-go">Vai al sito <span class="arr">→</span></span>
   </a>
   <a id="cedoly" class="card cedoly" draggable="false" href="https://cedoly.it/" target="_blank" rel="noopener" aria-label="Cedoly">
-    <img class="card-video-poster" src="/Phone%20App%20Presentation%20Mockup.webp" alt="" aria-hidden="true" width="1280" height="720" loading="lazy" decoding="async" draggable="false">
     <video id="cedolyVideo" class="card-video" poster="/Phone%20App%20Presentation%20Mockup.webp" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback preload="none" aria-hidden="true" tabindex="-1">
       <source data-src="/Phone%20App%20Presentation%20Mockup.mp4" type="video/mp4">
       <source data-src="/Phone%20App%20Presentation%20Mockup.webm" type="video/webm">
@@ -686,7 +680,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-go">Scopri Cedoly <span class="arr">→</span></span>
   </a>
   <a id="capannone3d" class="card capannone3d" draggable="false" href="#contatti" aria-label="Capannone 3D — Richiedi una demo">
-    <img class="card-video-poster" src="/capannone3d_mockup.webp" alt="" aria-hidden="true" width="1280" height="720" loading="lazy" decoding="async" draggable="false">
     <video id="capannone3dVideo" class="card-video" poster="/capannone3d_mockup.webp" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback preload="none" aria-hidden="true" tabindex="-1">
       <source data-src="/capannone3d_mockup.mp4" type="video/mp4">
       <source data-src="/capannone3d_mockup.webm" type="video/webm">
@@ -698,7 +691,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-go">Richiedi una demo <span class="arr">→</span></span>
   </a>
   <a id="ubi-ia" class="card ubi-ia" draggable="false" href="#contatti" aria-label="UBI ia — Richiedi una demo">
-    <img class="card-video-poster" src="/GettyImages-1303735870.webp" alt="" aria-hidden="true" width="1280" height="720" loading="lazy" decoding="async" draggable="false">
     <video id="ubiIaVideo" class="card-video" poster="/GettyImages-1303735870.webp" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback preload="none" aria-hidden="true" tabindex="-1">
       <source data-src="/GettyImages-1303735870.mp4" type="video/mp4">
       <source data-src="/GettyImages-1303735870.webm" type="video/webm">
@@ -710,7 +702,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <span class="card-go">Richiedi una demo <span class="arr">→</span></span>
   </a>
   <a id="picking" class="card picking" draggable="false" href="#contatti" aria-label="Picking — Richiedi una demo">
-    <img class="card-video-poster" src="/Mockup%204.webp" alt="" aria-hidden="true" width="1280" height="720" loading="lazy" decoding="async" draggable="false">
     <video id="pickingVideo" class="card-video" poster="/Mockup%204.webp" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback preload="none" aria-hidden="true" tabindex="-1">
       <source data-src="/Mockup%204.mp4" type="video/mp4">
       <source data-src="/Mockup%204.webm" type="video/webm">
