@@ -6,7 +6,8 @@ import assert from 'node:assert/strict';
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
 const sha256 = value => createHash('sha256').update(value).digest('hex');
 const pages = ['index.html', 'privacy-policy.html', 'cookie-policy.html', '404.html'];
-const files = [...pages, 'analytics.js', 'analytics.css', 'brand-rail.js'];
+const coreFiles = [...pages, 'analytics.js', 'analytics.css', 'brand-rail.js'];
+const files = [...coreFiles, 'brand-videos.js'];
 const cards = ['bionee', 'ilovepaghe', 'cedoly', 'capannone3d', 'ubi-ia', 'picking'];
 const html = readFileSync('public/index.html', 'utf8');
 const actualCards = [...html.matchAll(/<a id="([^"]+)" class="card /g)].map(match => match[1]);
@@ -46,7 +47,7 @@ let previous;
 if (response.status === 404) {
   // One-time adoption of the exact production version observed before recovery.
   const baseline = '8cfee032b19fcaa133e739c2adcfe2990357a0e1';
-  previous = { sourceCommit: baseline, files: Object.fromEntries(files.map(name => [name,
+  previous = { sourceCommit: baseline, files: Object.fromEntries(coreFiles.map(name => [name,
     sha256(execFileSync('git', ['show', baseline + ':public/' + name]))])) };
 } else {
   assert.equal(response.status, 200, 'Cannot verify the current production release');
@@ -55,7 +56,12 @@ if (response.status === 404) {
 }
 assert.match(previous.sourceCommit, /^[a-f0-9]{40}$/, 'Invalid production commit');
 execFileSync('git', ['merge-base', '--is-ancestor', previous.sourceCommit, commit]);
+const previousPaths = new Set(git('ls-tree', '-r', '--name-only', previous.sourceCommit, '--', 'public').split('\n'));
 await Promise.all(files.map(async name => {
+  if (!previous.files[name]) {
+    assert.ok(!previousPaths.has('public/' + name), 'Missing fingerprint for existing production file: ' + name);
+    return;
+  }
   assert.match(previous.files[name] || '', /^[a-f0-9]{64}$/, 'Missing production fingerprint: ' + name);
   const live = await get(name === 'index.html' ? '/' : '/' + name.replace(/\.html$/, ''));
   assert.equal(live.status, 200, 'Cannot read current production file: ' + name);
