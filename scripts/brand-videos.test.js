@@ -149,7 +149,7 @@ test('extra carousel cards join lifecycle tracking and detach cleanly', async ()
 test('cards use only native video previews with MP4 first and lazy sources', () => {
   const html = readFileSync(join(__dirname, '../public/index.html'), 'utf8');
   const videos = [...html.matchAll(/<video\b[^>]*>[\s\S]*?<\/video>/g)].map(m => m[0]);
-  assert.equal(videos.length, 6);
+  assert.equal(videos.length, 4);
   assert.doesNotMatch(html, /card-video-poster|\.card-video\.is-playing/);
   assert.doesNotMatch(html, /\.card-video\{[^}]*opacity/);
   for (const video of videos) {

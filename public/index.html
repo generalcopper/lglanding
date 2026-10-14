@@ -83,7 +83,7 @@
       "name": "LG Trading SRL",
       "description": "LG Trading SRL sviluppa e gestisce progetti a marchio proprio nei settori dei prodotti di consumo e dei servizi digitali per le imprese.",
       "inLanguage": "it-IT",
-      "dateModified": "2026-10-05",
+      "dateModified": "2026-10-14",
       "isPartOf": {
         "@id": "https://www.lgtrading.it/#website"
       },
@@ -96,7 +96,6 @@
 </script>
 <link rel="preload" href="/LG%20TRADING%20LOGO.%20trasp.webp" as="image" type="image/webp" fetchpriority="high">
 <link rel="preload" href="/logo%20bionee.webp" as="image" type="image/webp" fetchpriority="high">
-<link rel="preload" href="/ubi-ia-logo-bianco.webp" as="image" type="image/webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
@@ -420,26 +419,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
 .cedoly:focus-visible{outline:3px solid #50dfbf;outline-offset:-5px}
 
 
-/* Capannone 3D uses the shared logo, caption and action dimensions. */
-.card.capannone3d{background:#090c10;color:#fff;scroll-margin-top:0}
-.card.capannone3d::before{display:none}
-.capannone3d .card-logo img{height:125%}
-.capannone3d .card-video-overlay{background:linear-gradient(180deg,rgba(3,7,12,.3),rgba(3,7,12,.62) 30%,rgba(3,7,12,.78) 65%,rgba(3,7,12,.4))}
-.capannone3d .card-logo,.capannone3d .card-caption,.capannone3d .card-go{position:relative;z-index:2}
-.capannone3d .card-caption{text-shadow:0 2px 16px rgba(0,0,0,.7)}
-.capannone3d .card-go,.capannone3d:hover .card-go{color:#fff}
-.capannone3d:focus-visible{outline-color:#c9ff00}
-
-/* UBI ia shares the brand card layout and contact action. */
-.card.ubi-ia{background:#071526;color:#fff;scroll-margin-top:0}
-.card.ubi-ia::before{display:none}
-.ubi-ia .card-logo img{height:150%}
-.ubi-ia .card-video-overlay{background:linear-gradient(180deg,rgba(3,9,20,.35),rgba(3,9,20,.55) 35%,rgba(3,9,20,.66) 70%,rgba(3,9,20,.4))}
-.ubi-ia .card-logo,.ubi-ia .card-caption,.ubi-ia .card-go{position:relative;z-index:2}
-.ubi-ia .card-caption{text-shadow:0 2px 16px rgba(0,0,0,.7)}
-.ubi-ia .card-go,.ubi-ia:hover .card-go{color:#fff}
-.ubi-ia:focus-visible{outline-color:#20b8ef}
-
 /* Picking uses the shared video overlay and brand card dimensions. */
 .card.picking{background:#0B1220;color:#fff;scroll-margin-top:0}
 .card.picking::before{display:none}
@@ -618,8 +597,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
       <a href="#bionee">Bionee</a>
       <a href="#ilovepaghe">iLovePaghe</a>
       <a href="#cedoly">Cedoly</a>
-      <a href="#capannone3d">Capannone 3D</a>
-      <a href="#ubi-ia">UBI ia</a>
       <a href="#picking">Picking</a>
       <a href="#contatti">Contatti</a>
     </nav>
@@ -635,10 +612,8 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
   <a href="#bionee"><small>01</small>Bionee</a>
   <a href="#ilovepaghe"><small>02</small>iLovePaghe</a>
   <a href="#cedoly"><small>03</small>Cedoly</a>
-  <a href="#capannone3d"><small>04</small>Capannone 3D</a>
-  <a href="#ubi-ia"><small>05</small>UBI ia</a>
-  <a href="#picking"><small>06</small>Picking</a>
-  <a href="#contatti"><small>07</small>Contatti</a>
+  <a href="#picking"><small>04</small>Picking</a>
+  <a href="#contatti"><small>05</small>Contatti</a>
 </nav>
 
 <!-- ============ ENTRY CARDS ============ -->
@@ -678,28 +653,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
     <h2 class="sr-only">Cedoly — l’app per la gestione del personale</h2>
     <span class="card-caption">Buste paga, presenze e documenti.<br>Tutto in un’app.</span>
     <span class="card-go">Scopri Cedoly <span class="arr">→</span></span>
-  </a>
-  <a id="capannone3d" class="card capannone3d" draggable="false" href="#contatti" aria-label="Capannone 3D — Richiedi una demo">
-    <video id="capannone3dVideo" class="card-video" poster="/capannone3d_mockup.webp" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback preload="none" aria-hidden="true" tabindex="-1">
-      <source data-src="/capannone3d_mockup.mp4" type="video/mp4">
-      <source data-src="/capannone3d_mockup.webm" type="video/webm">
-    </video>
-    <span class="card-video-overlay" aria-hidden="true"></span>
-    <span class="card-logo"><img draggable="false" src="/capannone3d-scaffale-logo-dark-transparent.webp" width="2614" height="596" alt="Capannone 3D" decoding="async" loading="eager"></span>
-    <h2 class="sr-only">Capannone 3D — magazzino, inventario in tempo reale e agenti IA</h2>
-    <span class="card-caption">Tieni sotto controllo l’inventario del tuo magazzino in tempo reale con Capannone 3D.</span>
-    <span class="card-go">Richiedi una demo <span class="arr">→</span></span>
-  </a>
-  <a id="ubi-ia" class="card ubi-ia" draggable="false" href="#contatti" aria-label="UBI ia — Richiedi una demo">
-    <video id="ubiIaVideo" class="card-video" poster="/GettyImages-1303735870.webp" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback preload="none" aria-hidden="true" tabindex="-1">
-      <source data-src="/GettyImages-1303735870.mp4" type="video/mp4">
-      <source data-src="/GettyImages-1303735870.webm" type="video/webm">
-    </video>
-    <span class="card-video-overlay" aria-hidden="true"></span>
-    <span class="card-logo"><img draggable="false" src="/ubi-ia-logo-bianco.webp" width="2400" height="818" alt="UBI ia" decoding="async" loading="eager" fetchpriority="high"></span>
-    <h2 class="sr-only">UBI ia — l’agente IA integrato per le aziende</h2>
-    <span class="card-caption">L’agente IA integrato in azienda per conoscere in tempo reale la situazione della tua attività.</span>
-    <span class="card-go">Richiedi una demo <span class="arr">→</span></span>
   </a>
   <a id="picking" class="card picking" draggable="false" href="#contatti" aria-label="Picking — Richiedi una demo">
     <video id="pickingVideo" class="card-video" poster="/Mockup%204.webp" autoplay muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback preload="none" aria-hidden="true" tabindex="-1">
@@ -810,8 +763,6 @@ body.menu-open .header{background:transparent;backdrop-filter:none;-webkit-backd
         <a href="https://bionee.shop/" target="_blank" rel="noopener">Bionee</a>
         <a href="https://www.ilovepaghe.com/" target="_blank" rel="noopener">iLovePaghe</a>
         <a href="https://cedoly.it/" target="_blank" rel="noopener">Cedoly</a>
-        <a href="#capannone3d">Capannone 3D</a>
-        <a href="#ubi-ia">UBI ia</a>
         <a href="#picking">Picking</a>
       </div>
       <div class="footer-col">

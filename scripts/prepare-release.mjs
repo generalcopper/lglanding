@@ -8,7 +8,7 @@ const sha256 = value => createHash('sha256').update(value).digest('hex');
 const pages = ['index.html', 'privacy-policy.html', 'cookie-policy.html', '404.html'];
 const coreFiles = [...pages, 'analytics.js', 'analytics.css', 'brand-rail.js'];
 const files = [...coreFiles, 'brand-videos.js'];
-const cards = ['bionee', 'ilovepaghe', 'cedoly', 'capannone3d', 'ubi-ia', 'picking'];
+const cards = ['bionee', 'ilovepaghe', 'cedoly', 'picking'];
 const html = readFileSync('public/index.html', 'utf8');
 const actualCards = [...html.matchAll(/<a id="([^"]+)" class="card /g)].map(match => match[1]);
 assert.deepEqual(actualCards, cards, 'The complete published card list and order must be preserved');
@@ -25,7 +25,7 @@ for (const page of pages) {
     if (/\.[a-z0-9]+$/i.test(pathname)) assert.ok(existsSync('public' + pathname), 'Missing asset: ' + pathname);
   }
 }
-console.log('Verified all six cards, navigation, consent references and page assets.');
+console.log('Verified all four cards, navigation, consent references and page assets.');
 if (process.argv.includes('--check-only')) process.exit(0);
 
 assert.equal(process.env.GITHUB_ACTIONS, 'true', 'Production is deployed only by the tracked GitHub workflow');
