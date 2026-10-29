@@ -5,22 +5,121 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pagina non trovata | LG Trading SRL</title>
 <meta name="robots" content="noindex, follow">
-<meta name="theme-color" content="#06080D">
-<link rel="icon" type="image/png" href="/LG%20TRADING%20LOGO%20MADDAFAFCCA%20MODIFICABILE.png">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css?v=20261029">
 <style>
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#06080d;color:#fff}body{display:grid;place-items:center;padding:28px}.box{width:min(680px,100%);text-align:center}.logo{width:min(250px,65vw);height:auto;margin:0 auto 48px}.code{font-size:.8rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#7ea0ff}.box h1{margin:14px 0 16px;font-size:clamp(2.25rem,7vw,4.8rem);line-height:1;letter-spacing:-.05em}.box p{margin:0 auto 34px;max-width:520px;color:rgba(255,255,255,.68);font-size:1.04rem;line-height:1.65}.btn{display:inline-flex;align-items:center;justify-content:center;padding:15px 24px;border-radius:5px;background:#2e6bff;color:#fff;text-decoration:none;font-weight:700}.btn:hover{background:#1f5bef}
+.missing{padding:clamp(72px,11vw,168px) 0 clamp(96px,12vw,184px)}
+.missing-code{font-size:1rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.missing h1{margin-top:20px;max-width:12em;font-size:clamp(2.75rem,7vw,6rem);line-height:1;letter-spacing:-.05em}
+.missing p{margin-top:28px;max-width:30em;font-size:clamp(1.125rem,1.45vw,1.3125rem);line-height:1.5;color:var(--muted)}
+.missing-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px}
 </style>
 <link rel="stylesheet" href="/analytics.css?v=20261006-consent">
 <script src="/analytics.js?v=20261006-consent" defer></script>
+<script src="/site.js?v=20261029" defer></script>
 </head>
 <body>
-<main class="box">
-  <img class="logo" src="/LG%20TRADING%20LOGO.%20trasp.webp" alt="LG Trading SRL" width="4827" height="4018">
-  <div class="code">Errore 404</div>
-  <h1>Pagina non trovata</h1>
-  <p>L’indirizzo richiesto non è disponibile oppure è stato modificato.</p>
-  <a class="btn" href="/">Torna alla homepage</a>
-<footer style="margin-top:32px"><div class="fb-links" style="justify-content:center;gap:18px;font-size:14px"><a href="/privacy-policy" style="color:inherit">Privacy Policy</a><a href="/cookie-policy" style="color:inherit">Cookie Policy</a></div></footer>
+
+<span id="top"></span>
+<a class="skip-link" href="#contenuto" data-menu-inert>Vai al contenuto</a>
+
+<header class="header" id="header">
+  <div class="wrap header-inner">
+    <a href="/" class="logo" aria-label="LG Trading SRL, homepage">
+      <img src="/lg-trading-logo-black.webp" alt="" width="299" height="240" decoding="async" fetchpriority="high">
+    </a>
+    <nav class="nav" aria-label="Navigazione principale" data-nosnippet>
+      <a href="/#prodotti">Prodotti</a>
+      <a href="/#bionee">Bionee</a>
+      <a href="/#metodo">Metodo</a>
+      <a href="/#azienda">Azienda</a>
+      <a class="nav-cta" href="/#contatti">Contattateci</a>
+    </nav>
+    <button class="burger" id="burger" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="mobileNav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="mobile-nav" id="mobileNav" aria-label="Menu" data-nosnippet>
+  <div class="mobile-group">
+    <p class="mobile-group-title">Prodotti</p>
+    <a href="/#ilovepaghe">iLovePaghe</a>
+    <a href="/#cedoly">Cedoly</a>
+    <a href="/#picking">Picking</a>
+  </div>
+  <div class="mobile-group">
+    <p class="mobile-group-title">LG Trading</p>
+    <a href="/#bionee">Bionee</a>
+    <a href="/#metodo">Metodo</a>
+    <a href="/#azienda">Azienda</a>
+    <a href="/#contatti">Contatti</a>
+  </div>
+  <div class="mobile-meta">
+    <a href="mailto:info@lgtrading.it">info@lgtrading.it</a>
+    <a href="tel:+393481253603">+39 348 125 3603</a>
+  </div>
+</nav>
+
+<main id="contenuto" class="missing" data-menu-inert>
+  <div class="wrap">
+    <p class="missing-code">Errore 404</p>
+    <h1>Pagina non trovata</h1>
+    <p>L’indirizzo richiesto non è disponibile oppure è stato modificato.</p>
+    <div class="missing-actions">
+      <a class="btn btn-solid" href="/">Torna alla homepage</a>
+      <a class="btn btn-line" href="/#contatti">Contattateci</a>
+    </div>
+  </div>
 </main>
+
+<footer class="footer" data-menu-inert>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo" aria-label="LG Trading SRL, homepage">
+          <img src="/lg-trading-logo-black.webp" alt="" width="299" height="240" decoding="async" loading="lazy">
+        </a>
+        <p>LG Trading SRL sviluppa software gestionali per le imprese, progettati e collaudati nella propria attività <span class="nowrap">e-commerce</span>.</p>
+      </div>
+      <nav class="footer-col" aria-label="Prodotti">
+        <p class="footer-h">Prodotti</p>
+        <a href="/#ilovepaghe">iLovePaghe</a>
+        <a href="/#cedoly">Cedoly</a>
+        <a href="/#picking">Picking</a>
+      </nav>
+      <nav class="footer-col" aria-label="LG Trading">
+        <p class="footer-h">LG Trading</p>
+        <a href="/#bionee">Bionee</a>
+        <a href="/#metodo">Metodo</a>
+        <a href="/#azienda">Azienda</a>
+        <a href="/#contatti">Contatti</a>
+      </nav>
+      <div class="footer-col">
+        <p class="footer-h">Contatti</p>
+        <a href="mailto:info@lgtrading.it">info@lgtrading.it</a>
+        <a href="tel:+393481253603">+39 348 125 3603</a>
+      </div>
+      <div class="footer-col">
+        <p class="footer-h">Sedi</p>
+        <address><span>Sede legale</span>Via Olga Visentini 1<br>37053 Cerea (VR)</address>
+        <address><span>Sede operativa</span>Via Giuseppe Verdi 4<br>37050 Concamarise (VR)</address>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="legal"><span>© 2026 LG Trading SRL</span><span>P.IVA e C.F. 05060650230</span><span>REA VR-467219</span><span>Codice SDI M5UXCR1</span></p>
+      <div class="fb-links">
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/cookie-policy">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
 </body>
 </html>

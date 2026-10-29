@@ -31,6 +31,8 @@ jobs:
           node --check public/brand-rail.js
           node --check public/brand-videos.js
           node --test scripts/brand-videos.test.js
+          node --check public/site.js
+          node --test scripts/site-structure.test.js
           node --check backend/contact/server.js
           node --check backend/contact/store.js
           node --test backend/contact/test/*.test.js
