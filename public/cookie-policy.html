@@ -8,137 +8,163 @@
 <meta name="theme-color" content="#FFFFFF">
 <link rel="canonical" href="https://www.lgtrading.it/cookie-policy">
 <meta name="robots" content="index, follow">
+<link rel="icon" type="image/png" href="/LG%20TRADING%20LOGO%20MADDAFAFCCA%20MODIFICABILE.png">
+<link rel="apple-touch-icon" href="/LG%20TRADING%20LOGO%20MADDAFAFCCA%20MODIFICABILE.png">
 <meta property="og:title" content="Cookie Policy — LG Trading SRL">
 <meta property="og:description" content="Informativa sui cookie di LG Trading SRL.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="it_IT">
 <meta property="og:site_name" content="LG Trading SRL">
 <meta property="og:url" content="https://www.lgtrading.it/cookie-policy">
-<link rel="icon" href="/favicon.ico" sizes="48x48">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/site.css?v=20261029">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ============ PAGINE INFORMATIVE ============ */
-.doc-hero{padding:clamp(56px,7vw,112px) 0 clamp(40px,5vw,64px);border-bottom:1px solid var(--rule)}
-.crumbs{display:flex;flex-wrap:wrap;gap:8px;font-size:.9375rem;color:var(--muted)}
-.crumbs a{color:var(--ink);text-decoration:underline;text-underline-offset:.2em;text-decoration-color:rgba(13,13,13,.3)}
-.crumbs a:hover{text-decoration-color:var(--ink)}
-.doc-hero h1{margin-top:24px;font-size:clamp(2.5rem,5.6vw,5rem);line-height:1;letter-spacing:-.05em}
-.doc-hero .meta{margin-top:20px;color:var(--muted)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-.doc{padding:clamp(48px,6vw,88px) 0 clamp(96px,10vw,152px)}
-.doc-layout{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px}
-.toc{grid-column:1/4;align-self:start;position:sticky;top:calc(var(--header-h) + 32px)}
-.toc h4{margin-bottom:12px;font-size:.9375rem;font-weight:500;letter-spacing:-.005em}
-.toc ol{list-style:none;border-left:1px solid var(--rule)}
-.toc a{
-  display:block;margin-left:-1px;padding:7px 0 7px 16px;border-left:2px solid transparent;
-  font-size:.9375rem;line-height:1.4;color:var(--muted);transition:color .2s,border-color .2s;
+:root{
+  --bg:#000000;
+  --ink:#FFFFFF;
+  --muted:rgba(255,255,255,.62);
+  --faint:rgba(255,255,255,.42);
+  --line:rgba(255,255,255,.14);
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --maxw:1000px;
+  --header-h:84px;
 }
-.toc a:hover{color:var(--ink)}
-.toc a[aria-current="true"]{color:var(--ink);border-left-color:var(--ink)}
 
-.doc-body{grid-column:5/12;max-width:44em;color:#2E2E2E}
-.doc-body>:first-child{margin-top:0}
-.doc-body h2{margin:64px 0 16px;font-size:clamp(1.5rem,2.2vw,1.875rem);letter-spacing:-.03em;color:var(--ink)}
-.doc-body h3{margin:36px 0 10px;font-size:1.1875rem;letter-spacing:-.018em;color:var(--ink)}
-.doc-body p{margin-bottom:16px}
-.doc-body ul,.doc-body ol{margin:0 0 20px;padding-left:22px}
-.doc-body li{margin-bottom:10px;padding-left:4px}
-.doc-body strong{font-weight:600;color:var(--ink)}
-.doc-body a.inline{color:var(--ink);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em;text-decoration-color:rgba(13,13,13,.35);transition:text-decoration-color .2s}
-.doc-body a.inline:hover{text-decoration-color:var(--ink)}
-.doc-body .lg-cookie-preferences{font-weight:500;color:var(--ink);text-underline-offset:.2em}
-
-/* Tabella dei cookie: colori adattati allo sfondo chiaro (struttura in analytics.css). */
-.doc-body .cookie-inventory-wrap{margin:28px 0;padding:8px 20px;border:1px solid var(--rule);border-radius:16px}
-.doc-body .cookie-inventory{margin:0;min-width:620px}
-.doc-body .cookie-inventory th,.doc-body .cookie-inventory td{overflow-wrap:normal}
-.doc-body .cookie-inventory td:first-child{min-width:13em}
-.doc-body .cookie-inventory th:last-child,.doc-body .cookie-inventory td:last-child{white-space:nowrap}
-.doc-body .cookie-inventory code{overflow-wrap:anywhere}
-.doc-body .cookie-inventory caption{padding:12px 0 4px;color:var(--ink)}
-.doc-body .cookie-inventory th,.doc-body .cookie-inventory td{border-bottom-color:var(--rule)}
-.doc-body .cookie-inventory tr:last-child td{border-bottom:0}
-.doc-body .cookie-inventory th{color:var(--ink)}
-.doc-body .cookie-inventory td{color:#2E2E2E}
-.doc-body .cookie-inventory code{padding:1px 6px;border-radius:6px;background:var(--surface);color:var(--ink)}
-
-@media (max-width:900px){
-  .toc{position:static;grid-column:1/-1;margin-bottom:48px}
-  .doc-body{grid-column:1/-1}
+html{scroll-behavior:smooth;scroll-padding-top:88px;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter','SF Pro Text',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);color:var(--ink);
+  font-size:16.5px;line-height:1.7;letter-spacing:-.006em;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
-@media (max-width:480px){
-  .doc-body .cookie-inventory-wrap{padding:4px 12px}
+h1,h2,h3,h4{font-family:'Inter Tight','Inter',system-ui,sans-serif;font-weight:700;line-height:1.14;letter-spacing:-.03em;text-wrap:balance;color:#fff}
+a{color:inherit;text-decoration:none}
+img,svg{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:#fff;color:#000}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+/* ============ HEADER ============ */
+.header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--header-h);
+  display:flex;align-items:center;background:#000;
+  border-bottom:1px solid var(--line);
+  transition:height .4s var(--ease),transform .45s var(--ease);
+}
+.header.hidden{transform:translateY(-100%)}
+.header.scrolled{height:66px}
+.header .wrap{width:100%}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo{display:flex;align-items:center;flex-shrink:0}
+.logo img{height:44px;width:auto;transition:height .4s var(--ease)}
+.header.scrolled .logo img{height:40px}
+
+.back-link{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.92rem;font-weight:600;color:var(--muted);
+  letter-spacing:-.01em;transition:color .25s;
+}
+.back-link:hover{color:#fff}
+.back-link .arr{transition:transform .4s var(--ease)}
+.back-link:hover .arr{transform:translateX(-4px)}
+
+/* ============ HERO ============ */
+.doc-hero{padding:calc(var(--header-h) + 80px) 0 40px}
+.doc-hero .eyebrow{
+  display:inline-block;font-size:.74rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--faint);margin-bottom:16px;
+}
+.doc-hero h1{font-size:clamp(2.2rem,5vw,3.2rem)}
+.doc-hero .meta{margin-top:16px;font-size:.9rem;color:var(--faint)}
+
+/* ============ DOC BODY ============ */
+.doc{padding:8px 0 110px}
+.doc-inner{max-width:760px}
+.doc h2{font-size:1.45rem;margin:56px 0 14px}
+.doc h2:first-child{margin-top:0}
+.doc h3{font-size:1.1rem;margin:32px 0 10px;color:rgba(255,255,255,.9)}
+.doc p{color:var(--muted);margin-bottom:16px}
+.doc ul,.doc ol{margin:0 0 18px;padding-left:22px;color:var(--muted)}
+.doc li{margin-bottom:10px}
+.doc a.inline{color:#fff;font-weight:600;border-bottom:1px solid rgba(255,255,255,.4);transition:border-color .25s}
+.doc a.inline:hover{border-color:#fff}
+.doc strong{color:#fff;font-weight:600}
+
+.toc{margin-bottom:40px}
+.toc h4{font-size:.76rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+.toc ol{margin:0;padding-left:20px;color:var(--muted)}
+.toc li{margin-bottom:8px}
+.toc a{transition:color .25s}
+.toc a:hover{color:#fff}
+
+/* ============ FOOTER ============ */
+.footer{background:#000;color:#fff;padding:80px 0;border-top:1px solid var(--line)}
+.footer-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.1fr;gap:64px;padding-bottom:72px}
+.footer-brand{max-width:380px}
+.footer-brand .logo img{height:58px}
+.footer-brand p{margin-top:24px;font-size:.94rem;color:var(--muted);line-height:1.75}
+.footer-col h5{font-size:.76rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-bottom:24px}
+.footer-col a{display:block;font-size:.92rem;color:var(--muted);padding:8px 0;transition:color .25s}
+.footer-col a:hover{color:#fff}
+.footer-col p{font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:20px}
+.footer-bottom{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  padding-top:48px;border-top:1px solid var(--line);
+  font-size:.84rem;color:var(--faint);
+}
+.fb-links{display:flex;gap:26px}
+.fb-links a{transition:color .25s}
+.fb-links a:hover{color:#fff}
+
+@media (max-width:860px){
+  .footer-top{grid-template-columns:1fr 1fr;gap:36px}
+}
+@media (max-width:720px){
+  :root{--header-h:68px}
+  .wrap{padding:0 22px}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s !important;transition-duration:.001s !important}
 }
 </style>
 <link rel="stylesheet" href="/analytics.css?v=20261006-consent">
 <script src="/analytics.js?v=20261006-consent" defer></script>
-<script src="/site.js?v=20261029" defer></script>
 </head>
 <body>
 
 <span id="top"></span>
-<a class="skip-link" href="#contenuto" data-menu-inert>Vai al contenuto</a>
 
 <!-- ============ HEADER ============ -->
 <header class="header" id="header">
   <div class="wrap header-inner">
-    <a href="/" class="logo" aria-label="LG Trading SRL, homepage">
-      <img src="/lg-trading-logo-black.webp" alt="" width="299" height="240" decoding="async" fetchpriority="high">
+    <a href="index.html" class="logo" aria-label="LG Trading SRL">
+      <img src="/LG%20TRADING%20LOGO.%20trasp.webp" alt="LG Trading SRL" width="4827" height="4018">
     </a>
-    <nav class="nav" aria-label="Navigazione principale" data-nosnippet>
-      <a href="/#prodotti">Prodotti</a>
-      <a href="/#bionee">Bionee</a>
-      <a href="/#metodo">Metodo</a>
-      <a href="/#azienda">Azienda</a>
-      <a class="nav-cta" href="/#contatti">Contattateci</a>
-    </nav>
-    <button class="burger" id="burger" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="mobileNav">
-      <span></span><span></span><span></span>
-    </button>
+    <a href="index.html" class="back-link"><span class="arr">←</span> Torna al sito</a>
   </div>
 </header>
-
-<!-- mobile nav -->
-<nav class="mobile-nav" id="mobileNav" aria-label="Menu" data-nosnippet>
-  <div class="mobile-group">
-    <p class="mobile-group-title">Prodotti</p>
-    <a href="/#ilovepaghe">iLovePaghe</a>
-    <a href="/#cedoly">Cedoly</a>
-    <a href="/#picking">Picking</a>
-  </div>
-  <div class="mobile-group">
-    <p class="mobile-group-title">LG Trading</p>
-    <a href="/#bionee">Bionee</a>
-    <a href="/#metodo">Metodo</a>
-    <a href="/#azienda">Azienda</a>
-    <a href="/#contatti">Contatti</a>
-  </div>
-  <div class="mobile-meta">
-    <a href="mailto:info@lgtrading.it">info@lgtrading.it</a>
-    <a href="tel:+393481253603">+39 348 125 3603</a>
-  </div>
-</nav>
-
-<main id="contenuto" data-menu-inert>
 
 <!-- ============ HERO ============ -->
 <section class="doc-hero">
   <div class="wrap">
-    <nav class="crumbs" aria-label="Percorso"><a href="/">LG Trading SRL</a><span aria-hidden="true">/</span><span aria-current="page">Cookie Policy</span></nav>
+    <span class="eyebrow">Informativa</span>
     <h1>Cookie Policy</h1>
     <p class="meta">Ultimo aggiornamento: 6 ottobre 2026</p>
   </div>
 </section>
 
 <!-- ============ DOC ============ -->
-<div class="doc">
-  <div class="wrap doc-layout">
+<main class="doc">
+  <div class="wrap">
+    <div class="doc-inner">
+
       <nav class="toc" aria-label="Indice">
         <h4>Indice</h4>
         <ol>
@@ -149,8 +175,6 @@
           <li><a href="#diritti">Diritti e contatti</a></li>
         </ol>
       </nav>
-    <div class="doc-body">
-
 
       <h2 id="titolare">1. Titolare e ambito</h2>
       <p>Questa informativa riguarda <strong>lgtrading.it</strong> e <strong>www.lgtrading.it</strong>. Il titolare è <strong>LG Trading SRL</strong>, Via Olga Visentini 1, 37053 Cerea (VR), P.IVA e C.F. 05060650230, REA VR-467219. Contatto: <a class="inline" href="mailto:info@lgtrading.it">info@lgtrading.it</a>.</p>
@@ -192,48 +216,41 @@
       <h2 id="diritti">5. Diritti e contatti</h2>
       <p>Nei casi previsti dagli artt. 15–22 GDPR puoi chiedere accesso, rettifica, cancellazione, limitazione e portabilità dei dati, opporti al trattamento fondato sul legittimo interesse e revocare il consenso. Scrivi a <a class="inline" href="mailto:info@lgtrading.it">info@lgtrading.it</a>. Puoi proporre reclamo al <a class="inline" href="https://www.garanteprivacy.it/" target="_blank" rel="noopener noreferrer">Garante per la protezione dei dati personali</a>.</p>
       <p>Ulteriori informazioni sui dati trattati dal sito sono nella <a class="inline" href="/privacy-policy">Privacy Policy</a>. Gli aggiornamenti saranno pubblicati in questa pagina con la relativa data.</p>
+
     </div>
   </div>
-</div>
-
 </main>
 
 <!-- ============ FOOTER ============ -->
-<footer class="footer" data-menu-inert>
+<footer class="footer">
   <div class="wrap">
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="/" class="footer-logo" aria-label="LG Trading SRL, homepage">
-          <img src="/lg-trading-logo-black.webp" alt="" width="299" height="240" decoding="async" loading="lazy">
+        <a href="index.html" class="logo">
+          <img src="/LG%20TRADING%20LOGO.%20trasp.webp" alt="LG Trading SRL" width="4827" height="4018">
         </a>
-        <p>LG Trading SRL sviluppa software gestionali per le imprese, progettati e collaudati nella propria attività <span class="nowrap">e-commerce</span>.</p>
+        <p>LG Trading SRL sviluppa e gestisce progetti a marchio proprio nei settori dei prodotti di consumo e dei servizi digitali per le imprese.</p>
       </div>
-      <nav class="footer-col" aria-label="Prodotti">
-        <p class="footer-h">Prodotti</p>
-        <a href="/#ilovepaghe">iLovePaghe</a>
-        <a href="/#cedoly">Cedoly</a>
-        <a href="/#picking">Picking</a>
-      </nav>
-      <nav class="footer-col" aria-label="LG Trading">
-        <p class="footer-h">LG Trading</p>
-        <a href="/#bionee">Bionee</a>
-        <a href="/#metodo">Metodo</a>
-        <a href="/#azienda">Azienda</a>
-        <a href="/#contatti">Contatti</a>
-      </nav>
       <div class="footer-col">
-        <p class="footer-h">Contatti</p>
+        <h5>Brand</h5>
+        <a href="https://bionee.shop/" target="_blank" rel="noopener">Bionee</a>
+        <a href="https://www.ilovepaghe.com/" target="_blank" rel="noopener">iLovePaghe</a>
+        <a href="https://cedoly.it/" target="_blank" rel="noopener">Cedoly</a>
+      </div>
+      <div class="footer-col">
+        <h5>Contatti</h5>
         <a href="mailto:info@lgtrading.it">info@lgtrading.it</a>
         <a href="tel:+393481253603">+39 348 125 3603</a>
+        <a href="index.html#contatti">Contatti</a>
       </div>
       <div class="footer-col">
-        <p class="footer-h">Sedi</p>
-        <address><span>Sede legale</span>Via Olga Visentini 1<br>37053 Cerea (VR)</address>
-        <address><span>Sede operativa</span>Via Giuseppe Verdi 4<br>37050 Concamarise (VR)</address>
+        <h5>Sedi</h5>
+        <p>Sede legale<br>Via Olga Visentini 1<br>37053 Cerea (VR)</p>
+        <p>Sede operativa<br>Via Giuseppe Verdi 4<br>37050 Concamarise (VR)</p>
       </div>
     </div>
     <div class="footer-bottom">
-      <p class="legal"><span>© 2026 LG Trading SRL</span><span>P.IVA e C.F. 05060650230</span><span>REA VR-467219</span><span>Codice SDI M5UXCR1</span></p>
+      <span>© 2026 LG Trading SRL — P.IVA e C.F. 05060650230 — REA VR-467219 — Codice SDI M5UXCR1</span>
       <div class="fb-links">
         <a href="/privacy-policy">Privacy Policy</a>
         <a href="/cookie-policy">Cookie Policy</a>
@@ -244,22 +261,30 @@
 
 <script>
 (function(){
-  /* Evidenzia nell'indice la sezione in lettura. */
-  var links=Array.prototype.slice.call(document.querySelectorAll('.toc a[href^="#"]'));
-  if(!links.length||!('IntersectionObserver' in window))return;
-  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
-  var visible=new Set();
-  function mark(){
-    var current=null;
-    targets.forEach(function(t,i){if(t&&visible.has(t)&&current===null)current=i;});
-    if(current===null)return;
-    links.forEach(function(a,i){if(i===current)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');});
-  }
-  var io=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){if(e.isIntersecting)visible.add(e.target);else visible.delete(e.target);});
-    mark();
-  },{rootMargin:'-15% 0px -70% 0px'});
-  targets.forEach(function(t){if(t)io.observe(t);});
+  var header = document.getElementById('header');
+  var lastY = window.pageYOffset;
+  window.addEventListener('scroll',function(){
+    var y = window.pageYOffset;
+    if(y > lastY && y > 120){
+      header.classList.add('hidden');
+    } else if(y < lastY){
+      header.classList.remove('hidden');
+    }
+    lastY = y;
+  },{passive:true});
+
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    var href=a.getAttribute('href');
+    if(!href||href.length<2)return;
+    a.addEventListener('click',function(e){
+      var el=document.querySelector(href);
+      if(!el)return;
+      e.preventDefault();
+      var hh=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||80;
+      var y=el.getBoundingClientRect().top+window.pageYOffset-hh-8;
+      window.scrollTo({top:y<0?0:y,behavior:'smooth'});
+    });
+  });
 })();
 </script>
 </body>
