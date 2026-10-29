@@ -4,6 +4,9 @@
   var records = new Map();
   var observer = null, suspended = false, frame = 0;
   var MIN_VISIBLE = 0.12;
+  // «Risparmio dati» del browser: restano i poster, nessun video scaricato.
+  var connection = window.navigator && window.navigator.connection;
+  function saveData() { return !!(connection && connection.saveData); }
 
   function visible(video) {
     var rect = video.getBoundingClientRect();
@@ -53,7 +56,7 @@
   }
 
   function play(state, retry) {
-    if (suspended || document.hidden || motion.matches || !state.visible) return;
+    if (suspended || document.hidden || motion.matches || saveData() || !state.visible) return;
     if (retry) state.blocked = false;
     if (state.blocked || state.pending || !state.video.paused) return;
     prepare(state);
@@ -78,7 +81,7 @@
   function refresh(retry) {
     records.forEach(function (state) {
       state.visible = visible(state.video);
-      if (suspended || document.hidden || motion.matches || !state.visible) stop(state);
+      if (suspended || document.hidden || motion.matches || saveData() || !state.visible) stop(state);
       else play(state, retry);
     });
   }
