@@ -7,7 +7,7 @@ const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
 const sha256 = value => createHash('sha256').update(value).digest('hex');
 const pages = ['index.html', 'privacy-policy.html', 'cookie-policy.html', '404.html'];
 const coreFiles = [...pages, 'analytics.js', 'analytics.css', 'brand-rail.js'];
-const files = [...coreFiles, 'brand-videos.js', 'site.css', 'site.js'];
+const files = [...coreFiles, 'brand-videos.js'];
 const cards = ['bionee', 'ilovepaghe', 'cedoly', 'picking'];
 const html = readFileSync('public/index.html', 'utf8');
 const actualCards = [...html.matchAll(/<a id="([^"]+)" class="card /g)].map(match => match[1]);

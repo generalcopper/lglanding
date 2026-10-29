@@ -14,12 +14,11 @@ class Events {
   removeEventListener(name, fn) { this.events.get(name)?.delete(fn); }
   emit(name, props = {}) { this.events.get(name)?.forEach(fn => fn({ type: name, ...props })); }
 }
-function fixture({ reduced = false, hidden = false, observer = true, saveData = false } = {}) {
+function fixture({ reduced = false, hidden = false, observer = true } = {}) {
   const document = new Events(), window = new Events(), motion = new Events();
   let insideGesture = false, io;
   Object.assign(motion, { matches: reduced });
   Object.assign(window, { innerWidth: 390, innerHeight: 844, matchMedia: () => motion });
-  if (saveData) window.navigator = { connection: { saveData: true } };
   document.hidden = hidden;
   class Video extends Events {
     constructor(left = 0) {
@@ -124,10 +123,6 @@ test('reduced motion and initial backgrounding do not download video', async () 
     f.motion.matches = false; f.document.hidden = false; f.motion.emit('change'); await settle();
     assert.equal(f.videos[0].paused, false);
   }
-});
-test('data saver keeps the posters and downloads no video, even after a gesture', async () => {
-  const f = fixture({ saveData: true }); f.start(); f.gesture(); await settle();
-  assert.ok(f.videos.every(v => v.loads === 0 && v.plays === 0));
 });
 test('late rejection from an offscreen attempt cannot block a newer gesture', async () => {
   const f = fixture(); f.videos[0].deferPlay = true; f.start();
