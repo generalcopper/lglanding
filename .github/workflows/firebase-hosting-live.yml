@@ -39,5 +39,7 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          # CLI verified by the successful 2026-10-14 production release.
+          firebaseToolsVersion: 15.33.0
           projectId: lgtrading-landing
           channelId: live
